@@ -1,0 +1,6 @@
+.mainTitle {
+  font-weight: 600;
+}
+.mainTitle span {
+  color: var(--green);
+}
