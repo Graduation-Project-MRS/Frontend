@@ -1,10 +1,29 @@
+// import { jwtDecode } from "jwt-decode";
+import { curve, menuSlide, slide } from "./Animate";
+import { AnimatePresence, motion } from "framer-motion";
+import userImage from "../../assets/man-user.svg";
+import Swal from "sweetalert2";
 import React, { useMemo, useState } from "react";
 import style from "./page.module.css";
 import { Link, useLocation } from "react-router-dom";
-import { curve, menuSlide, slide } from "./Animate";
-import { AnimatePresence, motion } from "framer-motion";
+import { IoIosSearch } from "react-icons/io";
+import { useSelector } from "react-redux";
+import { getuser, logout } from "../../redux/slices/authSlice";
+import { IoNotificationsOutline } from "react-icons/io5";
 
 function Navbar() {
+  const [mode, setMode] = useState("light");
+  const availableUser = useSelector(getuser);
+  console.log("🚀 ~ Navbar ~ availableUser:", availableUser);
+
+  // let decodedUser = null;
+  // try {
+  //   decodedUser = jwtDecode(availableUser.result);
+  //   console.log("Decoded User:", decodedUser);
+  // } catch (error) {
+  //   console.error("Error decoding JWT token:", error);
+  // }
+
   const location = useLocation();
   const path = location.pathname;
 
@@ -46,76 +65,104 @@ function Navbar() {
   return (
     <>
       {!hide && (
-        <AnimatePresence mode="wait" initial={false}>
-          <div className="d-flex align-items-center w-100 justify-content-between" id={style.Header}>
-            <Link to={'/'}>Fast Plat</Link>
-            {/* burger menu  */}
-            <div
-              onClick={() => setClicked(!clicked)}
-              className={`${style.toggle} ${clicked ? style.toggled : ""}`}
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            {/* nav menu  */}
-            {clicked ? (
-              <motion.div
-                animate='enter'
-                exit='exit'
-                initial='initial'
-                variants={menuSlide}
-                className={style.menu}>
-                <div className={style.body}>
-                  <div className={style.nav}>
-                    <div className={style.header}>
-                      <p>Navigation</p>
-                    </div>
-                    {navItems.map((data, index) => {
-                      return (
-                        <motion.div
-                          key={index}
-                          variants={slide}
-                          custom={index}
-                          initial="initial"
-                          animate="enter"
-                          exit="exit"
-                          className={style.link}
-                        >
-                          <div
-
-                            className={style.indicator}
-                          ></div>
-                          <Link data={{ ...data, index }} key={index} href={data.href}>{data.title}</Link>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                  <div className={style.footer}>
-                    <Link href={''}>Github</Link>
-                    <Link href={''}>Instagram</Link>
-                    <Link href={''}>Dribble</Link>
-                    <Link href={''}>LinkedIn</Link>
-                  </div>
+        <nav className={`${style.nav} navbar navbar-expand-lg sticky-lg-top `}>
+          <div className="container">
+            <Link className="" to="/">
+              {mode === "light" ? (
+                <div className={style.logoContainer}>
+                  <img
+                    src={require("../../assets/logoLight.png")}
+                    alt=""
+                    srcset=""
+                  />
                 </div>
-                <svg className={style.svgCurve}>
-                  <motion.path
-                    initial="initial"
-                    animate="enter"
-                    exit="exit"
-                    variants={curve}
-                    d="..."
-                  ></motion.path>
-                </svg>
+              ) : (
+                <div className={style.logoContainer}>
+                  <img
+                    src={require("../../assets/logoDark.png")}
+                    alt=""
+                    srcset=""
+                  />
+                </div>
+              )}
+            </Link>
+            <button
+              className={`${style.toggler} navbar-toggler`}
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon" />
+            </button>
+            <div
+              className={` ${style.dragMenu} collapse navbar-collapse`}
+              id="navbarSupportedContent"
+            >
+              <form className={`d-flex mx-auto ${style.navForm}`} role="search">
+                <input
+                  className="form-control me-2"
+                  type="search"
+                  placeholder="Search recipes"
+                  aria-label="Search"
+                />
+                <div className={`${style.searchIcon}`}>
+                  {" "}
+                  <IoIosSearch size={20} />
+                </div>
+              </form>
 
-              </motion.div>
-            ) : (
-              ""
-            )}
-          </div >
-        </AnimatePresence>
-      )
-      }
+              <div className={` ${style.authBtns}`}>
+                {availableUser ? (
+                  <>
+                    <div className={style.userData}>
+                      <Link
+                        className={` ${style.notification}`}
+                        to="/community"
+                      >
+                        <IoNotificationsOutline
+                          size={25}
+                          className={style.icon}
+                        />
+                      </Link>
+                      <Link
+                        className={` ${style.userName}`}
+                        title={availableUser?.data.userName}
+                        to="/"
+                      >
+                        {availableUser?.data.userName}
+                      </Link>
+                      <Link className={` ${style.userImage}`} to="/profile">
+                        <img
+                          // src={userImage}
+                          src={availableUser?.data.profileImage.url}
+                          title={availableUser?.data.userName}
+                          alt="user"
+                          srcset=""
+                        />
+                      </Link>
+                    </div>
+                    {/* <div onClick={handleLogout} className={` ${style.logout}`}>
+                      logout
+                    </div> */}
+                  </>
+                ) : (
+                  <>
+                    <Link className={` ${style.register}`} to="/auth">
+                      sign up
+                    </Link>
+                    <Link className={` ${style.login}`} to="/auth">
+                      log in
+                    </Link>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </nav>
+      )}
     </>
   );
 }

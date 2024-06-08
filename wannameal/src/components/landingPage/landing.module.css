@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   gap: 30px;
-  background-color: var(--body);
+  background-image: linear-gradient(to top, var(--body) 90%, var(--text_white));
   position: relative;
   overflow: hidden;
 }

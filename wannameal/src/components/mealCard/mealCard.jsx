@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../mealsSlider/mealsslider.module.css";
+import styles from "./mealcard.module.css";
 import { IoTime } from "react-icons/io5";
 import { BsFire } from "react-icons/bs";
 import { GiCookingPot } from "react-icons/gi";
@@ -10,9 +10,7 @@ function MealCard() {
       <div className={`${styles.mealCard}`}>
         <div className={`${styles.imageContainer}`}>
           <img
-            style={{ borderRadius: "15px", width: 'inherit' }}
             src="https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?auto=compress&cs=tinysrgb&w=600"
-            fill={true}
             objectFit="cover"
             alt="meal"
           />

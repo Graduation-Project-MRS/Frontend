@@ -1,6 +1,6 @@
 .portfolioContainer {
   width: 100%;
-  background-color: var(--body);
+  background-color: var(--text-white) !important ;
 }
 
 .userData {

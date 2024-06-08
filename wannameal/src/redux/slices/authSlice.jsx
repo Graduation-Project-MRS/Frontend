@@ -1,42 +1,50 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
-export const loginUser = createAsyncThunk(
-    "auth/login",
-    async (user) => {
-        try {
-            const response = await axios.post("https://fast-plat1.vercel.app/auth/login", user);
-            return response.data;
-        } catch (error) {
-            throw error.response.data;
-        }
-    }
-);
+export const loginUser = createAsyncThunk("auth/login", async (user) => {
+  try {
+    const response = await axios.post(
+      "https://fast-plat1.vercel.app/auth/login",
+      user
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+});
 
 const authSlice = createSlice({
-    name: "auth",
-    initialState: {
-        user: null,
-        loading: false,
-        error: null,
+  name: "auth",
+  initialState: {
+    user: JSON.parse(localStorage.getItem("user") || null),
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    logout(state, action) {
+      state.user = null;
+      localStorage.removeItem("user");
     },
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            .addCase(loginUser.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(loginUser.fulfilled, (state, action) => {
-                state.loading = false;
-                state.user = action.payload;
-            })
-            .addCase(loginUser.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            });
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        localStorage.setItem("user", JSON.stringify(state.user));
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
 });
+
+export const getuser = (state) => state.auth.user;
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;

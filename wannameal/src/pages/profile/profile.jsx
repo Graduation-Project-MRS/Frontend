@@ -11,6 +11,8 @@ import { IoLinkOutline } from "react-icons/io5";
 import { FaCheckCircle } from "react-icons/fa";
 import { GiHotMeal } from "react-icons/gi";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/slices/authSlice";
 
 function Portfolio() {
   const [systemlanguage, setsystemlanguage] = useState("english");
@@ -52,9 +54,38 @@ function Portfolio() {
       title: "Copied Successfully",
     });
   }
-  function logOut() {
-    console.log("logout");
-  }
+  const dispatch = useDispatch();
+  let handleLogout = () => {
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      title: "Are you Sure you want to log out ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "rgb(236, 52, 52)",
+      cancelButtonColor: "#3ac568",
+      confirmButtonText: "Log Out",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(logout());
+        let timerInterval;
+        Swal.fire({
+          title: "Logging Out!",
+          html: "",
+          timer: 3000,
+          timerProgressBar: true,
+
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          },
+        });
+      }
+    });
+  };
+
   return (
     <>
       <div className={`py-5 ${styles.portfolioContainer} `}>
@@ -113,7 +144,6 @@ function Portfolio() {
                   >
                     <IoSettingsOutline size={29} />
                   </div>
-
                   <div
                     class="modal fade"
                     id="exampleModalToggle"
@@ -138,7 +168,7 @@ function Portfolio() {
                         <div class="modal-body p-0">
                           <ul className={`${styles.settingUl} `}>
                             <li>
-                              fast plate{" "}
+                              WannaMeaL{" "}
                               <span className={` ${styles.premium} `}>
                                 premium
                               </span>
@@ -156,20 +186,14 @@ function Portfolio() {
                               language
                             </li>
                             <li data-bs-target="#invite" data-bs-toggle="modal">
-                              Invite your friends to fast plat
+                              Invite your friends to WannaMeaL{" "}
                             </li>
-                            <li
-                              className="p-0"
-                              data-bs-target="#contact"
-                              data-bs-toggle="modal"
-                            >
+                            <li className="p-0">
                               <Link
                                 to="/contact"
                                 style={{
                                   padding: "15px",
                                   display: "block",
-                                  // minWidth: "100%",
-                                  // minHeight: "100%",
                                 }}
                               >
                                 contact us
@@ -178,7 +202,7 @@ function Portfolio() {
                             <li
                               data-bs-target="#logout"
                               data-bs-toggle="modal"
-                              onClick={logOut}
+                              onClick={handleLogout}
                             >
                               log out
                             </li>
@@ -390,7 +414,7 @@ function Portfolio() {
               </div>
             </div>
             <div
-              className={`row justify-content-around align-items-center ${styles.recipsContainer} `}
+              className={`row justify-content-center justify-content-md-between g-2 align-items-center ${styles.recipsContainer} `}
             >
               <MealCard className=" col-12 col-lg-3" />
               <MealCard className=" col-12 col-lg-3" />
