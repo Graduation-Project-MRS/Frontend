@@ -1,4 +1,4 @@
-import React from "react";
+import React, { } from "react";
 import rec2 from "../../assets/Rectangle 2.png";
 import rec3 from "../../assets/Rectangle 3.png";
 import rec4 from "../../assets/Rectangle 4.png";
@@ -12,7 +12,9 @@ import { motion } from "framer-motion"
 import styles from './landing.module.css';
 import { useTranslation } from "react-i18next";
 export default function LandingPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const isAr = i18n.dir();
+  console.log(isAr);
   return (
     <div className={styles.homeContainer}>
       <div className={`container-lg m-0 p-0 `}>
@@ -33,7 +35,7 @@ export default function LandingPage() {
             <button className={`btn ${styles.button}`}>{t('mainBtn')}</button>
 
           </motion.div>
-          <div className={` col-lg-6 ${styles.images}`}>
+          <div className={` col-lg-6 ${isAr === 'ltr' ? styles.images:styles.imagesAR}`}>
             <motion.div
               initial={{ x: 600, scale: 0.5 }}
               animate={{ x: 0, scale: 1 }}

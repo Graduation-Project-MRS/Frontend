@@ -6,7 +6,7 @@
 .title,
 .semiTitle,
 .note {
-  text-align: left;
+  text-align: justify;
 }
 .title {
   font-size: 22px;

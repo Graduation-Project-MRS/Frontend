@@ -5,12 +5,15 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { MdCheckCircleOutline } from "react-icons/md";
 import { CiCamera } from "react-icons/ci";
 import axios from "axios";
+import { useTranslation } from 'react-i18next';
 
 const AddProduct = () => { // Changed from addProduct to AddProduct
     const [ingredientsValue, setIngredientsValue] = useState([{ id: 1, value: "" }]);
     const [directionsValue, setDirectionsValue] = useState([{ id: 1, value: "" }]);
     const [isActive, setisActive] = useState("");
     const [image, setImage] = useState(null);
+    const { t } = useTranslation()
+    const { Rname, Special, share, breaks, lunch, dinner, enough, time, Ingredients, Directions, addingredient, addStep, saveRecipe, cancelRecipe } = t('add')
     const [recipe, setRecipe] = useState({
         recipeName: "",
         information: "",
@@ -166,7 +169,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                         value={recipe.recipeName}
                         name="recipeName"
                         type="text"
-                        placeholder="Recipe Name :"
+                        placeholder={`${Rname} :`}
                     />
                     <input
                         className={style.add_input}
@@ -174,7 +177,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                         value={recipe.information}
                         name="information"
                         type="text"
-                        placeholder="What distinguishes this recipe ?"
+                        placeholder={`${Special} :`}
                     />
                     <div className="d-flex gap-4 flex-wrap">
                         <button
@@ -188,7 +191,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                                 }`}
                             name="Breakfast"
                         >
-                            Breakfast
+                            {breaks}
                         </button>
                         <button
                             onClick={(e) => {
@@ -201,7 +204,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                                 }`}
                             name="Lunch"
                         >
-                            Lunch
+                            {lunch}
                         </button>
                         <button
                             onClick={(e) => {
@@ -214,11 +217,11 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                                 }`}
                             name="Dinner"
                         >
-                            Dinner
+                            {dinner}
                         </button>
                     </div>
                     <div className="d-flex gap-4 flex-wrap align-items-center justify-content-between ">
-                        <p className={style.text_label}>Enough For</p>
+                        <p className={style.text_label}>{enough}</p>
                         <input
                             className={style.add_input}
                             onChange={handleInputChange}
@@ -229,7 +232,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                         />
                     </div>
                     <div className="d-flex gap-4 flex-wrap align-items-center justify-content-between  ">
-                        <p className={style.text_label}>Preparation time</p>
+                        <p className={style.text_label}>{time}</p>
                         <input
                             className={style.add_input}
                             onChange={handleInputChange}
@@ -274,7 +277,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                                 </div>
                                 <div className={style.text}>
                                     <CiCamera size={36} />
-                                    <span>Share with us the picture of your dish</span>
+                                        <span>{share}</span>
                                 </div>
                             </div>
                         )}
@@ -282,7 +285,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                     </label>
                 </div>
             </div>
-            <h2 className={style.divider_title}>Ingredients</h2>
+            <h2 className={style.divider_title}>{Ingredients}</h2>
             <div className="row ps-4">
                 <div className="col-8 d-flex flex-column gap-4">
                     {ingredientsValue.map((ingredient, index) => (
@@ -307,12 +310,12 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                     ))}
                     <button onClick={handleAddIngredient} className={style.add_btn}>
                         <IoMdAddCircleOutline />
-                        Add Ingredient
+                        {addingredient}
                     </button>
 
                 </div>
             </div>
-            <h2 className={style.divider_title}>Directions</h2>
+            <h2 className={style.divider_title}>{Directions}</h2>
             <div className="row ps-4">
                 <div className="col-8 d-flex flex-column gap-4">
                     {directionsValue.map((direction, index) => (
@@ -337,7 +340,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                     ))}
                     <button onClick={handleAddDirection} className={style.add_btn}>
                         <IoMdAddCircleOutline />
-                        Add Step
+                        {addStep}
                     </button>
 
                 </div>
@@ -345,11 +348,11 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
             <div className={`col-12 col-lg-7 d-flex gap-4 mt-5 justify-content-center ${style.confirm_recipe}`}>
                 <button onClick={handleAddRecipe} className={style.confirm_btn}>
                     <MdCheckCircleOutline />
-                    Save Recipe
+                    {saveRecipe}
                 </button>
                 <button onClick={clearInputs} className={style.confirm_btn} style={{ background: "red" }}>
                     <BiSolidTrash />
-                    Cancel Recipe
+                    {cancelRecipe}
                 </button>
             </div>
         </div>

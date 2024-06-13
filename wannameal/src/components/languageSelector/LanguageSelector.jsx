@@ -13,9 +13,9 @@ export default function LanguageSelector() {
     const changeLanguage = (lng) => {
         i18n.changeLanguage(lng)
     }
-    // useEffect(() => {
-    //     document.body.dir = i18n.dir()
-    // }, [i18n, i18n.language])
+    useEffect(() => {
+        document.body.dir = i18n.dir()
+    }, [i18n, i18n.language])
 
     return (
         <>

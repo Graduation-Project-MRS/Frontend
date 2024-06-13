@@ -13,12 +13,17 @@ import { GiHotMeal } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slices/authSlice";
+import { useTranslation } from "react-i18next";
 
 function Portfolio() {
   const [systemlanguage, setsystemlanguage] = useState("english");
   console.log("🚀 ~ Portfolio ~ systemlanguage:", systemlanguage);
   const [link, setLink] = useState("");
-
+  const { t } = useTranslation()
+  const { name, Nickname, edit, share, followers, following, savedRE, MyRE } = t('profile', {
+    fullname: 'badr abdelhalim',
+    nickname: 'badrJr'
+  })
   useEffect(() => {
     setLink(window.location.href);
 
@@ -108,13 +113,13 @@ function Portfolio() {
                 <div className={`${styles.personalData}`}>
                   <div>
                     <div className={`${styles.userName}`}>
-                      Badr abd elheleem ali
+                      {name}
                     </div>
-                    <div className={`${styles.acountName}`}>@Badr_Jr</div>
+                    <div className={`${styles.acountName}`}>{Nickname}</div>
                   </div>
                   <div className={`${styles.followData}`}>
-                    <span className={`${styles.followers}`}>1 followers </span>
-                    <span className={`${styles.following}`}>1 following </span>
+                    <span className={`${styles.followers}`}>1 {followers} </span>
+                    <span className={`${styles.following}`}>1 {following} </span>
                   </div>
                 </div>
                 <div className={`${styles.btns}`}>
@@ -123,7 +128,7 @@ function Portfolio() {
                       className={`${styles.btn}`}
                       style={{ minWidth: "130px" }}
                     >
-                      Edit profile
+                      {edit}
                     </div>
                   </Link>
                   <div
@@ -132,15 +137,15 @@ function Portfolio() {
                     className={`${styles.btn}`}
                     style={{ minWidth: "130px" }}
                   >
-                    Share profile
+                    {share}
                   </div>
                   <div
                     className={`${styles.settingIcon}`}
                     data-bs-target="#exampleModalToggle"
                     data-bs-toggle="modal"
-                    // onClick={() => {
-                    //   console.log("🚀 ~ Portfolio ~ showOverlay:", showOverlay);
-                    // }}
+                  // onClick={() => {
+                  //   console.log("🚀 ~ Portfolio ~ showOverlay:", showOverlay);
+                  // }}
                   >
                     <IoSettingsOutline size={29} />
                   </div>
@@ -406,12 +411,9 @@ function Portfolio() {
           <div className={` ${styles.recipsContainer} `}>
             <div className={`  ${styles.labels}  `}>
               <div className={` ${styles.saved} ${styles.active} `}>
-                <CiBookmark size={25} className={`${styles.icon}`} /> saved
-                recipes{" "}
-              </div>
+                <CiBookmark size={25} className={`${styles.icon}`} />{savedRE}</div>
               <div className={` ${styles.mine} `}>
-                <GiHotMeal size={25} className={`${styles.icon}`} /> my recipes
-              </div>
+                <GiHotMeal size={25} className={`${styles.icon}`} />{MyRE}</div>
             </div>
             <div
               className={`row justify-content-center justify-content-md-between g-2 align-items-center ${styles.recipsContainer} `}

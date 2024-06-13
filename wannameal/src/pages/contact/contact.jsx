@@ -7,15 +7,16 @@ import { TiSocialFacebook } from "react-icons/ti";
 import { FaXTwitter } from "react-icons/fa6";
 import { TiSocialLinkedin } from "react-icons/ti";
 import "animate.css";
+import { useTranslation } from "react-i18next";
 function ContactUs() {
+  const { t } = useTranslation()
+  const { head, fname, Email, msg, send, location, phone, mail } = t('contact')
   return (
     <div className={` ${styles.contactContainer} `}>
       <div
         className={`${styles.contact} animate__animated animate__backInRight container-lg`}
       >
-        <div className={styles.title}>
-          get in touch
-        </div>
+        <div className={styles.title}>{head}</div>
         <div
           className={`${styles.box} row justify-content-between align-items-center px-5`}
         >
@@ -28,7 +29,7 @@ function ContactUs() {
                     name="name"
                     className={`form-control ${styles.input}`}
                     id="exampleFormControlInput1"
-                    placeholder="Your Name"
+                    placeholder={fname}
                   />
                 </div>
                 <div>
@@ -37,21 +38,21 @@ function ContactUs() {
                     name="email"
                     className={`form-control  ${styles.input}`}
                     id="exampleFormControlInput1"
-                    placeholder="Your Email "
+                    placeholder={Email}
                   />
                 </div>
                 <div>
                   <textarea
                     name="message"
                     className={`form-control text-white ${styles.input}`}
-                    placeholder="Enter Your Message"
+                    placeholder={msg}
                     id="exampleFormControlTextarea1"
                     rows={3}
                     defaultValue={""}
                   />
                 </div>
 
-                <div className={`${styles.submit}  w-100  py-3`}>send</div>
+                <div className={`${styles.submit}  w-100  py-3`}>{send}</div>
                 {/* {message && <div className={`${style.message}`}>{message}</div>} */}
                 {/* {!isLoading ? (
                   <div
@@ -80,15 +81,15 @@ function ContactUs() {
           <div className={`${styles.information} col-5`}>
             <div className={`${styles.location}`}>
               <MdOutlineLocationOn color="#3AC568" size={22} className="me-2" />
-              Suez Canal University
+              {location}
             </div>
             <div className={`${styles.phone}`}>
               <FiPhone color="#3AC568" size={22} className="me-2" />
-              010-11-0101010-14-52
+              {phone}
             </div>
             <div className={`${styles.email}`}>
               <MdOutlineEmail color="#3AC568" size={22} className="me-2" />
-              Teem-ala-alaah@gmail.com
+              {mail}
             </div>
             <div className={`${styles.socialIcons}`}>
               <TiSocialFacebook size={22} /> <FaXTwitter size={22} />{" "}

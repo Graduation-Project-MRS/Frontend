@@ -7,8 +7,11 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { PiUploadSimple } from "react-icons/pi";
 import Swal from "sweetalert2";
 import profile from "../../../assets/man-user.svg";
+import { useTranslation } from "react-i18next";
 
 function EditProfile() {
+  const { t } = useTranslation()
+  const { setting, Profile, info, fname, lname, Email, image, change, delte, changePass, info2, CurrentPass, NewPass, ConfirmPass, savedCH, cancel, deltePers, info3, delteAcc } = t('editprofile')
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -118,50 +121,47 @@ function EditProfile() {
         <div className="container-lg">
           <div className="row">
             <div className={`${styles.content} col-12 col-md-10`}>
-              <div className={styles.title}>Personal Setting</div>
-              <div className={styles.semiTitle}>profile</div>
-              <div className={styles.note}>
-                This information will be displayed publicly so be careful what
-                you share.
-              </div>
+              <div className={styles.title}>{setting}</div>
+              <div className={styles.semiTitle}>{Profile}</div>
+              <div className={styles.note}>{info}</div>
               <form action="" onSubmit={handleSubmit} className={styles.form}>
                 <div className={`${styles.name} mt-2 `}>
                   <div className={`${styles.firstname}  col-12 col-md-5`}>
-                    <label htmlFor="firstName">first name</label>
+                    <label htmlFor="firstName">{fname}</label>
                     <input
                       type="text"
                       name="firstName"
                       id="firstName"
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      placeholder="first name"
+                      placeholder={fname}
                     />
                   </div>
                   <div className={`${styles.lastname}  col-12 col-md-5`}>
-                    <label htmlFor="lastName">last name</label>
+                    <label htmlFor="lastName">{lname}</label>
                     <input
                       type="text"
                       name="lastName"
                       id="lastName"
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      placeholder="last name"
+                      placeholder={lname}
                     />
                   </div>
                 </div>
                 <div className={`${styles.email}`}>
-                  <label htmlFor="email">email</label>
+                  <label htmlFor="email">{Email}</label>
                   <input
                     type="email"
                     name="email"
                     id="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    placeholder="email"
+                    placeholder={Email}
                   />
                 </div>
                 <hr />
-                <div className={styles.semiTitle}>profile picture</div>
+                <div className={styles.semiTitle}>{image}</div>
                 <div className={styles.imageProfile}>
                   <div className={styles.image}>
                     {formData.profilePicture ? (
@@ -175,9 +175,7 @@ function EditProfile() {
                   </div>
                   <div className={styles.btns}>
                     <label htmlFor="change" className={styles.change}>
-                      <PiUploadSimple size={22} className="mx-2" />
-                      change picture
-                    </label>
+                      <PiUploadSimple size={22} className="mx-2" />{change}</label>
                     <input
                       id="change"
                       type="file"
@@ -191,50 +189,45 @@ function EditProfile() {
                         on
                         onClick={handleDeletePhoto}
                       />
-                      delete
+                      {delte}
                     </label>
                   </div>
                 </div>
                 <hr />
-                <div className={styles.semiTitle}>change password</div>
-                <div className={styles.note}>
-                  This will be used to log into your account and complete high
-                  severity actions.
-                </div>
+                <div className={styles.semiTitle}>{changePass}</div>
+                <div className={styles.note}>{info2}</div>
                 <div className={`${styles.password} mt-2  `}>
                   <div className={styles.currentpassword}>
-                    <label htmlFor="currentPassword">current password</label>
+                    <label htmlFor="currentPassword">{CurrentPass}</label>
                     <input
                       type="password"
                       name="currentPassword"
                       id="currentPassword"
                       value={formData.currentPassword}
                       onChange={handleInputChange}
-                      placeholder="current passwword"
+                      placeholder={CurrentPass}
                     />
                   </div>
                   <div className={styles.newpassword}>
-                    <label htmlFor="newPassword">new password</label>
+                    <label htmlFor="newPassword">{NewPass}</label>
                     <input
                       type="password"
                       name="newPassword"
                       id="newPassword"
                       value={formData.newPassword}
                       onChange={handleInputChange}
-                      placeholder="new password"
+                      placeholder={NewPass}
                     />
                   </div>
                   <div className={styles.confirmnewpassword}>
-                    <label htmlFor="confirmNewPassword">
-                      confirm new password
-                    </label>
+                    <label htmlFor="confirmNewPassword">{ConfirmPass}</label>
                     <input
                       type="password"
                       name="confirmNewPassword"
                       id="confirmNewPassword"
                       value={formData.confirmNewPassword}
                       onChange={handleInputChange}
-                      placeholder="confirm new password"
+                      placeholder={ConfirmPass}
                     />
                   </div>
                 </div>
@@ -243,30 +236,21 @@ function EditProfile() {
                   <button
                     type="submit"
                     className={` ${styles.change} col-12 col-md-5`}
-                  >
-                    save changes
-                  </button>
+                  >{savedCH}</button>
                   <button
                     onClick={cancelChanges}
                     className={` ${styles.delete} col-12 col-md-5`}
-                  >
-                    Cancel
-                  </button>
+                  >{cancel}</button>
                 </div>
               </form>
               <hr />
-              <div className={styles.semiTitle}>Deiete Personal Account</div>
-              <div className={styles.note}>
-                Don't need wecraft any longer? We understand, and appreciate you
-                using our service!
-              </div>
+              <div className={styles.semiTitle}>{deltePers}</div>
+              <div className={styles.note}>{info3}</div>
 
               <div
                 className={styles.deleteAccount}
                 onClick={handleDeleteAcount}
-              >
-                delete account?
-              </div>
+              >{delteAcc}</div>
             </div>
           </div>
         </div>
