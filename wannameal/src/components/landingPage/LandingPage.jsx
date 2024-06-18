@@ -35,7 +35,7 @@ export default function LandingPage() {
             <button className={`btn ${styles.button}`}>{t('mainBtn')}</button>
 
           </motion.div>
-          <div className={` col-lg-6 ${isAr === 'ltr' ? styles.images:styles.imagesAR}`}>
+          <div className={` col-lg-6 ${isAr === 'ltr' ? styles.images : styles.imagesAR}`}>
             <motion.div
               initial={{ x: 600, scale: 0.5 }}
               animate={{ x: 0, scale: 1 }}

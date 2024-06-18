@@ -144,12 +144,12 @@ function Portfolio() {
                   </div>
                   <div className={`${styles.followData}`}>
                     <span className={`${styles.followers}`}>
-                      {" "}
-                      {profile?.user?.followers?.length || 0} followers{" "}
+
+                      {profile?.user?.followers?.length || 0} {followers}
                     </span>
                     <span className={`${styles.following}`}>
-                      {" "}
-                      {profile?.user?.following?.length || 0} following{" "}
+
+                      {profile?.user?.following?.length || 0} {following}
                     </span>
                   </div>
                 </div>
@@ -204,7 +204,7 @@ function Portfolio() {
                         <div class="modal-body p-0">
                           <ul className={`${styles.settingUl} `}>
                             <li>
-                              WannaMeaL{" "}
+                              WannaMeaL
                               <span className={` ${styles.premium} `}>
                                 premium
                               </span>
@@ -222,7 +222,7 @@ function Portfolio() {
                               language
                             </li>
                             <li data-bs-target="#invite" data-bs-toggle="modal">
-                              Invite your friends to WannaMeaL{" "}
+                              Invite your friends to WannaMeaL
                             </li>
                             <li data-bs-dismiss="modal">
                               <Link
@@ -449,8 +449,7 @@ function Portfolio() {
                   setActiveMeals("saved");
                 }}
               >
-                <CiBookmark size={25} className={`${styles.icon}`} /> saved
-                recipes{" "}
+                <CiBookmark size={25} className={`${styles.icon}`} /> {savedRE}
               </div>
               <div
                 className={
@@ -462,7 +461,7 @@ function Portfolio() {
                   setActiveMeals("mine");
                 }}
               >
-                <GiHotMeal size={25} className={`${styles.icon}`} /> my recipes
+                <GiHotMeal size={25} className={`${styles.icon}`} /> {MyRE}
               </div>
             </div>
             <div
