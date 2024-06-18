@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 export const loginUser = createAsyncThunk("auth/login", async (user) => {
   try {
     const response = await axios.post(
-      "https://fast-plat1.vercel.app/auth/login",
+      "https://fast-plat1.vercel.app/auth/login?lang=eng",
       user
     );
     return response.data;
@@ -17,6 +18,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: JSON.parse(localStorage.getItem("user") || null),
+    decodedToken: localStorage.getItem("user")
+      ? jwtDecode(JSON.parse(localStorage.getItem("user"))?.token)
+      : "",
+
     loading: false,
     error: null,
   },
@@ -45,6 +50,7 @@ const authSlice = createSlice({
 });
 
 export const getuser = (state) => state.auth.user;
+export const getDecodedToken = (state) => state.auth.decodedToken;
 export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;

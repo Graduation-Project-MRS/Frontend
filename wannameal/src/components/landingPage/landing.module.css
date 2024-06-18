@@ -18,7 +18,7 @@
 }
 
 .info .mainTitle {
-  color: #272727;
+  color: var(--dark);
   font-style: normal;
   line-height: 80px;
 }

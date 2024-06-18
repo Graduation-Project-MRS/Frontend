@@ -82,7 +82,7 @@
 }
 
 .labels {
-  margin-top: 20px;
+  margin: 20px 0;
   border-top: 1px solid var(--text_black);
   width: 100%;
   display: flex;
@@ -91,14 +91,53 @@
   gap: 20px;
 }
 
-.labels div {
-  padding-top: 15px;
+.labels .saved,
+.labels .mine {
+  /* padding-top: 15px; */
+  padding: 15px 0 0 0;
+  cursor: pointer;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-transform: capitalize;
+  /* text-align: start; */
 }
 
-.active {
-  border-top: 2px solid var(--light-green);
+.labels .activeSaved {
+  position: relative;
+  transition: 0.3s;
 }
-.active .icon {
+.labels .activeSaved::after {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: -1px;
+  width: 100%;
+  height: 2px;
+  background-color: var(--light-green);
+  z-index: 1000;
+  transform: translate(0px);
+  transition: 1s;
+}
+.labels .activeMine {
+  position: relative;
+  transition: 0.3s;
+}
+.labels .activeMine::after {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: -1px;
+  width: 100%;
+  height: 2px;
+  background-color: var(--light-green);
+  z-index: 1000;
+  transform: translate(0px);
+  transition: 1s;
+}
+.labels .activeMine .icon,
+.labels .activeSaved .icon {
   color: var(--light-green);
 }
 
@@ -168,7 +207,7 @@
   transition: 0.3s;
 }
 
-.icon {
+.checkicon {
   transition: 0.3s;
   opacity: 0;
 }
@@ -177,7 +216,7 @@
   border: 1px solid var(--green) !important;
   transform: scale(1.02);
 }
-.checked .icon {
+.checked .checkicon {
   opacity: 0.8;
   color: var(--green);
 }

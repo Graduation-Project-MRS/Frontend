@@ -10,9 +10,7 @@ import rec9 from "../../assets/Rectangle 9.png";
 import rec10 from "../../assets/Rectangle 10.png";
 import { motion } from "framer-motion"
 import styles from './landing.module.css';
-import { useTranslation } from "react-i18next";
-export default function LandingPage() {
-  const { t } = useTranslation()
+export default function landingPage() {
   return (
     <div className={styles.homeContainer}>
       <div className={`container-lg m-0 p-0 `}>
@@ -23,15 +21,19 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             className={`col-12 col-lg-6  ${styles.info}`}>
             <div className={styles.mainTitle}>
-              <h1>{t("heading")}</h1>
-              <h3>{t("mini")}</h3>
+              <h1 >
+                Health Requires Healthy food
+              </h1>
+              <h3>Manage your recipes the easy way</h3>
             </div>
             <div className={styles.description}>
-              <p>{t('intro_p1')}</p>
-              <p>{t('intro_p2')}</p>
+              <p>share recipes with your friends and discover new ones</p>
+              <p>
+                Know the parts of the meal and what it consists of and the
+                components that each molecule contains.
+              </p>
             </div>
-            <button className={`btn ${styles.button}`}>{t('mainBtn')}</button>
-
+            <button className={`btn ${styles.button}`}>Make a meal</button>
           </motion.div>
           <div className={` col-lg-6 ${styles.images}`}>
             <motion.div

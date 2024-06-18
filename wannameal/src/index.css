@@ -21,6 +21,21 @@
   --mainFontFamily: "Poppins";
   --light_burble: #f2ecff;
 }
+
+.dark {
+  --body: ##201e27;
+  --green: #049601;
+  --light-green: #4ecb77;
+  --opacity_green: #e6fee3;
+  --text_black: #fff;
+  --text_white: #3b3b3b;
+  --text_gray: #00000080;
+  --blue: #1976d2;
+  --light-blue: #699bf7;
+  --grayWritingColor: #b5b4b4ba;
+  --mainFontFamily: "Poppins";
+  --light_burble: #f2ecff;
+}
 a {
   color: inherit;
   text-decoration: none;

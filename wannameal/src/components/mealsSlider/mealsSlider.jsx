@@ -16,9 +16,26 @@ import "swiper/css/scrollbar";
 import "swiper/css/free-mode";
 import MealCard from "../mealCard/mealCard";
 
+import { useSelector } from "react-redux";
+import { getRecommendMeals } from "../../redux/slices/recomendedMealsSlice";
+import Loading from "../loading/loading";
+
 function MealsSlider() {
+  const recomendedMeals = useSelector(getRecommendMeals);
+  console.log("🚀 ~ MealsSlider ~ recomendedMeals:", recomendedMeals);
+  const loading = useSelector((state) => state.meals.loading);
+  const error = useSelector((state) => state.meals.error);
+
+  if (loading)
+    return (
+      <div className="w-100 d-flex justify-content-center align-items-center">
+        <Loading />
+      </div>
+    );
+  if (error) return <p>Error: {error}</p>;
+
   return (
-    <div className="container">
+    <div className="container mb-3">
       <Swiper
         modules={[FreeMode]}
         freeMode={true}
@@ -45,21 +62,11 @@ function MealsSlider() {
           },
         }}
       >
-        <SwiperSlide>
-          <MealCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <MealCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <MealCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <MealCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <MealCard />
-        </SwiperSlide>
+        {recomendedMeals?.map((meal, index) => (
+          <SwiperSlide key={index}>
+            <MealCard meal={meal} />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );

@@ -10,7 +10,6 @@ import { IoIosSearch } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { getuser, logout } from "../../redux/slices/authSlice";
 import { IoNotificationsOutline } from "react-icons/io5";
-import LanguageSelector from "../../components/languageSelector/LanguageSelector";
 
 function Navbar() {
   const [mode, setMode] = useState("light");
@@ -99,7 +98,7 @@ function Navbar() {
               <span className="navbar-toggler-icon" />
             </button>
             <div
-              className={` ${style.dragMenu} collapse navbar-collapse gap-3`}
+              className={` ${style.dragMenu} collapse navbar-collapse`}
               id="navbarSupportedContent"
             >
               <form className={`d-flex mx-auto ${style.navForm}`} role="search">
@@ -160,7 +159,6 @@ function Navbar() {
                   </>
                 )}
               </div>
-              <LanguageSelector />
             </div>
           </div>
         </nav>
