@@ -420,4 +420,9 @@ export const ingredients = [
     name: "بقرة",
     hex: "1F404",
   },
+  {
+    id: 81,
+    name: "ارز",
+    hex: "1F404",
+  },
 ];

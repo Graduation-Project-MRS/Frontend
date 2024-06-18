@@ -20,10 +20,16 @@ import "swiper/css/free-mode";
 import { TiDelete } from "react-icons/ti";
 import { RiDeleteBin2Line } from "react-icons/ri";
 
+import { useDispatch } from "react-redux";
+import { recommendMeals } from "../../redux/slices/recomendedMealsSlice";
+import axios from "axios";
+
 function FoodIngreientSlider() {
   const [checkedIngredients, setCheckedIngredients] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredIngredients, setFilteredIngredients] = useState(ingredients);
+
+  const dispatch = useDispatch();
 
   const handleCheckboxChange = (ingredient) => {
     setCheckedIngredients((prevIngredients) => {
@@ -49,6 +55,17 @@ function FoodIngreientSlider() {
     );
     setFilteredIngredients(filtered);
   }, [searchQuery, ingredients]);
+
+  useEffect(() => {
+    if (checkedIngredients.length > 0) {
+      const ingredientNames = checkedIngredients
+        .map((ingredient) => ingredient.name)
+        .join(",");
+      dispatch(recommendMeals(ingredientNames));
+    } else {
+      dispatch(recommendMeals("رز,فراخ,بطاطس"));
+    }
+  }, [checkedIngredients, dispatch]);
 
   return (
     <>
@@ -86,10 +103,10 @@ function FoodIngreientSlider() {
             </div>
           )}
           {checkedIngredients &&
-            checkedIngredients.map((ingredient) => {
+            checkedIngredients.map((ingredient, index) => {
               return (
                 <div
-                  key={ingredient.id}
+                  key={index}
                   className={`${styles.checkedIngredient} animate__animated animate__bounceIn`}
                 >
                   {ingredient.name}
@@ -141,8 +158,8 @@ function FoodIngreientSlider() {
                 },
               }}
             >
-              {filteredIngredients.map((ingredient) => (
-                <SwiperSlide key={ingredient.id}>
+              {filteredIngredients.map((ingredient, index) => (
+                <SwiperSlide key={index}>
                   <div className={styles.parentcheckbox}>
                     <input
                       type="checkbox"

@@ -4,21 +4,32 @@ import styles from "./profile.module.css";
 import MealCard from "../../components/mealCard/mealCard";
 import "animate.css";
 import Swal from "sweetalert2";
-
+import defaultProfile from "../../assets/man-user.svg"; // Renamed import to avoid conflict with the profile variable
 import { IoSettingsOutline } from "react-icons/io5";
 import { CiBookmark } from "react-icons/ci";
+import { GiHotMeal } from "react-icons/gi";
 import { IoLinkOutline } from "react-icons/io5";
 import { FaCheckCircle } from "react-icons/fa";
-import { GiHotMeal } from "react-icons/gi";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { logout } from "../../redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getDecodedToken, getuser, logout } from "../../redux/slices/authSlice";
+import {
+  getProfile,
+  getProfileById,
+} from "../../redux/slices/communityUserSlice";
 import { useTranslation } from "react-i18next";
 
 function Portfolio() {
   const [systemlanguage, setsystemlanguage] = useState("english");
-  console.log("🚀 ~ Portfolio ~ systemlanguage:", systemlanguage);
   const [link, setLink] = useState("");
+  const [activeMeals, setActiveMeals] = useState("saved");
+  const availableUser = useSelector(getuser);
+  const decodedToken = useSelector(getDecodedToken);
+  const profile = useSelector(getProfile); // Ensure profile is fetched properly
+  const profileError = useSelector((state) => state.communityUser.error);
+  const dispatch = useDispatch();
+  console.log("🚀 ~ Community ~ profile:", profile);
+  console.log("🚀 ~ Portfolio ~ systemlanguage:", systemlanguage);
   const { t } = useTranslation()
   const { name, Nickname, edit, share, followers, following, savedRE, MyRE } = t('profile', {
     fullname: 'badr abdelhalim',
@@ -26,20 +37,33 @@ function Portfolio() {
   })
   useEffect(() => {
     setLink(window.location.href);
-
-    // Function to update link state on popstate event (back/forward button)
     const handlePopState = () => {
       setLink(window.location.href);
     };
-
-    // Listen for the popstate event (back/forward button)
     window.addEventListener("popstate", handlePopState);
-
-    // Cleanup the event listener
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
   }, []);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        dispatch(
+          getProfileById({
+            userId: decodedToken.id,
+            token: availableUser.token,
+          })
+        );
+      } catch (error) {
+        console.error("Failed to fetch profile:", profileError);
+      }
+    };
+
+    if (availableUser.token && decodedToken.id) {
+      fetchProfile();
+    }
+  }, [dispatch, availableUser.token, decodedToken.id, profileError]);
 
   function copyLink() {
     navigator.clipboard.writeText(link);
@@ -59,7 +83,6 @@ function Portfolio() {
       title: "Copied Successfully",
     });
   }
-  const dispatch = useDispatch();
   let handleLogout = () => {
     Swal.fire({
       toast: true,
@@ -102,24 +125,32 @@ function Portfolio() {
                   style={{
                     borderRadius: "50%",
                   }}
-                  src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src={profile?.user?.profileImage?.url || defaultProfile}
                   width={180}
                   height={180}
                   objectFit="cover"
-                  alt="meal"
+                  alt="profile"
                 />
               </div>
               <div className={`${styles.info} `}>
                 <div className={`${styles.personalData}`}>
                   <div>
                     <div className={`${styles.userName}`}>
-                      {name}
+                      {profile?.user?.userName}
                     </div>
-                    <div className={`${styles.acountName}`}>{Nickname}</div>
+                    <div className={`${styles.acountName}`}>
+                      {profile?.user?.email}
+                    </div>
                   </div>
                   <div className={`${styles.followData}`}>
-                    <span className={`${styles.followers}`}>1 {followers} </span>
-                    <span className={`${styles.following}`}>1 {following} </span>
+                    <span className={`${styles.followers}`}>
+                      {" "}
+                      {profile?.user?.followers?.length || 0} followers{" "}
+                    </span>
+                    <span className={`${styles.following}`}>
+                      {" "}
+                      {profile?.user?.following?.length || 0} following{" "}
+                    </span>
                   </div>
                 </div>
                 <div className={`${styles.btns}`}>
@@ -193,22 +224,20 @@ function Portfolio() {
                             <li data-bs-target="#invite" data-bs-toggle="modal">
                               Invite your friends to WannaMeaL{" "}
                             </li>
-                            <li className="p-0">
+                            <li data-bs-dismiss="modal">
                               <Link
                                 to="/contact"
-                                style={{
-                                  padding: "15px",
-                                  display: "block",
-                                }}
+                                style={
+                                  {
+                                    // padding: "15px",
+                                    // display: "block",
+                                  }
+                                }
                               >
                                 contact us
                               </Link>
                             </li>
-                            <li
-                              data-bs-target="#logout"
-                              data-bs-toggle="modal"
-                              onClick={handleLogout}
-                            >
+                            <li data-bs-dismiss="modal" onClick={handleLogout}>
                               log out
                             </li>
                           </ul>
@@ -301,7 +330,7 @@ function Portfolio() {
                               <div className="d-flex">
                                 english
                                 <FaCheckCircle
-                                  className={`${styles.icon}`}
+                                  className={`${styles.checkicon}`}
                                   size={25}
                                   style={{ marginLeft: "auto" }}
                                 />
@@ -330,7 +359,7 @@ function Portfolio() {
                               <div className="d-flex">
                                 arabic
                                 <FaCheckCircle
-                                  className={`${styles.icon}`}
+                                  className={`${styles.checkicon}`}
                                   size={25}
                                   style={{ marginLeft: "auto" }}
                                 />
@@ -410,20 +439,42 @@ function Portfolio() {
           </div>
           <div className={` ${styles.recipsContainer} `}>
             <div className={`  ${styles.labels}  `}>
-              <div className={` ${styles.saved} ${styles.active} `}>
-                <CiBookmark size={25} className={`${styles.icon}`} />{savedRE}</div>
-              <div className={` ${styles.mine} `}>
-                <GiHotMeal size={25} className={`${styles.icon}`} />{MyRE}</div>
+              <div
+                className={
+                  activeMeals === "saved"
+                    ? ` ${styles.saved} ${styles.activeSaved} `
+                    : `${styles.saved}`
+                }
+                onClick={() => {
+                  setActiveMeals("saved");
+                }}
+              >
+                <CiBookmark size={25} className={`${styles.icon}`} /> saved
+                recipes{" "}
+              </div>
+              <div
+                className={
+                  activeMeals === "mine"
+                    ? ` ${styles.mine} ${styles.activeMine} `
+                    : `${styles.mine}`
+                }
+                onClick={() => {
+                  setActiveMeals("mine");
+                }}
+              >
+                <GiHotMeal size={25} className={`${styles.icon}`} /> my recipes
+              </div>
             </div>
             <div
-              className={`row justify-content-center justify-content-md-between g-2 align-items-center ${styles.recipsContainer} `}
+              className={` d-flex flex-wrap w-100 justify-content-center justify-content-md-between g-2 align-items-center ${styles.recipsContainer} `}
             >
+              {activeMeals === "saved" ? "saved meals" : "my recips"}
+              {/* <MealCard className=" col-12 col-lg-3" />
               <MealCard className=" col-12 col-lg-3" />
               <MealCard className=" col-12 col-lg-3" />
               <MealCard className=" col-12 col-lg-3" />
               <MealCard className=" col-12 col-lg-3" />
-              <MealCard className=" col-12 col-lg-3" />
-              <MealCard className=" col-12 col-lg-3" />
+              <MealCard className=" col-12 col-lg-3" /> */}
             </div>
           </div>
         </div>

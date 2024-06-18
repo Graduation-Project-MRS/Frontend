@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { Suspense } from "react";
 import "./App.css";
 import Home from "./pages/Home/Home";
 import ContactUs from "./pages/contact/contact";
@@ -11,9 +12,11 @@ import Auth from "./pages/Auth/Auth";
 import Chatting from "./pages/chatting/chatting";
 import Community from "./pages/community/comunity";
 import Navbar from "./components/navbar/navbar";
+import Loading from "./components/loading/loading";
 //!
 import { useDispatch, useSelector } from "react-redux";
 import { getuser } from "./redux/slices/authSlice";
+import { getTheme } from "./redux/slices/systemModeSlice";
 let authorized = false;
 console.log("🚀 ~ authorized:", authorized);
 function App() {
@@ -23,42 +26,56 @@ function App() {
     authorized = true;
   } else authorized = false;
 
+  const theme = useSelector(getTheme);
+
+  theme == "dark"
+    ? document.body.classList.add("dark")
+    : document.body.classList.remove("dark");
+
   return (
     <>
       <Navbar />
-      <Routes>
-        {["/", "home"].map((x, ind) => (
-          <Route path={x} key={ind} element={<Home />} />
-        ))}
-        <Route
-          path="/contact"
-          element={authorized ? <ContactUs /> : <Auth />}
-        />
-        <Route
-          path="/recipeDetails"
-          element={authorized ? <RecipeDetails /> : <Auth />}
-        />
-        <Route path="/AddProduct" element={<AddProduct />} />
-        <Route
-          path="/dashboard/*"
-          element={authorized ? <Dashboard /> : <Auth />}
-        />
-        <Route path="/auth/*" element={<Auth />} />
-        <Route
-          path="/profile/*"
-          element={authorized ? <Profile /> : <Auth />}
-        />
-        <Route
-          path="/profile/edit/"
-          element={authorized ? <EditProfile /> : <Auth />}
-        />
-        <Route
-          path="/community"
-          element={authorized ? <Community /> : <Auth />}
-        />
-        <Route path="/community/chat" element={<Chatting />} />
-        <Route path="*" element={<Navigate to={"/"} />} />
-      </Routes>
+      <Suspense
+        fallback={
+          <div className="w-100 d-flex justify-content-center align-items-center">
+            <Loading />
+          </div>
+        }
+      >
+        <Routes>
+          {["/", "home"].map((x, ind) => (
+            <Route path={x} key={ind} element={<Home />} />
+          ))}
+          <Route
+            path="/contact"
+            element={authorized ? <ContactUs /> : <Auth />}
+          />
+          <Route
+            path="/recipeDetails/:recepDetailsId"
+            element={authorized ? <RecipeDetails /> : <Auth />}
+          />
+          <Route path="/AddProduct" element={<AddProduct />} />
+          <Route
+            path="/dashboard/*"
+            element={authorized ? <Dashboard /> : <Auth />}
+          />
+          <Route path="/auth/*" element={<Auth />} />
+          <Route
+            path="/profile/*"
+            element={authorized ? <Profile /> : <Auth />}
+          />
+          <Route
+            path="/profile/edit/"
+            element={authorized ? <EditProfile /> : <Auth />}
+          />
+          <Route
+            path="/community"
+            element={authorized ? <Community /> : <Auth />}
+          />
+          <Route path="/community/chat" element={<Chatting />} />
+          <Route path="*" element={<Navigate to={"/"} />} />
+        </Routes>
+      </Suspense>
     </>
   );
 }
