@@ -6,8 +6,8 @@
   "intro_p2": "Know The Parts Of The Meal And What It Consists Of And The Components That Each Molecule Contains.",
   "mainBtn": "Make a Meal",
   "profile": {
-    "name": "Badr Abd Elheleem Ali",
-    "Nickname": "@badrjr",
+    "name": "{{fullname}}",
+    "Nickname": "{{NickName}}",
     "edit": "edit profile",
     "share": "share profile",
     "followers": "followers",
@@ -55,7 +55,7 @@
     "cancelRecipe": "cancel Recipe"
   },
   "contact": {
-    "head":"get in touch",
+    "head": "get in touch",
     "fname": "Your Name",
     "Email": "Your Email",
     "msg": "enter your message",
@@ -63,5 +63,22 @@
     "location": "Suez Canal University",
     "phone": " 010-11-0101010-14-52",
     "mail": "Teem-ala-alaah@gmail.com"
+  },
+  "community": {
+    "Fname": "{{fullname}}",
+    "email": "{{email}}",
+    "edit": "edit profile",
+    "mine": "my profile",
+    "recommend": "recommended for you",
+    "Norecommend": "No recommended users for you!",
+    "more": "Show more",
+    "followers": "followers",
+    "following": "following",
+    "follow": "follow",
+    "photo": "photo",
+    "video": "video",
+    "share": "Share what you want",
+    "who": "who are you following",
+    "msg":"message"
   }
 }

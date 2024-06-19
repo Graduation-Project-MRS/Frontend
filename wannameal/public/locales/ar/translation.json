@@ -63,5 +63,22 @@
     "location": "جامعة قناة السويس",
     "phone": "010-11-0101010-14-52",
     "mail": "Teem-ala-alaah@gmail.com"
+  },
+  "community": {
+    "Fname": "{{fullname}}",
+    "email": "{{email}}",
+    "edit": "تعديل الملف الشخصي",
+    "mine": "ملفي الشخصي",
+    "recommend": "موصى به لك",
+    "Norecommend": "لا يوجد مستخدمون موصى بهم لك!",
+    "more": "عرض المزيد",
+    "followers": "اتابعهم",
+    "following": "المتابعون",
+    "follow": "متابعة",
+    "photo": "صورة",
+    "video": "فيديو",
+    "share": "شارك ما تريد",
+    "who": "من تتابع",
+    "msg": "محادثة"
   }
 }

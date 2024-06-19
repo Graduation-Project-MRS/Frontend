@@ -19,6 +19,7 @@ import {
   getProfile,
 } from "../../redux/slices/communityUserSlice";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 export default function Community() {
   const [text, setText] = useState("");
@@ -26,7 +27,11 @@ export default function Community() {
   const [videos, setVideos] = useState([]);
   const [previewPhotos, setPreviewPhotos] = useState([]);
   const [previewVideos, setPreviewVideos] = useState([]);
-
+  const { t } = useTranslation()
+  const { Fname, email, edit, mine, recommend, Norecommend, more, follow, msg, share, followers, following, photo, video, who } = t('community', {
+    fullname: 'mahmoud khairy402',
+    email: 'mahmoudkhairy402@gmail.com'
+  })
   // Use selectors to get state values
   const { suggestedUsers } = useSelector(getSuggestedUsers);
   const profile = useSelector(getProfile); // Ensure profile is fetched properly
@@ -161,17 +166,17 @@ export default function Community() {
                     <div className={style.followNum}>
                       {profile.user.following?.length || 0}{" "}
                     </div>
-                    <div className={style.followTitle}>following</div>
+                    <div className={style.followTitle}>{following}</div>
                   </div>
                   <div className={style.follwers}>
                     <div className={style.followNum}>
                       {profile.user.followers?.length || 0}{" "}
                     </div>
-                    <div className={style.followTitle}>followers</div>
+                    <div className={style.followTitle}>{followers}</div>
                   </div>
                 </div>
                 <div className={style.profileLink}>
-                  <Link to="/profile">my profile</Link>
+                  <Link to="/profile">{mine}</Link>
                 </div>
               </div>
             ) : (
@@ -180,24 +185,24 @@ export default function Community() {
 
             {suggestedUsers ? (
               <div className={style.followInfoCard}>
-                <div className={style.title}>recommended for you</div>
+                <div className={style.title}>{recommend}</div>
                 <div className={style.userCards}>
                   {suggestedUsers && suggestedUsers?.length > 0 ? (
                     suggestedUsers.map((user) => (
                       <UserCard
                         key={user.id}
-                        method="follow"
+                        method={follow}
                         user={user}
-                        // suggestedUsers={suggestedUsers}
+                      // suggestedUsers={suggestedUsers}
                       /> // Ensure unique key for each UserCard
                     ))
                   ) : (
-                    <p>No recommended users for you!</p>
+                    <p>{Norecommend}</p>
                   )}
                 </div>
                 {suggestedUsers && suggestedUsers?.length > 3 && (
                   <div className={style.showMore}>
-                    <Link to="/community">Show more</Link>
+                    <Link to="/community">{more}</Link>
                   </div>
                 )}
               </div>
@@ -222,7 +227,7 @@ export default function Community() {
                 <div className={`${style.textInput} col-12`}>
                   <input
                     type="text"
-                    placeholder="Share what you want"
+                    placeholder={`${share}`}
                     name="post"
                     value={text}
                     id="post"
@@ -249,7 +254,7 @@ export default function Community() {
                 />
                 <label htmlFor="photoInput">
                   <HiPhoto size={23} color="#1976d2" className="me-1" />
-                  Photo
+                  {photo}
                 </label>
                 <input
                   type="file"
@@ -261,7 +266,7 @@ export default function Community() {
                 />
                 <label htmlFor="videoInput">
                   <IoVideocam size={23} color="#1976d2" className="me-1" />
-                  Video
+                  {video}
                 </label>
               </form>
               <div
@@ -288,12 +293,12 @@ export default function Community() {
           </div>
           <div className={`  ${style.rightAside}`}>
             <div className={style.followInfoCard}>
-              <div className={style.title}>who are you following</div>
+              <div className={style.title}>{who}</div>
               <div className={style.userCards}>
-                <UserCard method="message" user="" />
+                <UserCard method={msg} user="" />
               </div>
               <div className={style.showMore}>
-                <Link to="/community">Show more</Link>
+                <Link to="/community">{more}</Link>
               </div>
             </div>
           </div>
