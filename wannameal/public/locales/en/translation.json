@@ -79,6 +79,9 @@
     "video": "video",
     "share": "Share what you want",
     "who": "who are you following",
-    "msg":"message"
+    "msg":"message",
+    "comment":"comment",
+    "sharee":"share",
+    "like":"like"
   }
 }

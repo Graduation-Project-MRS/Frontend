@@ -5,8 +5,11 @@
 .number_btn button {
   padding: 5px 14px;
   color: var(--text_black);
-  border-radius: 3px;
+  border-radius: 7px;
   background: #ffffff;
   transition: 1s;
   border: 1px solid #eff3fd;
+}
+.active {
+  background-color: var(--green) !important;
 }

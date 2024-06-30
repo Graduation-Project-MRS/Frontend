@@ -30,7 +30,7 @@ function Sidebar() {
         Fast Plate
       </Link>
       <div className={style.divider}></div>
-      <div className="d-flex flex-column gap-5 my-5 align-items-start ps-3 ps-lg-5">
+      <div className="d-flex flex-column gap-5 my-5 align-items-start ps-0  ps-lg-5">
         <Link to={"/dashboard"}>
           <div
             onClick={() => setChoosen("Dashboard")}

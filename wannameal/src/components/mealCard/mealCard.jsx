@@ -12,8 +12,8 @@ function MealCard({ meal }) {
         <div className={`${styles.mealCard}`}>
           <div className={`${styles.imageContainer}`}>
             <img
-              src={meal?.img_link.url}
-              id={meal?.img_link.id}
+              src={meal?.image.url}
+              id={meal?.image.id}
               objectFit="cover"
               alt={`meal ${meal?.name}`}
               loading="lazy"

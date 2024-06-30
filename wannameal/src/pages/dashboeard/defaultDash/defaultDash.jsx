@@ -80,8 +80,8 @@ export default function DefaultDash() {
           </div>
         </div>
       </div>
-      <div className="row  my-4">
-        <div className="col-9">
+      <div className="row  my-4 row-gap-2">
+        <div className="col-12 col-lg-9">
           {isClient && (
             <div className={`p-3 py-4 ${style.state_div}`}>
               <h4 className="mb-4">Market Overview</h4>
@@ -113,7 +113,7 @@ export default function DefaultDash() {
             </div>
           )}
         </div>
-        <div className="col-3 d-flex flex-column gap-5">
+        <div className="col-12 col-lg-3 d-flex flex-column gap-5">
           <div
             className={`p-3 py-5 d-flex flex-column gap-5 ${style.state_div}`}
           >

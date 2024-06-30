@@ -28,7 +28,7 @@ export default function Community() {
   const [previewPhotos, setPreviewPhotos] = useState([]);
   const [previewVideos, setPreviewVideos] = useState([]);
   const { t } = useTranslation()
-  const { Fname, email, edit, mine, recommend, Norecommend, more, follow, msg, share, followers, following, photo, video, who } = t('community', {
+  const { Fname, email, edit, comment, sharee,like,mine, recommend, Norecommend, more, follow, msg, share, followers, following, photo, video, who } = t('community', {
     fullname: 'mahmoud khairy402',
     email: 'mahmoudkhairy402@gmail.com'
   })

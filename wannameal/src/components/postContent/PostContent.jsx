@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { likePost, commentPost } from "../../redux/slices/postsSLlce";
 import { getDecodedToken } from "../../redux/slices/authSlice";
 import { getuser } from "../../redux/slices/authSlice";
+import { useTranslation } from "react-i18next";
 
 export default function PostContent() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -16,9 +17,7 @@ export default function PostContent() {
   const [previewVideos, setPreviewVideos] = useState([]);
   const [likedPost, setLikedPost] = useState(false);
   const [commentText, setCommentText] = useState("");
-  let dispatch = useDispatch();
   let { token } = useSelector(getuser);
-  let decodedToken = useSelector(getDecodedToken);
 
   const handleImageClick = (src) => {
     setSelectedImage(src);
@@ -44,13 +43,11 @@ export default function PostContent() {
     console.log("first share");
   };
 
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    console.log("Comment submitted: ", commentText);
-    // Dispatch the commentPost action here
-    // dispatch(commentPost({ postId: post.id, token, text: commentText }));
-  };
-
+  const { t } = useTranslation()
+  const { comment, sharee, like } = t('community', {
+    fullname: 'mahmoud khairy402',
+    email: 'mahmoudkhairy402@gmail.com'
+  })
   return (
     <div className={`${style.post} w-100 d-flex align-items-start`}>
       <div className={`${style.profileImage} col-1 me-1`}>
@@ -153,16 +150,15 @@ export default function PostContent() {
             <AiFillHeart size={16} color="#699bf7" className="me-1" />
             2k
           </p>
-          <p className={style.comments}>3 comments</p>
+          <p className={style.comments}>3 {comment}</p>
         </div>
         <div className={style.reacts}>
           <div
-            className={`${
-              likedPost ? `${style.like} ${style.likedPost}` : style.like
-            }`}
+            className={`${likedPost ? `${style.like} ${style.likedPost}` : style.like
+              }`}
             onClick={handleLikeClick}
           >
-            <AiFillHeart size={23} className={style.likeIcon} /> like
+            <AiFillHeart size={23} className={style.likeIcon} /> {like}
           </div>
           <div
             className={style.comment}
@@ -171,12 +167,12 @@ export default function PostContent() {
             data-bs-target="#commentmodal"
           >
             <AiFillMessage size={23} color="#699bf7" />
-            comment
+            {comment}
           </div>
 
           <div className={style.share} onClick={handleShareClick}>
             <IoIosShareAlt size={23} color="#699bf7" />
-            share
+            {sharee}
           </div>
         </div>
       </div>

@@ -6,6 +6,8 @@ import postsSlice from "./slices/postsSLlce";
 import communityUserSlice from "./slices/communityUserSlice";
 import language from "./slices/language";
 import themeSlice from "./slices/systemModeSlice";
+import dashusers from "./slices/dashusers";
+import dashmeals from "./slices/dashmeals";
 const store = configureStore({
   reducer: {
     auth: authSlice,
@@ -15,6 +17,8 @@ const store = configureStore({
     communityUser: communityUserSlice,
     language: language,
     theme: themeSlice,
+    dashmeals: dashmeals,
+    users: dashusers
   },
 });
 

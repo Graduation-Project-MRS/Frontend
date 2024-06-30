@@ -1,7 +1,7 @@
 .filter_btn {
   background-color: var(--text_white);
   border-radius: 10px;
-  padding: 1rem 2rem;
+  padding: 1rem 1rem;
   transition: 0.3s;
   cursor: pointer;
   margin: 0.2rem 1.5rem;
@@ -12,14 +12,23 @@
 }
 .head_table {
   color: #000;
-  text-align: center;
+  /* text-align: center; */
   font-family: Poppins;
+  padding: 0 8px;
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
   letter-spacing: 0.18px;
   text-transform: capitalize;
+}
+@media (max-width: 940px) {
+  .head_table {
+    font-size: 14px;
+  }
+  .body_table {
+    font-size: 13px !important;
+  }
 }
 .table {
   width: 100%;
@@ -34,7 +43,8 @@
 }
 .body_table {
   color: #000;
-  text-align: center;
+  /* text-align: center; */
+  padding: 0 8px;
   font-family: Poppins;
   font-size: 18px;
   font-style: normal;
