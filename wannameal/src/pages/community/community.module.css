@@ -79,7 +79,7 @@
 .leftAside .userInfoCard .userProfile .mainInfo .email {
   font-size: 14px;
   font-weight: 400;
-  color: var(--text_gray);
+  color: var(--grayWritingColor);
 }
 
 .leftAside .userInfoCard .follwInfo {
@@ -89,13 +89,13 @@
   height: 25%;
   position: relative;
   padding: 10px;
-  border-top: 1px solid var(--text_gray);
-  border-bottom: 1px solid var(--text_gray);
+  border-top: 1px solid var(--grayWritingColor);
+  border-bottom: 1px solid var(--grayWritingColor);
 }
 .leftAside .userInfoCard .follwInfo::after {
   position: absolute;
   content: "";
-  background-color: var(--text_gray);
+  background-color: var(--grayWritingColor);
   width: 1px;
   height: 80%;
   left: 50%;
@@ -113,7 +113,7 @@
   font-weight: 600;
 }
 .leftAside .userInfoCard .follwInfo .followTitle {
-  color: var(--text_gray);
+  color: var(--grayWritingColor);
   text-transform: capitalize;
   letter-spacing: -1px;
   font-size: 16px;
@@ -201,6 +201,8 @@
   border-radius: 6px;
   border: none;
   border: 1px solid transparent;
+  color: var(--text_black);
+  background-color: var(--text_white);
 }
 .mainContent .uploadPost input[type="text"]:focus {
   outline: none;
@@ -210,7 +212,7 @@
   width: 49%;
   border: 1px solid var(--blue);
   border-radius: 6px;
-  color: var(--text_gray);
+  color: var(--grayWritingColor);
   padding: 3px;
   display: flex;
   align-items: center;
@@ -236,8 +238,8 @@
 
 .textInput .sendIcon .postIcon {
   cursor: pointer;
-  color: var();
-  background: linear-gradient(to right, var(--blue), var(--text_black));
+  color: var(--light-blue);
+  background-image: linear-gradient(to right, var(--blue), var(--text_black));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

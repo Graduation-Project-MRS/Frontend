@@ -79,7 +79,9 @@ export default function UserCard({ method, user }) {
       </div>
       <div
         className={
-          activeBtn ? `btn ${style.btn} ${style.activeBtn}` : `btn ${style.btn}`
+          activeBtn
+            ? `btn ${style.btn} `
+            : `btn ${style.btn} ${style.activeBtn} `
         }
         onClick={handleClick}
         disabled={status === "loading"} // Disable the button when loading

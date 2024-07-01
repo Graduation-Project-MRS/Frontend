@@ -159,6 +159,7 @@
   height: fit-content;
   list-style-type: none;
   padding-left: 0;
+  margin: 0;
 }
 @keyframes fadeIn {
   0% {
@@ -172,6 +173,7 @@
 }
 
 .settingUl li {
+  margin: 0;
   padding: 15px;
   text-align: center;
   text-transform: capitalize;
@@ -195,6 +197,9 @@
   display: none;
 }
 
+.input input[type="checkbox"] + label {
+  color: #000 !important;
+}
 .input input[type="checkbox"]:checked + label {
   width: 100%;
   height: 100%;
@@ -231,12 +236,14 @@
 .inviteBody h6 {
   text-align: center;
   font-weight: 600;
+  color: var(--text_black);
 }
 .inviteBody .links {
   display: flex;
   justify-content: space-around;
   align-items: center;
   gap: 10px;
+  color: var(--text_black);
 }
 
 .linkField {
@@ -246,6 +253,8 @@
   padding: 4px 5px;
   border: none;
   outline: none;
+  color: var(--text_black);
+  background-color: var(--text-white);
 }
 /* .linkField:focus {
     width: 90%;
@@ -255,3 +264,9 @@
     border: none;
     outline: none;
   } */
+
+.darkModeChanges {
+  background-color: var(--text-white) !important;
+  opacity: 1;
+  color: var(--text-black) !important;
+}

@@ -13,7 +13,7 @@
 }
 
 .mealCard .mealInfo {
-  color: var(--text_white);
+  color: #fff;
   background-color: #4c4c4cba;
   display: flex;
   width: 100%;

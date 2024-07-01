@@ -11,6 +11,7 @@ import EditProfile from "./pages/profile/edit/editProfile";
 import Auth from "./pages/Auth/Auth";
 import Chatting from "./pages/chatting/chatting";
 import Community from "./pages/community/comunity";
+import MakeMeal from "./pages/makeMeal/makeMeal";
 import Navbar from "./components/navbar/navbar";
 import Loading from "./components/loading/loading";
 //!
@@ -69,10 +70,15 @@ function App() {
             element={authorized ? <EditProfile /> : <Auth />}
           />
           <Route
+            path="/makeMeal"
+            element={authorized ? <MakeMeal /> : <Auth />}
+          />
+          <Route
             path="/community"
             element={authorized ? <Community /> : <Auth />}
           />
           <Route path="/community/chat" element={<Chatting />} />
+
           <Route path="*" element={<Navigate to={"/"} />} />
         </Routes>
       </Suspense>

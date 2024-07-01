@@ -1,5 +1,6 @@
 .thebody {
-  background-color: var(--body);
+  background-image: linear-gradient(to top, var(--body) 90%, var(--text_white));
+  color: var(--text_Black);
   height: 100vh;
   width: 100vw;
   position: relative;
@@ -61,6 +62,8 @@
   border-radius: 10px;
   box-shadow: 0px 0px 25px 10px rgba(0, 0, 0, 0.25);
   opacity: 0;
+  color: var(--text_black);
+  background-color: var(--text_white);
 }
 
 .login_animation {
@@ -88,6 +91,8 @@
   padding-right: 5px;
   transition: 0.2s ease-in-out;
   background-color: var(--body);
+  color: var(--text_black);
+  background-color: var(--body);
 }
 .typo {
   color: rgba(76, 76, 76, 0.73) !important;
@@ -110,6 +115,7 @@
   border: none;
   width: 85%;
   height: 100%;
+  color: var(--text_black);
   background-color: var(--body);
 }
 
@@ -150,7 +156,7 @@
 
 .p {
   text-align: center;
-  color: black;
+  color: var(--text_Black);
   font-size: 14px;
   margin: 5px 0;
 }
@@ -172,6 +178,7 @@
   cursor: pointer;
   transition: 0.2s ease-in-out;
   text-decoration: none;
+  background-color: var(--body);
 }
 /* sign up style */
 .form_register {
@@ -188,6 +195,8 @@
   border-radius: 10px;
   box-shadow: 0px 0px 25px 10px rgba(0, 0, 0, 0.25);
   opacity: 0;
+  color: var(--text_black);
+  background-color: var(--text_white);
 }
 .signup_animation {
   animation: sign 1s forwards;

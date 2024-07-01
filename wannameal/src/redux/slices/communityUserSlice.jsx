@@ -3,6 +3,7 @@ import axios from "axios";
 
 const initialState = {
   profile: null,
+  updatedProfile: null,
   suggestedUsers: [],
   follow: null,
   status: "idle",
@@ -18,6 +19,30 @@ export const getProfileById = createAsyncThunk(
         {
           headers: {
             token: token,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateProfile = createAsyncThunk(
+  "communityUser/updateProfile",
+  async ({ formData, token, userId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `https://fast-plat1.vercel.app/auth/update/${userId}?lang=eng`,
+        formData,
+        {
+          headers: {
+            token: `${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -96,6 +121,19 @@ const communityUserSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || action.error.message;
       })
+      // update Profile by ID
+      .addCase(updateProfile.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.updatedProfile = action.payload;
+        state.error = null;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error.message;
+      })
       // Follow User
       .addCase(followUser.pending, (state) => {
         state.status = "loading";
@@ -127,5 +165,6 @@ const communityUserSlice = createSlice({
 
 export const getProfile = (state) => state.communityUser.profile;
 export const getSuggestedUsers = (state) => state.communityUser.suggestedUsers;
+export const getupdatedProfile = (state) => state.communityUser.updatedProfile;
 
 export default communityUserSlice.reducer;

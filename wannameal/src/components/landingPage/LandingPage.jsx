@@ -8,8 +8,9 @@ import rec7 from "../../assets/Rectangle 7.png";
 import rec8 from "../../assets/Rectangle 8.png";
 import rec9 from "../../assets/Rectangle 9.png";
 import rec10 from "../../assets/Rectangle 10.png";
-import { motion } from "framer-motion"
-import styles from './landing.module.css';
+import { motion } from "framer-motion";
+import styles from "./landing.module.css";
+import { Link } from "react-router-dom";
 export default function landingPage() {
   return (
     <div className={styles.homeContainer}>
@@ -19,11 +20,10 @@ export default function landingPage() {
             initial={{ x: -200, opacity: 0.3 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.8 }}
-            className={`col-12 col-lg-6  ${styles.info}`}>
+            className={`col-12 col-lg-6  ${styles.info}`}
+          >
             <div className={styles.mainTitle}>
-              <h1 >
-                Health Requires Healthy food
-              </h1>
+              <h1>Health Requires Healthy food</h1>
               <h3>Manage your recipes the easy way</h3>
             </div>
             <div className={styles.description}>
@@ -33,14 +33,17 @@ export default function landingPage() {
                 components that each molecule contains.
               </p>
             </div>
-            <button className={`btn ${styles.button}`}>Make a meal</button>
+            <Link to={"/makeMeal"} className={`btn ${styles.button}`}>
+              Make a meal
+            </Link>
           </motion.div>
           <div className={` col-lg-6 ${styles.images}`}>
             <motion.div
               initial={{ x: 600, scale: 0.5 }}
               animate={{ x: 0, scale: 1 }}
               transition={{ duration: 0.6 }}
-              className={` ${styles.imageCol}`}>
+              className={` ${styles.imageCol}`}
+            >
               <img
                 src={rec10}
                 width="100"
@@ -54,7 +57,8 @@ export default function landingPage() {
               initial={{ x: 600, scale: 0.5 }}
               animate={{ x: 0, scale: 1 }}
               transition={{ duration: 0.8 }}
-              className={` ${styles.imageCol}`}>
+              className={` ${styles.imageCol}`}
+            >
               <img
                 src={rec9}
                 width="110"
@@ -76,7 +80,8 @@ export default function landingPage() {
               initial={{ x: 600, scale: 0.5 }}
               animate={{ x: 0, scale: 1 }}
               transition={{ duration: 1 }}
-              className={` ${styles.imageCol}`}>
+              className={` ${styles.imageCol}`}
+            >
               <img
                 src={rec7}
                 width="130"
@@ -106,7 +111,8 @@ export default function landingPage() {
               initial={{ x: 600, scale: 0.5 }}
               animate={{ x: 0, scale: 1 }}
               transition={{ duration: 1.2 }}
-              className={` ${styles.imageCol}`}>
+              className={` ${styles.imageCol}`}
+            >
               <img
                 src={rec4}
                 width="150"

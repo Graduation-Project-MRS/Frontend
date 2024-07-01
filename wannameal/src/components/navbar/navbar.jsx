@@ -7,14 +7,52 @@ import React, { useMemo, useState } from "react";
 import style from "./page.module.css";
 import { Link, useLocation } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getuser, logout } from "../../redux/slices/authSlice";
 import { IoNotificationsOutline } from "react-icons/io5";
+import { getTheme, toggleTheme } from "../../redux/slices/systemModeSlice";
+import { IoMoonOutline } from "react-icons/io5";
+import { IoSunnyOutline } from "react-icons/io5";
+import { HiBars3 } from "react-icons/hi2";
 
 function Navbar() {
-  const [mode, setMode] = useState("light");
   const availableUser = useSelector(getuser);
+
   console.log("🚀 ~ Navbar ~ availableUser:", availableUser);
+  const dispatch = useDispatch();
+  const theme = useSelector(getTheme);
+  console.log("🚀 ~ Navbar ~ theme:", theme);
+
+  let handleLogout = () => {
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      title: "Are you Sure you want to log out ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "rgb(236, 52, 52)",
+      cancelButtonColor: "#3ac568",
+      confirmButtonText: "Log Out",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(logout());
+        let timerInterval;
+        Swal.fire({
+          title: "Logging Out!",
+          html: "",
+          timer: 3000,
+          timerProgressBar: true,
+
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          },
+        });
+      }
+    });
+  };
 
   // let decodedUser = null;
   // try {
@@ -62,13 +100,26 @@ function Navbar() {
     },
   ];
 
+  const toggletheme = () => {
+    dispatch(toggleTheme());
+  };
   return (
     <>
       {!hide && (
         <nav className={`${style.nav} navbar navbar-expand-lg sticky-lg-top `}>
           <div className="container">
+            <button
+              class={style.leftBars}
+              type=""
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasRouting"
+              aria-controls="offcanvasWithBothOptions"
+            >
+              <HiBars3 size={22} />
+            </button>
+
             <Link className="" to="/">
-              {mode === "light" ? (
+              {theme === "light" ? (
                 <div className={style.logoContainer}>
                   <img
                     src={require("../../assets/logoLight.png")}
@@ -112,6 +163,15 @@ function Navbar() {
                   {" "}
                   <IoIosSearch size={20} />
                 </div>
+                {theme === "light" ? (
+                  <div className={style.moon} onClick={toggletheme}>
+                    <IoMoonOutline size={22} color="#fff" />
+                  </div>
+                ) : (
+                  <div className={style.sun} onClick={toggletheme}>
+                    <IoSunnyOutline size={22} color="#fff" />
+                  </div>
+                )}
               </form>
 
               <div className={` ${style.authBtns}`}>
@@ -163,6 +223,59 @@ function Navbar() {
           </div>
         </nav>
       )}
+
+      {/*left aside  offcanvas */}
+      <div
+        className={`offcanvas offcanvas-start ${style.Aside}`}
+        tabIndex={-1}
+        id="offcanvasRouting"
+        aria-labelledby="offcanvasExampleLabel"
+      >
+        <div className="offcanvas-header">
+          {theme === "light" ? (
+            <div className={style.logoContainer}>
+              <img
+                src={require("../../assets/logoLight.png")}
+                alt=""
+                srcset=""
+              />
+            </div>
+          ) : (
+            <div className={style.logoContainer}>
+              <img
+                src={require("../../assets/logoDark.png")}
+                alt=""
+                srcset=""
+              />
+            </div>
+          )}
+        </div>
+        <div className="offcanvas-body p-0">
+          <div>
+            <ul>
+              <li>
+                <Link to={"/"}>Home</Link>
+              </li>
+              <li>
+                <Link to={"/community"}>Community</Link>
+              </li>
+              <li>
+                <Link to={"/makeMeal"}>Make Meal</Link>
+              </li>
+              <li>
+                <Link to={"/profile"}>My Profile</Link>
+              </li>
+              <li>
+                <Link to={"/contact"}>Contact Us</Link>
+              </li>
+            </ul>
+
+            <div className={style.logout} onClick={handleLogout}>
+              logout
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

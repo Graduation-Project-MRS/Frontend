@@ -36,7 +36,7 @@
 }
 .form input {
   background-color: var(--body);
-
+  color: var(--text_black);
   border-radius: 8px;
   outline: navajowhite;
   border: none;
@@ -51,19 +51,20 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  min-width: 98%;
+  width: 98%;
 }
 .form .name input {
-  min-width: 98%;
+  width: 100%;
 }
 .form .email input {
-  min-width: 98%;
+  width: 98%;
 }
 
 .imageProfile {
   width: 70%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 50px;
   flex-wrap: wrap;
 }
 .imageProfile .image {
@@ -101,6 +102,7 @@
   cursor: pointer;
   transition: 0.2s;
   border: none;
+  max-height: 60px;
 }
 
 .btns .change:hover {
@@ -141,4 +143,11 @@
   flex-wrap: wrap;
   min-width: 98%;
   gap: 5px;
+}
+
+.green {
+  color: var(--green);
+}
+.red {
+  color: red;
 }

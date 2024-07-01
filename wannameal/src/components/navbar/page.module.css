@@ -1,6 +1,7 @@
 .nav {
   backdrop-filter: blur(10px) !important;
   background-color: inherit !important;
+  position: relative;
 }
 .logoContainer {
   width: 50px;
@@ -23,6 +24,8 @@
   box-shadow: none !important;
   border: none;
   outline: none;
+  color: var(--text_black) !important;
+  font-size: 23px;
 }
 
 .navForm {
@@ -32,19 +35,26 @@
 
 .navForm input {
   width: 100%;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
   transition: 0.1s;
   padding-left: 40px;
+  background-color: var(--body);
+  border: 0;
+  color: var(--text_black);
 }
 .navForm input::placeholder {
   text-transform: capitalize;
   opacity: 0.7;
   font-size: 14px;
+  color: var(--grayWritingColor);
 }
 .navForm input:focus {
   outline: none;
   box-shadow: none;
   border: 1px solid var(--light-green) !important;
+  background-color: var(--text_white);
+  caret-color: var(--grayWritingColor);
+  color: var(--text_black);
 }
 
 .searchIcon {
@@ -121,14 +131,86 @@
   object-fit: cover;
 }
 
-.logout {
-  margin-left: auto;
-  text-transform: capitalize;
-  padding: 4px 6px;
-  border: 1px solid var(--text_black);
-  color: var(--text_black);
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
+.sun,
+.moon {
+  padding: 7px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
   cursor: pointer;
+}
+.sun {
+  background-color: #e98a2ff2;
+}
+.moon {
+  background-color: #5a5da0;
+}
+
+.leftBars {
+  padding: 7px;
+  border-radius: 50%;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+  background-color: var(--light-green);
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 20px;
+}
+
+.Aside {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--text_white);
+  color: var(--text_black);
+  width: 250px !important;
+}
+.Aside ul {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  padding: 0;
+}
+.Aside ul li {
+  width: 100%;
+  padding: 15px 0;
+  padding-left: 20px;
+  transition: 0.3s;
+  color: var(--text_black);
+  border-radius: 6px;
+}
+.Aside ul li a {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+.Aside ul li:hover {
+  background-color: var(--green);
+  color: #fff;
+}
+
+.logout {
+  width: 70%;
+  padding: 5px 10px;
+  text-transform: capitalize;
+  font-size: 20px;
+  background-color: var(--green);
+  border-radius: 6px;
+  border: none;
+  margin: 30px auto;
+  color: var(--text_black);
+  text-align: center;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background-color: var(--light-green);
 }

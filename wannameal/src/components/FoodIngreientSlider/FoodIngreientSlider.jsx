@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+// import { ingredients } from "./ingredients";
 
 import styles from "./FoodIngreientSlider.module.css";
-import { ingredients } from "./ingredients";
 import "animate.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -20,25 +20,45 @@ import "swiper/css/free-mode";
 import { TiDelete } from "react-icons/ti";
 import { RiDeleteBin2Line } from "react-icons/ri";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { recommendMeals } from "../../redux/slices/recomendedMealsSlice";
-import axios from "axios";
+import {
+  fetchIngredients,
+  getIngredients,
+  getIngredientsError,
+  getIngredientsStatus,
+} from "../../redux/slices/ingredients";
+import { getuser } from "../../redux/slices/authSlice";
+import { getLanguage } from "../../redux/slices/language";
 
 function FoodIngreientSlider() {
+  // const ingredients = useSelector(getIngredients);
   const [checkedIngredients, setCheckedIngredients] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredIngredients, setFilteredIngredients] = useState(ingredients);
-
+  const [filteredIngredients, setFilteredIngredients] = useState([]);
+  console.log(
+    "🚀 ~ FoodIngreientSlider ~ filteredIngredients:",
+    filteredIngredients
+  );
+  const availableUser = useSelector(getuser);
   const dispatch = useDispatch();
+  const ingredients = useSelector(getIngredients);
+  console.log("🚀🚀🚀🚀🚀 ~ FoodIngreientSlider ~ ingredients:", ingredients);
+  const ingredientsStatus = useSelector(getIngredientsStatus);
+  console.log("🚀🚀🚀🚀🚀 ~ FoodIngreientSlider ~ status:", ingredientsStatus);
+  const ingredientError = useSelector(getIngredientsError);
+  console.log("🚀🚀🚀🚀🚀 ~ FoodIngreientSlider ~ error:", ingredientError);
+  const language = useSelector(getLanguage);
+  console.log("🚀 ~ FoodIngreientSlider ~ language:", language);
 
   const handleCheckboxChange = (ingredient) => {
     setCheckedIngredients((prevIngredients) => {
       const isIngredientChecked = prevIngredients.some(
-        (item) => item.id === ingredient.id
+        (item) => item._id === ingredient._id
       );
 
       if (isIngredientChecked) {
-        return prevIngredients.filter((item) => item.id !== ingredient.id);
+        return prevIngredients.filter((item) => item._id !== ingredient._id);
       } else {
         return [...prevIngredients, ingredient];
       }
@@ -50,6 +70,17 @@ function FoodIngreientSlider() {
   };
 
   useEffect(() => {
+    const fetch = async () => {
+      await dispatch(
+        fetchIngredients({ token: availableUser.token, lang: language })
+      );
+      setFilteredIngredients(ingredients);
+    };
+
+    fetch();
+  }, []);
+
+  useEffect(() => {
     const filtered = ingredients.filter((ingredient) =>
       ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -57,14 +88,23 @@ function FoodIngreientSlider() {
   }, [searchQuery, ingredients]);
 
   useEffect(() => {
-    if (checkedIngredients.length > 0) {
-      const ingredientNames = checkedIngredients
-        .map((ingredient) => ingredient.name)
-        .join(",");
-      dispatch(recommendMeals(ingredientNames));
-    } else {
-      dispatch(recommendMeals("رز,فراخ,بطاطس"));
-    }
+    const fetchMeals = async () => {
+      if (checkedIngredients.length > 0) {
+        const ingredientNames = checkedIngredients
+          .map((ingredient) => ingredient.name)
+          .join(",");
+        console.log("🚀🚀🚀🚀 ~ useEffect ~ ingredientNames:", ingredientNames);
+        await dispatch(
+          recommendMeals({ "ingredients": ingredientNames, lang: language })
+        );
+      } else {
+        await dispatch(
+          recommendMeals({ "ingredients": "banana", lang: language })
+        );
+      }
+    };
+
+    fetchMeals();
   }, [checkedIngredients, dispatch]);
 
   return (
@@ -86,6 +126,7 @@ function FoodIngreientSlider() {
               placeholder="search for your ingredients"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              // autocomplete="off"
             />
           </form>
         </div>
@@ -115,7 +156,7 @@ function FoodIngreientSlider() {
                     onClick={() => {
                       setCheckedIngredients(
                         checkedIngredients.filter(
-                          (item) => item.id !== ingredient.id
+                          (item) => item._id !== ingredient._id
                         )
                       );
 
@@ -131,7 +172,7 @@ function FoodIngreientSlider() {
         </div>
 
         <div className={`${styles.ingredients}`}>
-          {filteredIngredients.length !== 0 ? (
+          {filteredIngredients && filteredIngredients.length !== 0 ? (
             <Swiper
               modules={[FreeMode]}
               grabCursor={true}
@@ -163,25 +204,25 @@ function FoodIngreientSlider() {
                   <div className={styles.parentcheckbox}>
                     <input
                       type="checkbox"
-                      id={`ingredientCheckbox_${ingredient.id}`}
+                      id={`ingredientCheckbox_${ingredient?._id}`}
                       checked={checkedIngredients.some(
-                        (ele) => ele.id === ingredient.id
+                        (ele) => ele._id === ingredient._id
                       )}
                       onChange={() => handleCheckboxChange(ingredient)}
                     />
                     <label
                       className={
                         checkedIngredients.some(
-                          (ele) => ele.id === ingredient.id
+                          (ele) => ele._id === ingredient._id
                         )
                           ? `${styles.ingredient} ${styles.checked}`
                           : `${styles.ingredient}`
                       }
-                      htmlFor={`ingredientCheckbox_${ingredient.id}`}
+                      htmlFor={`ingredientCheckbox_${ingredient._id}`}
                     >
-                      <div className={styles.symbol}>
+                      {/* <div className={styles.symbol}>
                         {String.fromCodePoint(parseInt(ingredient.hex, 16))}
-                      </div>{" "}
+                      </div>{" "} */}
                       <div className={styles.name}>{ingredient.name}</div>
                     </label>
                   </div>

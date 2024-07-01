@@ -23,7 +23,7 @@
   color: var(--text_black);
 }
 .cardContainer .text .email {
-  color: var(--text_gray);
+  color: var(--grayWritingColor);
   font-size: 14px;
   transform: scale(0.8) translate(-5px, -8px);
   overflow: hidden;
@@ -33,7 +33,7 @@
 }
 .cardContainer .btn {
   background-color: var(--text_gray);
-  color: var(--text_white);
+  color: #fff;
   padding: 2px 17px;
   border-radius: 20px;
   margin-left: auto;

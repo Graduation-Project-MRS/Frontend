@@ -3,9 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const loadTheme = () => {
   try {
     const savedTheme = localStorage.getItem("theme");
-    return savedTheme ? JSON.parse(savedTheme) : "light";
+    return savedTheme ? JSON.parse(savedTheme) : "dark";
   } catch (err) {
-    return "light";
+    return "dark";
   }
 };
 
