@@ -24,7 +24,7 @@ export default function PostContent({ post }) {
   let decodedToken = useSelector(getDecodedToken);
   let availableUser = useSelector(getuser);
   const isPostLiked = () => {
-    return post?.likes.some((like) => like === decodedToken.id);
+    return post?.likes?.some((like) => like === decodedToken.id);
   };
   const [likedPost, setLikedPost] = useState(isPostLiked());
   const [likes, setLikes] = useState(post?.likes);
@@ -88,18 +88,21 @@ export default function PostContent({ post }) {
   return (
     <div className={`${style.post} w-100 d-flex align-items-start`}>
       <div className={`${style.profileImage} col-1 me-1`}>
-        <img src={profile} alt="profileImage" />
+        <img
+          src={post?.postedBy?.profileImage?.url || profile}
+          alt="profileImage"
+        />
       </div>
       <div className={`col-11 d-flex flex-column gap-2 ${style.postInfo}`}>
         <div className={`${style.userInfo} col-12`}>
           <div className={style.text}>
-            <div className={style.name}>mahmoud</div>
-            <div className={style.email}>khairy402</div>
+            <div className={style.name}>{post?.postedBy?.userName}</div>
+            <div className={style.email}>{post?.postedBy?.email}</div>
           </div>
         </div>
         <div className={`${style.postText} col-12`}>{post?.text}</div>
         <div
-          className={`${style.preview} col-12 d-flex justify-content-center flex-wrap g-1`}
+          className={`${style.preview} col-12 d-flex justify-content-center flex-wrap g-1 `}
         >
           {previewPhotos &&
             previewPhotos.map((img, index) => (

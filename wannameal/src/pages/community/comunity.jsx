@@ -296,7 +296,7 @@ export default function Community() {
           </div>
           <div className={`${style.mainContent} d-flex flex-column gap-2`}>
             <div
-              className={`${style.uploadPost} w-100 d-flex align-items-start flex-flex-nowrap`}
+              className={`${style.uploadPost} w-100 d-flex align-items-start flex-wrap`}
             >
               <div className={`${style.profileImage} col-1 me-1`}>
                 <img
@@ -377,7 +377,7 @@ export default function Community() {
               feedPostes.map((post) => <Post key={post._id} post={post} />)
             ) : randomposts && randomposts.length > 0 ? (
               randomposts
-                .slice(0, 3)
+                .slice(0, 10)
                 .map((post) => <Post key={post._id} post={post} />)
             ) : (
               <Loading width="100px" height="100px" />
