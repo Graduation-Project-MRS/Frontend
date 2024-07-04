@@ -1,7 +1,7 @@
 .thebody {
   background-image: linear-gradient(to top, var(--body) 90%, var(--text_white));
   color: var(--text_Black);
-  height: 100vh;
+  height: 93vh;
   width: 100vw;
   position: relative;
 }
