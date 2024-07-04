@@ -34,9 +34,8 @@ function Sidebar() {
         <Link to={"/dashboard"}>
           <div
             onClick={() => setChoosen("Dashboard")}
-            className={`d-flex gap-3 align-items-center ${style.title_div}  ${
-              choosen === "Dashboard" ? style.active : ""
-            }`}
+            className={`d-flex gap-3 align-items-center ${style.title_div}  ${choosen === "Dashboard" ? style.active : ""
+              }`}
           >
             <MdDashboard size={40} />
             <h4 className="m-0">Dashboard</h4>
@@ -45,9 +44,8 @@ function Sidebar() {
         <Link to={"/dashboard/users"}>
           <div
             onClick={() => setChoosen("Users")}
-            className={`d-flex gap-3 align-items-center ${style.title_div}  ${
-              choosen === "Users" ? style.active : ""
-            }`}
+            className={`d-flex gap-3 align-items-center ${style.title_div}  ${choosen === "Users" ? style.active : ""
+              }`}
           >
             <FaUsers size={40} />
             <h4 className="m-0">Users</h4>
@@ -56,9 +54,8 @@ function Sidebar() {
         <Link to={"/dashboard/ingredients"}>
           <div
             onClick={() => setChoosen("Ingredients")}
-            className={`d-flex gap-3 align-items-center ${style.title_div}  ${
-              choosen === "Ingredients" ? style.active : ""
-            }`}
+            className={`d-flex gap-3 align-items-center ${style.title_div}  ${choosen === "Ingredients" ? style.active : ""
+              }`}
           >
             <GiShinyApple size={40} />
             <h4 className="m-0">Ingredients</h4>
@@ -67,9 +64,8 @@ function Sidebar() {
         <Link to={"/dashboard/recipes"}>
           <div
             onClick={() => setChoosen("Recipes")}
-            className={`d-flex gap-3 align-items-center ${style.title_div}  ${
-              choosen === "Recipes" ? style.active : ""
-            }`}
+            className={`d-flex gap-3 align-items-center ${style.title_div}  ${choosen === "Recipes" ? style.active : ""
+              }`}
           >
             <GiHotMeal size={40} />
             <h4 className="m-0">Recipes</h4>
@@ -77,12 +73,11 @@ function Sidebar() {
         </Link>
         <div
           onClick={() => setChoosen("Settings")}
-          className={`d-flex gap-3 align-items-center ${style.title_div}  ${
-            choosen === "Settings" ? style.active : ""
-          }`}
+          className={`d-flex gap-3 align-items-center ${style.title_div}  ${choosen === "Settings" ? style.active : ""
+            }`}
         >
           <MdOutlineSettings size={40} />
-          <Link to={"/dashboard/settings"}>
+          <Link to={"/profile/edit"}>
             <h4 className="m-0">Settings</h4>
           </Link>
         </div>
