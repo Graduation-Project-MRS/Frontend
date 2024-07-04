@@ -5,20 +5,34 @@ import dish2 from "../../assets/Rectangle 9.png";
 import { AiFillHeart, AiFillMessage } from "react-icons/ai";
 import { IoIosShareAlt } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { likePost, commentPost } from "../../redux/slices/postsSLlce";
+import {
+  likePost,
+  commentPost,
+  getPostError,
+  getPostStatus,
+  getlikkk,
+} from "../../redux/slices/postsSLlce";
 import { getDecodedToken } from "../../redux/slices/authSlice";
 import { getuser } from "../../redux/slices/authSlice";
 import { useTranslation } from "react-i18next";
 
-export default function PostContent() {
+export default function PostContent({ post }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [previewPhotos, setPreviewPhotos] = useState([dish2, dish2]);
-  const [previewVideos, setPreviewVideos] = useState([]);
-  const [likedPost, setLikedPost] = useState(false);
-  const [commentText, setCommentText] = useState("");
-  let { token } = useSelector(getuser);
+  const [previewPhotos, setPreviewPhotos] = useState([post?.img]);
+  const [previewVideos, setPreviewVideos] = useState([post?.video]);
 
+  let decodedToken = useSelector(getDecodedToken);
+  let availableUser = useSelector(getuser);
+  const isPostLiked = () => {
+    return post?.likes.some((like) => like === decodedToken.id);
+  };
+  const [likedPost, setLikedPost] = useState(isPostLiked());
+  const [likes, setLikes] = useState(post?.likes);
+  const [commentText, setCommentText] = useState("");
+  let dispatch = useDispatch();
+  let postError = useSelector(getPostError);
+  let postStatue = useSelector(getPostStatus);
   const handleImageClick = (src) => {
     setSelectedImage(src);
   };
@@ -27,10 +41,29 @@ export default function PostContent() {
     setSelectedVideo(src);
   };
 
-  const handleLikeClick = () => {
-    setLikedPost(!likedPost);
-    console.log("first like");
-    // dispatch(likePost({ postId, token }));
+  const handleLikeClick = async () => {
+    try {
+      await dispatch(
+        likePost({ postId: post._id, token: availableUser?.token })
+      );
+
+      if (postError === null) {
+        const newLikedPost = !likedPost;
+        setLikedPost(newLikedPost);
+
+        if (newLikedPost) {
+          setLikes([...likes, decodedToken.id]);
+        } else {
+          setLikes(likes.filter((like) => like !== decodedToken.id));
+        }
+
+        console.log("Post liked/unliked successfully");
+      } else {
+        console.error(`Failed to like ${post._id}`);
+      }
+    } catch (error) {
+      console.error(`Failed to like ${post._id}`, error);
+    }
   };
 
   const handleCommentClick = () => {
@@ -60,28 +93,28 @@ export default function PostContent() {
             <div className={style.email}>khairy402</div>
           </div>
         </div>
-        <div className={`${style.postText} col-12`}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
-          reprehenderit ea maiores sunt ipsam est quis similique labore iste.
-          Iusto sed fuga cumque at qui optio, labore non officia quidem.
-        </div>
+        <div className={`${style.postText} col-12`}>{post?.text}</div>
         <div
           className={`${style.preview} col-12 d-flex justify-content-center flex-wrap g-1`}
         >
           {previewPhotos &&
-            previewPhotos.map((src, index) => (
+            previewPhotos.map((img, index) => (
               <div
                 className={`${style.imgContainer}`}
-                key={index}
+                key={img?.id}
                 data-bs-toggle="modal"
-                data-bs-target={`#staticBackdrop${index}`}
-                onClick={() => handleImageClick(src)}
+                data-bs-target={`#staticBackdrop${img?.id}`}
+                onClick={() => handleImageClick(img?.url)}
               >
-                <img src={src} alt={`Preview ${index}`} />
+                {img === undefined ? (
+                  ""
+                ) : (
+                  <img src={img?.url} alt={`Preview ${index}`} />
+                )}
                 {/* modal */}
                 <div
                   className={`modal fade ${style.modalview}`}
-                  id={`staticBackdrop${index}`}
+                  id={`staticBackdrop${img?.id}`}
                   data-bs-keyboard="false"
                   tabIndex="-1"
                   aria-labelledby="staticBackdropLabel"
@@ -107,50 +140,53 @@ export default function PostContent() {
                 </div>
               </div>
             ))}
-          {previewVideos.map((src, index) => (
-            <div
-              className={`${style.videoContainer}`}
-              key={index}
-              data-bs-toggle="modal"
-              data-bs-target={`#staticBackdrop${index}000`}
-              onClick={() => handleVideoClick(src)}
-            >
-              <video src={src} controls />
-              {/* modal */}
+          {previewVideos &&
+            previewVideos.map((video, index) => (
               <div
-                className={`modal fade ${style.modalview}`}
-                id={`staticBackdrop${index}000`}
-                data-bs-keyboard="false"
-                tabIndex="-1"
-                aria-labelledby="staticBackdropLabel"
-                aria-hidden="true"
+                className={`${style.videoContainer}`}
+                key={video?.url}
+                data-bs-toggle="modal"
+                data-bs-target={`#staticBackdrop${video?.url}`}
+                onClick={() => handleVideoClick(video?.url)}
               >
-                <div className="modal-dialog">
-                  <div className={`modal-content ${style.modalContent}`}>
-                    <div className="modal-header border-bottom-0">
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div className={`modal-body w-100 p-1 ${style.modalBody}`}>
-                      <video src={selectedVideo} controls />
+                {video === undefined ? "" : <video src={video?.url} controls />}
+                {/* modal */}
+                <div
+                  className={`modal fade ${style.modalview}`}
+                  id={`staticBackdrop${video?.url}`}
+                  data-bs-keyboard="false"
+                  tabIndex="-1"
+                  aria-labelledby="staticBackdropLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog">
+                    <div className={`modal-content ${style.modalContent}`}>
+                      <div className="modal-header border-bottom-0">
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div
+                        className={`modal-body w-100 p-1 ${style.modalBody}`}
+                      >
+                        <video src={selectedVideo} controls />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         <div className={style.reactsNum}>
           <p className={style.likes}>
             <AiFillHeart size={16} color="#699bf7" className="me-1" />
-            2k
+            {likes?.length >= 1000 ? `${likes?.length / 1000}k` : likes?.length}
           </p>
-          <p className={style.comments}>3 {comment}</p>
+          <p className={style.comments}>{post?.replies?.length} {comment}</p>
         </div>
         <div className={style.reacts}>
           <div

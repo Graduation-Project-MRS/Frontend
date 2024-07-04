@@ -1,26 +1,83 @@
-"use client";
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./editProfile.module.css";
-
 import { RiDeleteBinLine } from "react-icons/ri";
 import { PiUploadSimple } from "react-icons/pi";
 import Swal from "sweetalert2";
-import profile from "../../../assets/man-user.svg";
+import defaultProfile from "../../../assets/man-user.svg";
+import { useNavigate } from "react-router-dom";
+import {
+  getDecodedToken,
+  getuser,
+  logout,
+} from "../../../redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+
+import Loading from "../../../components/loading/loading";
+
+import {
+  fetchUser,
+  getLoggoedUser,
+  updateUser,
+  deleteAccount,
+} from "../../../redux/slices/userSLice";
+import { getUpdatedUser } from "../../../redux/slices/userSLice";
 import { useTranslation } from "react-i18next";
 
 function EditProfile() {
   const { t } = useTranslation()
   const { setting, Profile, info, fname, lname, Email, image, change, delte, changePass, info2, CurrentPass, NewPass, ConfirmPass, savedCH, cancel, deltePers, info3, delteAcc } = t('editprofile')
+  const navigate = useNavigate();
+  const user = useSelector(getLoggoedUser); // Ensure profile is fetched properly
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
+    firstName: user?.userName?.split(" ")[0],
+    lastName: user?.userName?.split(" ")[1],
+    email: user?.email,
+    phone: user?.phone || "",
     currentPassword: "",
     newPassword: "",
     confirmNewPassword: "",
-    profilePicture: null,
+    imageProfile: user?.profileImage?.url,
+    removeProfileImage: false,
   });
+
+  const [passwordValidity, setPasswordValidity] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    digit: false,
+    specialChar: false,
+    match: false,
+  });
+
+  const availableUser = useSelector(getuser);
+  const decodedToken = useSelector(getDecodedToken);
+
+  const userError = useSelector((state) => state.user.error);
+  console.log("🚀 ~ EditProfile ~ userError:", userError);
+  const userStatus = useSelector((state) => state.user.status);
+  console.log("🚀 ~ EditProfile ~ userStatus:", userStatus);
+  const dispatch = useDispatch();
+
+  const updatedUser = useSelector(getUpdatedUser);
+  console.log("🚀 ~ EditProfile ~ updatedUser:", updatedUser);
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      await dispatch(fetchUser());
+    };
+    fetchProfileData();
+  }, [dispatch]);
+
+  const validatePassword = (password) => {
+    setPasswordValidity({
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      digit: /[0-9]/.test(password),
+      specialChar: /[!@#$%^&*]/.test(password),
+      match: password === formData.newPassword,
+    });
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,57 +85,131 @@ function EditProfile() {
       ...prevData,
       [name]: value,
     }));
-    console.log(formData);
+    if (name === "newPassword" || name === "confirmNewPassword") {
+      validatePassword(value);
+    }
   };
+
   const cancelChanges = (e) => {
+    e.preventDefault()
     setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
+      firstName: user?.userName?.split(" ")[0],
+      lastName: user?.userName?.split(" ")[1],
+      email: user?.email,
+      phone: user?.phone || "",
       currentPassword: "",
       newPassword: "",
       confirmNewPassword: "",
-      profilePicture: null,
+      imageProfile: user?.profileImage?.url,
+      removeProfileImage: false,
     });
-    console.log(formData);
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    console.log("🚀 ~ handleImageChange ~ file:", file);
     setFormData((prevData) => ({
       ...prevData,
-      profilePicture: file,
+      imageProfile: file,
+      removeProfileImage: false,
     }));
   };
 
   const handleDeletePhoto = () => {
     setFormData((prevData) => ({
       ...prevData,
-      profilePicture: null,
+      imageProfile: null,
+      removeProfileImage: true,
     }));
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formDataToSend = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      formDataToSend.append(key, value);
-    });
 
-    fetch("", {
-      method: "POST",
-      body: formDataToSend,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.newPassword === "") {
+      if (!Object.values(passwordValidity).every(Boolean)) {
+        Swal.fire({
+          icon: "error",
+          title: "Password does not meet all requirments",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+        return;
+      }
+    }
+
+    if (
+      formData.firstName === "" ||
+      formData.lastName === "" ||
+      formData.email == ""
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "please fill all required fields",
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
       });
+      return;
+    }
+
+    const formDataToSend = new FormData();
+
+    formDataToSend.append(
+      "userName",
+      formData.firstName + " " + formData.lastName
+    );
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("password", formData.newPassword);
+    formDataToSend.append("confirmPassword", formData.confirmNewPassword);
+    if (
+      typeof formData.imageProfile !== "string" ||
+      formData.imageProfile !== null
+    ) {
+      formDataToSend.append("img", formData.imageProfile);
+    }
+    if (formData.removeProfileImage == true) {
+      formDataToSend.append("removeProfileImage", formData.removeProfileImage);
+    }
+    formDataToSend.append("phone", formData.phone);
+
+    await dispatch(
+      updateUser({
+        formData: formDataToSend,
+        userId: decodedToken.id,
+        token: availableUser.token,
+      })
+    );
+
+    if (userError) {
+      Swal.fire({
+        icon: "error",
+        title: `${userError?.msgError}`,
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    } else {
+      Swal.fire({
+        icon: "success",
+        title: "Profile updated successfully",
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+
+      navigate("/profile");
+    }
   };
 
-  let handleDeleteAcount = () => {
+  let handleDeleteAccount = () => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -87,15 +218,21 @@ function EditProfile() {
       confirmButtonColor: "rgb(236, 52, 52)",
       cancelButtonColor: "#3ac568",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         let timerInterval;
+        await dispatch(
+          deleteAccount({
+            userId: decodedToken.id,
+            token: availableUser.token,
+          })
+        );
+
         Swal.fire({
           title: "Deleting Account!",
           html: "Your Account will be Deleted in <b></b> second.",
           timer: 5000,
           timerProgressBar: true,
-
           didOpen: () => {
             Swal.showLoading();
             const timer = Swal.getPopup().querySelector("b");
@@ -108,13 +245,13 @@ function EditProfile() {
           },
         }).then((result) => {
           if (result.dismiss === Swal.DismissReason.timer) {
-            console.log("I was closed by the timer");
-            //روح علي الهوم بقا
+            dispatch(logout());
           }
         });
       }
     });
   };
+
   return (
     <>
       <div className={`py-5 ${styles.editportfolioContainer} `}>
@@ -124,7 +261,7 @@ function EditProfile() {
               <div className={styles.title}>{setting}</div>
               <div className={styles.semiTitle}>{Profile}</div>
               <div className={styles.note}>{info}</div>
-              <form action="" onSubmit={handleSubmit} className={styles.form}>
+              <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={`${styles.name} mt-2 `}>
                   <div className={`${styles.firstname}  col-12 col-md-5`}>
                     <label htmlFor="firstName">{fname}</label>
@@ -158,19 +295,42 @@ function EditProfile() {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder={Email}
+                    required
+                  />
+                </div>
+                <div className={`${styles.email}`}>
+                  <label htmlFor="phone">Phone Number</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="phone"
+                    minLength="11"
+                    maxLength="11"
                   />
                 </div>
                 <hr />
                 <div className={styles.semiTitle}>{image}</div>
                 <div className={styles.imageProfile}>
                   <div className={styles.image}>
-                    {formData.profilePicture ? (
+                    {formData.imageProfile ? (
                       <img
-                        alt="user profile "
-                        src={URL.createObjectURL(formData.profilePicture)}
+                        alt="User Profile"
+                        src={
+                          typeof formData.imageProfile === "string"
+                            ? formData.imageProfile
+                            : URL.createObjectURL(formData.imageProfile)
+                        }
                       />
                     ) : (
-                      <img src={profile} alt="" objectFit="cover" fill="true" />
+                      <img
+                        src={defaultProfile}
+                        alt="Default Profile"
+                        objectFit="cover"
+                        fill="true"
+                      />
                     )}
                   </div>
                   <div className={styles.btns}>
@@ -179,14 +339,13 @@ function EditProfile() {
                     <input
                       id="change"
                       type="file"
-                      accept="image/jpeg, image/png, , image/svg+xml"
+                      accept="image/jpeg, image/png, image/svg+xml"
                       onChange={handleImageChange}
                     />
-                    <label className={` ${styles.delete}`}>
+                    <label className={styles.delete}>
                       <RiDeleteBinLine
                         size={22}
                         className="mx-2"
-                        on
                         onClick={handleDeletePhoto}
                       />
                       {delte}
@@ -218,6 +377,51 @@ function EditProfile() {
                       onChange={handleInputChange}
                       placeholder={NewPass}
                     />
+                    <div className={styles.passwordCriteria}>
+                      <ul>
+                        <li
+                          className={
+                            passwordValidity.length ? styles.green : styles.red
+                          }
+                        >
+                          Minimum 8 characters
+                        </li>
+                        <li
+                          className={
+                            passwordValidity.uppercase
+                              ? styles.green
+                              : styles.red
+                          }
+                        >
+                          At least one uppercase letter
+                        </li>
+                        <li
+                          className={
+                            passwordValidity.lowercase
+                              ? styles.green
+                              : styles.red
+                          }
+                        >
+                          At least one lowercase letter
+                        </li>
+                        <li
+                          className={
+                            passwordValidity.digit ? styles.green : styles.red
+                          }
+                        >
+                          At least one digit
+                        </li>
+                        <li
+                          className={
+                            passwordValidity.specialChar
+                              ? styles.green
+                              : styles.red
+                          }
+                        >
+                          At least one special character (!@#$%^&*)
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                   <div className={styles.confirmnewpassword}>
                     <label htmlFor="confirmNewPassword">{ConfirmPass}</label>
@@ -229,17 +433,27 @@ function EditProfile() {
                       onChange={handleInputChange}
                       placeholder={ConfirmPass}
                     />
+                    {formData.newPassword === formData.confirmNewPassword ? (
+                      ""
+                    ) : (
+                      <p className={styles.red}>Passwords don`t match</p>
+                    )}
                   </div>
                 </div>
-
                 <div className={`${styles.btns} ${styles.submitbtns}`}>
                   <button
                     type="submit"
-                    className={` ${styles.change} col-12 col-md-5`}
-                  >{savedCH}</button>
+                    className={`${styles.change} col-12 col-md-5`}
+                  >
+                    {userStatus === "loading" ? (
+                      <Loading width="60px" height="40px" />
+                    ) : (
+                      "Save Changes"
+                    )}
+                  </button>
                   <button
                     onClick={cancelChanges}
-                    className={` ${styles.delete} col-12 col-md-5`}
+                    className={`${styles.delete} col-12 col-md-5`}
                   >{cancel}</button>
                 </div>
               </form>

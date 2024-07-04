@@ -1,4 +1,5 @@
 import React from "react";
+import { MdSmsFailed } from "react-icons/md";
 import styles from "./mealsslider.module.css";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,22 +18,34 @@ import "swiper/css/free-mode";
 import MealCard from "../mealCard/mealCard";
 
 import { useSelector } from "react-redux";
-import { getRecommendMeals } from "../../redux/slices/recomendedMealsSlice";
+import {
+  getMealsError,
+  getMealsStatus,
+  getRecommendMeals,
+} from "../../redux/slices/recomendedMealsSlice";
 import Loading from "../loading/loading";
 
 function MealsSlider() {
   const recomendedMeals = useSelector(getRecommendMeals);
   console.log("🚀 ~ MealsSlider ~ recomendedMeals:", recomendedMeals);
-  const loading = useSelector((state) => state.meals.loading);
-  const error = useSelector((state) => state.meals.error);
+  const mealsStatus = useSelector(getMealsStatus);
+  console.log("🚀 ~ MealsSlider ~ mealsStatus:", mealsStatus);
+  const error = useSelector(getMealsError);
+  console.log("🚀 ~ MealsSlider ~ error:", error);
 
-  if (loading)
+  if (mealsStatus == "loading")
     return (
       <div className="w-100 d-flex justify-content-center align-items-center">
         <Loading />
       </div>
     );
-  if (error) return <p>Error: {error}</p>;
+  if (error)
+    return (
+      <p className="w-100 text-center fs-2 mt-5">
+        {" "}
+        {error} <MdSmsFailed size={25} className="text-danger ms-2" />
+      </p>
+    );
 
   return (
     <div className="container mb-3">
@@ -62,11 +75,11 @@ function MealsSlider() {
           },
         }}
       >
-        {recomendedMeals?.map((meal, index) => (
+        {/* {recomendedMeals?.map((meal, index) => (
           <SwiperSlide key={index}>
             <MealCard meal={meal} />
           </SwiperSlide>
-        ))}
+        ))} */}
       </Swiper>
     </div>
   );

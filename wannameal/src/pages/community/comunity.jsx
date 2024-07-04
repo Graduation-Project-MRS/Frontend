@@ -11,15 +11,25 @@ import Post from "../../components/post/post";
 import { VscSend } from "react-icons/vsc";
 import { useSelector, useDispatch } from "react-redux";
 import { getuser, getDecodedToken } from "../../redux/slices/authSlice";
-import { createPost } from "../../redux/slices/postsSLlce";
+import {
+  createPost,
+  fetchFeedPosts,
+  fetchRandomPosts,
+  getCreatedPosts,
+  getFeedPosts,
+  getRandomPosts,
+} from "../../redux/slices/postsSLlce";
 import {
   getSuggestedUsers,
   fetchSuggestedUsers,
   getProfileById,
   getProfile,
+  getFollowingUsers,
+  fetchFollowingUsers,
 } from "../../redux/slices/communityUserSlice";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
+import { getLanguage } from "../../redux/slices/language";
 
 export default function Community() {
   const [text, setText] = useState("");
@@ -28,22 +38,35 @@ export default function Community() {
   const [previewPhotos, setPreviewPhotos] = useState([]);
   const [previewVideos, setPreviewVideos] = useState([]);
   const { t } = useTranslation()
-  const { Fname, email, edit, comment, sharee,like,mine, recommend, Norecommend, more, follow, msg, share, followers, following, photo, video, who } = t('community', {
+  const { Fname, email, edit, comment, sharee, like, mine, recommend, Norecommend, more, follow, msg, share, followers, following, photo, video, who } = t('community', {
     fullname: 'mahmoud khairy402',
     email: 'mahmoudkhairy402@gmail.com'
-  })
+  });
+  const [followingUsersPage, setFollowingUsersPage] = useState(1);
+  console.log("🚀 ~ Community ~ followingUsersPage:", followingUsersPage);
+  const [suggestedUsersPage, setSuggestedUsersPage] = useState(1);
+  console.log("🚀 ~ Community ~ suggestedUsersPage:", suggestedUsersPage);
+
   // Use selectors to get state values
   const { suggestedUsers } = useSelector(getSuggestedUsers);
+  console.log("🚀 ~ Community ~ suggestedUsers:", suggestedUsers);
+  const followingUsers = useSelector(getFollowingUsers);
+  console.log("🚀🚀🚀 ~ Community ~ followingUsers:", followingUsers);
   const profile = useSelector(getProfile); // Ensure profile is fetched properly
   console.log("🚀 ~ Community ~ profile:", profile);
   const availableUser = useSelector(getuser);
-  const posts = useSelector((state) => state.posts.posts);
-  console.log("🚀 ~ Community ~ posts:", posts);
+  const createdPosts = useSelector(getCreatedPosts);
+  const feedPostes = useSelector(getFeedPosts);
+  console.log("🚀 ~ Community ~ feedPostes:", feedPostes);
+  const randomposts = useSelector(getRandomPosts);
+  console.log("🚀 ~ Community ~ randomposts:", randomposts);
+  console.log("🚀 ~ Community ~ posts:", createdPosts);
   const postError = useSelector((state) => state.posts.error);
   const postStatus = useSelector((state) => state.posts.status);
   const profileError = useSelector((state) => state.communityUser.error);
   const profileStatus = useSelector((state) => state.communityUser.status);
   const decodedToken = useSelector(getDecodedToken);
+  const language = useSelector(getLanguage);
 
   const dispatch = useDispatch();
 
@@ -109,11 +132,65 @@ export default function Community() {
     setPreviewVideos([]);
   };
 
-  const fetchSuggested = async () => {
+  //handle pagination on users
+  const handleShowMoreSuggestedUsers = () => {
+    setSuggestedUsersPage((prevPage) => prevPage + 1);
+  };
+
+  const handleShowMoreFollowingUsers = () => {
+    setFollowingUsersPage((prevPage) => prevPage + 1);
+  };
+
+  //handle fetching data
+
+  const fetchFollowing = async () => {
     try {
-      await dispatch(fetchSuggestedUsers(availableUser.token));
+      await dispatch(
+        fetchFollowingUsers({
+          token: availableUser.token,
+          lang: language,
+          page: followingUsersPage,
+        })
+      );
     } catch (error) {
       console.error("Failed to fetch suggested users:", error);
+    }
+  };
+  const fetchSuggested = async () => {
+    try {
+      await dispatch(
+        fetchSuggestedUsers({
+          token: availableUser.token,
+          lang: language,
+          page: suggestedUsersPage,
+        })
+      );
+    } catch (error) {
+      console.error("Failed to fetch suggested users:", error);
+    }
+  };
+  const fetchAllRandomPosts = async () => {
+    try {
+      await dispatch(
+        fetchRandomPosts({
+          token: availableUser.token,
+          lang: language,
+        })
+      );
+    } catch (error) {
+      console.error("Failed to fetch random posts:", error);
+    }
+  };
+  const fetchAllFeedPosts = async () => {
+    try {
+      await dispatch(
+        fetchFeedPosts({
+          token: availableUser.token,
+          lang: language,
+        })
+      );
+    } catch (error) {
+      console.error("Failed to fetch feed posts:", error);
     }
   };
 
@@ -123,6 +200,7 @@ export default function Community() {
         getProfileById({
           userId: decodedToken.id,
           token: availableUser.token,
+          lang: language,
         })
       );
     } catch (error) {
@@ -131,10 +209,22 @@ export default function Community() {
   };
   useEffect(() => {
     if (availableUser.token && decodedToken.id) {
-      fetchSuggested();
       fetchProfile();
+      fetchAllFeedPosts();
+      fetchAllRandomPosts();
     }
-  }, [dispatch, availableUser.token, decodedToken.id, profileError]);
+  }, [availableUser.token, decodedToken.id]);
+  useEffect(() => {
+    if (availableUser.token && decodedToken.id) {
+      fetchSuggested();
+    }
+  }, [availableUser.token, decodedToken.id, suggestedUsersPage]);
+
+  useEffect(() => {
+    if (availableUser.token && decodedToken.id) {
+      fetchFollowing();
+    }
+  }, [availableUser.token, decodedToken.id, followingUsersPage]);
 
   return (
     <div className={style.communityContainer}>
@@ -202,7 +292,7 @@ export default function Community() {
                 </div>
                 {suggestedUsers && suggestedUsers?.length > 3 && (
                   <div className={style.showMore}>
-                    <Link to="/community">{more}</Link>
+                    <div onClick={handleShowMoreSuggestedUsers}>{more}</div>
                   </div>
                 )}
               </div>
@@ -212,7 +302,7 @@ export default function Community() {
           </div>
           <div className={`${style.mainContent} d-flex flex-column gap-2`}>
             <div
-              className={`${style.uploadPost} w-100 d-flex align-items-start flex-wrap`}
+              className={`${style.uploadPost} w-100 d-flex align-items-start flex-flex-nowrap`}
             >
               <div className={`${style.profileImage} col-1 me-1`}>
                 <img
@@ -284,23 +374,43 @@ export default function Community() {
                 ))}
               </div>
             </div>
-            {posts ? (
-              posts.map((post) => <Post key={post.id} post={post} />)
+            {createdPosts ? (
+              createdPosts.map((post) => <Post key={post._id} post={post} />)
             ) : (
               <Loading width="100px" height="100px" />
             )}
-            <Post />
+            {feedPostes && feedPostes.length > 0 ? (
+              feedPostes.map((post) => <Post key={post._id} post={post} />)
+            ) : randomposts && randomposts.length > 0 ? (
+              randomposts
+                .slice(0, 3)
+                .map((post) => <Post key={post._id} post={post} />)
+            ) : (
+              <Loading width="100px" height="100px" />
+            )}
           </div>
-          <div className={`  ${style.rightAside}`}>
-            <div className={style.followInfoCard}>
-              <div className={style.title}>{who}</div>
-              <div className={style.userCards}>
-                <UserCard method={msg} user="" />
+          <div className={` ${style.rightAside}`}>
+            {followingUsers ? (
+              <div className={style.followInfoCard}>
+                <div className={style.title}>{who}</div>
+                <div className={style.userCards}>
+                  {followingUsers && followingUsers?.length > 0 ? (
+                    followingUsers.map((user) => (
+                      <UserCard key={user.id} method="message" user={user} />
+                    ))
+                  ) : (
+                    <p>{msg}</p>
+                  )}
+                </div>
+                {followingUsers && followingUsers?.length > 3 && (
+                  <div className={style.showMore}>
+                    <div onClick={handleShowMoreFollowingUsers}>{more}</div>
+                  </div>
+                )}
               </div>
-              <div className={style.showMore}>
-                <Link to="/community">{more}</Link>
-              </div>
-            </div>
+            ) : (
+              <Loading width="150px" height="150px" />
+            )}
           </div>
         </div>
       </div>

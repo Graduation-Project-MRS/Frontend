@@ -1,33 +1,67 @@
 import React, { useState } from "react";
-import PostContent from "../postContent/PostContent";
-import style from "./post.module.css";
-import { VscSend } from "react-icons/vsc";
 import { useDispatch, useSelector } from "react-redux";
-import defaultProfile from "../../assets/man-user.svg"; // Renamed import to avoid conflict with the profile variable
-import { getProfile } from "../../redux/slices/communityUserSlice";
-import Loading from "../loading/loading";
+import { VscSend } from "react-icons/vsc";
+import {
+  commentPost,
+  getPostStatus,
+  getPostError,
+} from "../../redux/slices/postsSLlce";
 import { getDecodedToken, getuser } from "../../redux/slices/authSlice";
+import PostContent from "../postContent/PostContent";
+import Loading from "../loading/loading";
+import style from "./post.module.css";
+import defaultProfile from "../../assets/man-user.svg";
+import { getProfile } from "../../redux/slices/communityUserSlice";
+import axios from "axios";
 
 export default function Post({ post }) {
+  const dispatch = useDispatch();
   const [commentText, setCommentText] = useState("");
-  const commentstatus = useSelector((state) => state.posts.status);
-  const profile = useSelector(getProfile); // Ensure profile is fetched properly
-  // const comments = useSelector((state)=>state.posts.comments); // Ensure profile is fetched properly
+  const [postComments, setPostComments] = useState(post?.replies || []);
 
-  let dispatch = useDispatch();
-  let { token } = useSelector(getuser);
-  let decodedToken = useSelector(getDecodedToken);
+  console.log("🚀 ~ Post ~ postComments:", postComments);
 
-  const handleCommentSubmit = (e) => {
+  const commentStatus = useSelector(getPostStatus);
+  const postError = useSelector(getPostError);
+  const profile = useSelector(getProfile);
+  const { token } = useSelector(getuser);
+  const decodedToken = useSelector(getDecodedToken);
+
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    console.log("Comment submitted: ", commentText);
-    // dispatch(commentPost({ postId: post.id, token, text: commentText }));
+    if (commentText.trim()) {
+      try {
+        const newComment = {
+          userProfilePic: profile?.user?.profileImage?.url || defaultProfile,
+          userName: profile?.user?.userName,
+          text: commentText,
+        };
+
+        setPostComments([...postComments, newComment]);
+
+        // Dispatch the action to add comment to server
+        await dispatch(
+          commentPost({ postId: post._id, text: commentText, token })
+        );
+        // await axios
+        //   .put(`https://fast-plat1.vercel.app/post/reply/${post?._id}`, null, {
+        //     headers: {
+        //       token: token,
+        //     },
+        //   })
+        //   .then((res) => console.log(res))
+        //   .catch((err) => console.log(err));
+
+        setCommentText("");
+      } catch (error) {
+        console.error(`Failed to add comment to ${post._id}`, postError);
+      }
+    }
   };
 
   return (
     <>
       <PostContent post={post} />
-      {/* Comment modal */}
       <div
         className="modal fade rounded-2"
         id="commentmodal"
@@ -35,11 +69,11 @@ export default function Post({ post }) {
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-lg rounded-2 ">
-          <div className="modal-content position-relative ">
+        <div className="modal-dialog modal-lg rounded-2">
+          <div className="modal-content position-relative">
             <button
               type="button"
-              className={` ${style.btnClose}`}
+              className={`${style.btnClose}`}
               style={{
                 position: "absolute",
                 top: "15px",
@@ -51,48 +85,28 @@ export default function Post({ post }) {
               aria-label="Close"
             />
             <div className={`modal-body p-0 ${style.modalBody} rounded-2`}>
-              {/* Display the same post content */}
               <PostContent post={post} />
-              {/* Form to add a comment */}
               <div className={`${style.comments}`}>
-                {/* {comments?.data?.replies ? (
-                  <div className={style.comment}>
-                    <div className={`${style.profileImage} col-1 me-1`}>
-                      <img
-                        src={
-                          comments?.data?.replies?.userProfilePic ||
-                          defaultProfile
-                        }
-                        alt="Profile"
-                      />
-                    </div>
-                    <div className={style.commentBody}>
-                      <div className={style.name}>
-                        {comments?.data?.replies?.userName}
-                      </div>
-                      <div className={style.text}>
-                        {comments?.data?.replies?.text}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
+                {commentStatus === "loading" ? (
                   <Loading width="50px" height="50px" />
-                )} */}
-
-                {/* //!temp comment  */}
-                <div className={style.comment}>
-                  <div className={`${style.profileImage} col-2 me-1`}>
-                    <img src={defaultProfile} alt="Profile" />
-                  </div>
-                  <div className={style.commentBody}>
-                    <div className={style.name}>Mahmoud Khairy</div>
-                    <div className={style.text}>
-                      welcome bro, you have a good jop welcome bro, you have a
-                      good jop welcome bro, you have a good jop welcome bro, you
-                      have a good jop{" "}
+                ) : postComments && postComments.length > 0 ? (
+                  postComments.map((comment, index) => (
+                    <div key={index} className={style.comment}>
+                      <div className={`${style.profileImage} col-1 me-1`}>
+                        <img
+                          src={comment.userProfilePic || defaultProfile}
+                          alt="Profile"
+                        />
+                      </div>
+                      <div className={style.commentBody}>
+                        <div className={style.name}>{comment.userName}</div>
+                        <div className={style.text}>{comment.text}</div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  ))
+                ) : (
+                  <p>No comments yet.</p>
+                )}
               </div>
               <div className={`${style.uploadComment} d-flex p-`}>
                 <div className={`${style.profileImage} col-1 me-1`}>
@@ -101,7 +115,7 @@ export default function Post({ post }) {
                     alt="Profile"
                   />
                 </div>
-                <form onSubmit={handleCommentSubmit} className=" col-11 ">
+                <form onSubmit={handleCommentSubmit} className="col-11">
                   <div className={`${style.textInput} col-12`}>
                     <label htmlFor="comment">{profile?.user?.userName}</label>
                     <input
@@ -116,7 +130,7 @@ export default function Post({ post }) {
                     <button
                       type="submit"
                       className={style.sendIcon}
-                      disabled={commentstatus === "loading"}
+                      disabled={commentStatus === "loading"}
                     >
                       <VscSend size={25} className={style.postIcon} />
                     </button>

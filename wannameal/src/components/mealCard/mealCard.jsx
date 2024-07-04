@@ -8,11 +8,11 @@ import { Link } from "react-router-dom";
 function MealCard({ meal }) {
   return (
     <>
-      <Link to={`/recipeDetails/${meal?._id} `} state={{ meal }} >
-        <div className={`${styles.mealCard}`}>
+      <Link to={`/recipeDetails/${meal?._id}`} state={{ meal }}>
+        <div className={`${styles.mealCard} mx-auto`}>
           <div className={`${styles.imageContainer}`}>
             <img
-              src={meal?.image.url}
+              src={meal?.image?.url}
               id={meal?.image.id}
               objectFit="cover"
               alt={`meal ${meal?.name}`}
@@ -26,18 +26,18 @@ function MealCard({ meal }) {
             <div className={`${styles.mealRates}`}>
               <div className={`${styles.time}`}>
                 <IoTime size={25} color="#4CAF50" />
-                <span>60</span>Minutes
+                <span>{meal?.prep_time}</span>Minutes
               </div>
               <div className={`${styles.interacts}`}>
                 <BsFire size={25} color="#4CAF50" />
-                <span>600</span>
+                <span>{meal?.calories}</span>
               </div>
               <div className={`${styles.components}`}>
-                <GiCookingPot size={25} color="#4CAF50" /> <span>9</span>{" "}
-                Components
+                <GiCookingPot size={25} color="#4CAF50" />{" "}
+                <span>{meal?.ingredients?.split(",").length}</span> Components
               </div>
             </div>
-            <h4 className={`${styles.description}`}>{meal?.name}</h4>
+            <h4 className={`${styles.description}`}>{meal?.recipeName}</h4>
           </div>
         </div>
       </Link>

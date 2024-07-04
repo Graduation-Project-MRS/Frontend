@@ -1,6 +1,6 @@
 .mealCard {
   /* margin-top: 50px; */
-  width: 370px;
+  width: 340px;
   height: 300px;
   border-radius: 15px;
   background-image: url("../../assets/Rectangle\ 9.png");
@@ -8,12 +8,17 @@
   background-size: cover;
   position: relative;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.3s;
   transform: scale(1.001);
+}
+@media (max-width: 767px) {
+  .mealCard {
+    width: 100%;
+  }
 }
 
 .mealCard .mealInfo {
-  color: var(--text_white);
+  color: #fff;
   background-color: #4c4c4cba;
   display: flex;
   width: 100%;

@@ -12,7 +12,7 @@
   --green: #049601;
   --light-green: #3ac568;
   --opacity_green: #e6fee3;
-  --text_black: #3b3b3b;
+  --text_black: #0d0d0d;
   --text_white: #fff;
   --text_gray: #00000080;
   --blue: #1976d2;
@@ -23,12 +23,12 @@
 }
 
 .dark {
-  --body: ##201e27;
+  --body: #201e27;
   --green: #049601;
   --light-green: #4ecb77;
   --opacity_green: #e6fee3;
   --text_black: #fff;
-  --text_white: #3b3b3b;
+  --text_white: #0d0d0d;
   --text_gray: #00000080;
   --blue: #1976d2;
   --light-blue: #699bf7;
@@ -44,7 +44,28 @@ a {
 body {
   position: relative;
   background-color: var(--text_white);
+  color: var(--text_black);
 }
 .row {
   max-width: 98vw;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--body) inset !important;
+  -webkit-text-fill-color: var(--text_black) !important;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  width: 60%;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--grayWritingColor);
+  border-radius: 4px;
 }

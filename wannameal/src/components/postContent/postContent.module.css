@@ -27,7 +27,7 @@
   color: var(--text_black);
 }
 .userInfo .email {
-  color: var(--text_gray);
+  color: var(--grayWritingColor);
   font-size: 14px;
   transform: scale(0.8) translate(-5px, -8px);
 }
@@ -51,7 +51,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 6px;
+  flex-basis: auto;
 }
+
 .preview .imgContainer img,
 .preview .videoContainer video {
   object-fit: cover;

@@ -1,6 +1,6 @@
 .homeContainer {
   width: 100%;
-  height: calc(100vh - 0px);
+  height: calc(100vh - 66px);
   display: flex;
   align-items: center;
   gap: 30px;
@@ -18,7 +18,7 @@
 }
 
 .info .mainTitle {
-  color: var(--dark);
+  color: var(--text_black);
   font-style: normal;
   line-height: 80px;
 }
