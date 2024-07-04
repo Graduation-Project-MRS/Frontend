@@ -75,11 +75,11 @@ function MealsSlider() {
           },
         }}
       >
-        {recomendedMeals?.map((meal, index) => (
+        {/* {recomendedMeals?.map((meal, index) => (
           <SwiperSlide key={index}>
             <MealCard meal={meal} />
           </SwiperSlide>
-        ))}
+        ))} */}
       </Swiper>
     </div>
   );

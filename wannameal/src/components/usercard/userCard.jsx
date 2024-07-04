@@ -15,14 +15,14 @@ export default function UserCard({ method, user }) {
   const [activeBtn, setActiveBtn] = useState(false);
   const { token } = useSelector(getuser);
   const userId = user?._id;
-  console.log("🚀 ~ UserCard ~ user:", user);
+  // console.log("🚀 ~ UserCard ~ user:", user);
   const status = useSelector((state) => state.communityUser.status);
   const error = useSelector((state) => state.communityUser.error);
   const availableUser = useSelector(getuser);
   const decodedToken = useSelector(getDecodedToken);
   const follow = useSelector((state) => state.communityUser.follow);
   const pr = useSelector((state) => state.communityUser.profile);
-  console.log("🚀 ~ UserCard ~ follow:", follow);
+  // console.log("🚀 ~ UserCard ~ follow:", follow);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

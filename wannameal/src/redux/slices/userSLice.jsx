@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  user: null,    
+  user: null,
   updatedUser: null,
   status: "idle",
   error: null,
@@ -32,15 +32,37 @@ export const fetchUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "user/updateUser",
-  async ({ userId, token, formData }, { rejectWithValue }) => {
+  async ({ token, formData }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `https://fast-plat1.vercel.app/users/${userId}`,
+        `https://fast-plat1.vercel.app/users/updateme`,
         formData,
         {
           headers: {
             token: `${token}`,
             "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteAccount = createAsyncThunk(
+  "user/deleteAccount",
+  async ({ userId, token }, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `https://fast-plat1.vercel.app/users/${userId}`,
+        {
+          headers: {
+            token: `${token}`,
           },
         }
       );
@@ -60,8 +82,7 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-
-      // Fetch User by ID
+      // Fetch User
       .addCase(fetchUser.pending, (state) => {
         state.status = "loading";
       })
@@ -84,6 +105,20 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error;
+      })
+      // Delete Account
+      .addCase(deleteAccount.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteAccount.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = null;
+        state.updatedUser = null;
+        state.error = null;
+      })
+      .addCase(deleteAccount.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || action.error.message;
       });

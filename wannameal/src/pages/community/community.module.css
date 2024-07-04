@@ -149,6 +149,7 @@
   color: var(--blue);
   font-weight: 500;
   margin-top: 10px;
+  cursor: pointer;
 }
 .rightAside .followInfoCard {
   background-color: var(--body);
@@ -275,6 +276,7 @@
 
   .leftAside {
     flex-direction: row;
+    justify-content: space-around;
     gap: 10px;
   }
 

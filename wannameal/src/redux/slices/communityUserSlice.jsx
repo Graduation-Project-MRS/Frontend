@@ -5,6 +5,7 @@ const initialState = {
   profile: null,
   updatedProfile: null,
   suggestedUsers: [],
+  followingUsers: [],
   follow: null,
   status: "idle",
   error: null,
@@ -12,10 +13,10 @@ const initialState = {
 
 export const getProfileById = createAsyncThunk(
   "communityUser/getProfileById",
-  async ({ userId, token }, { rejectWithValue }) => {
+  async ({ userId, token, lang }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://fast-plat1.vercel.app/auth/profile/${userId}?lang=eng`,
+        `https://fast-plat1.vercel.app/auth/profile/${userId}?lang=${lang}`,
         {
           headers: {
             token: token,
@@ -37,7 +38,7 @@ export const updateProfile = createAsyncThunk(
   async ({ formData, token, userId }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `https://fast-plat1.vercel.app/auth/update/${userId}?lang=eng`,
+        `https://fast-plat1.vercel.app/auth/update/${userId}`,
         formData,
         {
           headers: {
@@ -80,12 +81,33 @@ export const followUser = createAsyncThunk(
   }
 );
 
-export const fetchSuggestedUsers = createAsyncThunk(
-  "communityUser/fetchSuggestedUsers",
-  async (token, { rejectWithValue }) => {
+export const fetchFollowingUsers = createAsyncThunk(
+  "communityUser/fetchFollowingUsers",
+  async ({ token, lang, page }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://fast-plat1.vercel.app/auth/suggested?lang=eng`,
+        `https://fast-plat1.vercel.app/auth/following?page=${page}`,
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+      return response.data.following.following;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const fetchSuggestedUsers = createAsyncThunk(
+  "communityUser/fetchSuggestedUsers",
+  async ({ token, lang }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `https://fast-plat1.vercel.app/auth/suggested?lang=${lang}`,
         {
           headers: {
             token: token,
@@ -159,12 +181,26 @@ const communityUserSlice = createSlice({
       .addCase(fetchSuggestedUsers.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || action.error.message;
+      })
+      // Get Following Users
+      .addCase(fetchFollowingUsers.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchFollowingUsers.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.followingUsers = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchFollowingUsers.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error.message;
       });
   },
 });
 
 export const getProfile = (state) => state.communityUser.profile;
 export const getSuggestedUsers = (state) => state.communityUser.suggestedUsers;
+export const getFollowingUsers = (state) => state.communityUser.followingUsers;
 export const getupdatedProfile = (state) => state.communityUser.updatedProfile;
 
 export default communityUserSlice.reducer;

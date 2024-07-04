@@ -15,26 +15,50 @@ export const recommendMeals = createAsyncThunk(
   "meals/recommendMeals",
   async ({ ingredients, lang }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `https://fast-plat1.vercel.app/meals/recommendMeal?lang=${lang}`,
+      console.log("Sending request to API with params:", {
+        lang: lang,
+        ingredients: ingredients,
+      });
+
+      const response = await fetch(
+        `https://tesst11.azurewebsites.net/meals/recommendMeal?lang=${lang}&ingredients=${ingredients}`,
         {
-          params: {
-            ingredients,
-          },
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Accept: "*/*",
           },
         }
       );
-      console.log("res from Api", response.data);
-      return response.data.Recommendation;
+      return response;
     } catch (error) {
-      console.error("Error from API", error.message);
       return rejectWithValue(error.message);
     }
   }
 );
+
+// export const recommendMeals = createAsyncThunk(
+//   "meals/recommendMeals",
+//   async ({ ingredients, lang,token }, { rejectWithValue }) => {
+//     try {
+//       const response = await fetch(
+//         `https://tesst11.azurewebsites.net/meals/recommendMeal?lang=${lang}&ingredients=${JSON.stringify(ingredients)}`,
+//         {
+//           method: 'GET',
+//           headers: {
+//           // token: token,
+//             'Content-Type': 'application/json'
+//           }
+//         }
+//       );
+//       const data = await response.json(); // Parse response body as JSON
+//       console.log("Response from API:", data);
+//       return data; // Assuming Recommendation is in the response
+//     } catch (error) {
+//       console.error("Error from API:", error.message);
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
 
 export const fetchSingleMeal = createAsyncThunk(
   "meals/fetchSingleMeal",

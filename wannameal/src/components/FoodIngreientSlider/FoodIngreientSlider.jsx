@@ -33,21 +33,15 @@ import { getLanguage } from "../../redux/slices/language";
 
 function FoodIngreientSlider() {
   // const ingredients = useSelector(getIngredients);
+  const ingredients = useSelector(getIngredients);
   const [checkedIngredients, setCheckedIngredients] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredIngredients, setFilteredIngredients] = useState([]);
-  console.log(
-    "🚀 ~ FoodIngreientSlider ~ filteredIngredients:",
-    filteredIngredients
-  );
+  const [filteredIngredients, setFilteredIngredients] = useState(ingredients);
+
   const availableUser = useSelector(getuser);
   const dispatch = useDispatch();
-  const ingredients = useSelector(getIngredients);
-  console.log("🚀🚀🚀🚀🚀 ~ FoodIngreientSlider ~ ingredients:", ingredients);
   const ingredientsStatus = useSelector(getIngredientsStatus);
-  console.log("🚀🚀🚀🚀🚀 ~ FoodIngreientSlider ~ status:", ingredientsStatus);
   const ingredientError = useSelector(getIngredientsError);
-  console.log("🚀🚀🚀🚀🚀 ~ FoodIngreientSlider ~ error:", ingredientError);
   const language = useSelector(getLanguage);
   console.log("🚀 ~ FoodIngreientSlider ~ language:", language);
 
@@ -69,16 +63,19 @@ function FoodIngreientSlider() {
     );
   };
 
-  useEffect(() => {
+    useEffect(() => {
     const fetch = async () => {
       await dispatch(
         fetchIngredients({ token: availableUser.token, lang: language })
       );
-      setFilteredIngredients(ingredients);
     };
 
     fetch();
-  }, []);
+  }, [dispatch, availableUser.token, language]);
+
+  useEffect(() => {
+    setFilteredIngredients(ingredients);
+  }, [ingredients]);
 
   useEffect(() => {
     const filtered = ingredients.filter((ingredient) =>
@@ -89,24 +86,30 @@ function FoodIngreientSlider() {
 
   useEffect(() => {
     const fetchMeals = async () => {
-      if (checkedIngredients.length > 0) {
-        const ingredientNames = checkedIngredients
-          .map((ingredient) => ingredient.name)
-          .join(",");
-        console.log("🚀🚀🚀🚀 ~ useEffect ~ ingredientNames:", ingredientNames);
-        await dispatch(
-          recommendMeals({ "ingredients": ingredientNames, lang: language })
+      try {
+        let ingredientNames = 'موز'; // Default value if no checked ingredients
+        console.log("🚀 ~ fetchMeals ~ ingredientNames:", ingredientNames)
+        if (checkedIngredients.length > 0) {
+          ingredientNames = checkedIngredients
+          .map(ingredient => ingredient.name)
+          .join(",")
+        }
+        
+        console.log("🚀 ~ fetchMeals ~ checkedIngredients:", checkedIngredients)
+        console.log("🚀🚀🚀🚀🚀 ~ fetchMeals ~ ingredientNames:", ingredientNames)
+        
+        const response = await dispatch(
+          recommendMeals({ ingredients: ingredientNames, lang: language,token:availableUser?.token })
         );
-      } else {
-        await dispatch(
-          recommendMeals({ "ingredients": "banana", lang: language })
-        );
+
+        console.log("Recommendation response:", response); // Log the response or handle it as needed
+      } catch (error) {
+        console.error("Error fetching meals:", error);
       }
     };
 
     fetchMeals();
-  }, [checkedIngredients, dispatch]);
-
+  }, [checkedIngredients, dispatch, language]);
   return (
     <>
       <div className="container my-4">
@@ -220,9 +223,10 @@ function FoodIngreientSlider() {
                       }
                       htmlFor={`ingredientCheckbox_${ingredient._id}`}
                     >
-                      {/* <div className={styles.symbol}>
-                        {String.fromCodePoint(parseInt(ingredient.hex, 16))}
-                      </div>{" "} */}
+                      <div className={styles.symbolImage}>
+                        <img src={ingredient?.image?.url} alt="" srcset="" />
+                        {/* {String.fromCodePoint(parseInt(ingredient.hex, 16))} */}
+                      </div>{" "}
                       <div className={styles.name}>{ingredient.name}</div>
                     </label>
                   </div>

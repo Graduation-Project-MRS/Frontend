@@ -6,6 +6,9 @@ const initialState = {
   posts: [],
   comments: [],
   singlePost: null,
+  feedPosts: [], // New property for feed posts
+  randomPosts: [], // New property for random posts
+  like: null,
   status: "idle",
   error: null,
 };
@@ -19,7 +22,7 @@ export const createPost = createAsyncThunk(
         formData,
         {
           headers: {
-            token: `${token}`,
+            token: token,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -33,6 +36,7 @@ export const createPost = createAsyncThunk(
     }
   }
 );
+
 export const fetchPost = createAsyncThunk(
   "posts/fetchPost",
   async (postId, { rejectWithValue }) => {
@@ -49,16 +53,40 @@ export const fetchPost = createAsyncThunk(
     }
   }
 );
+
 export const likePost = createAsyncThunk(
   "posts/likePost",
-  async ({ postId, token }, { rejectWithValue }) => {
+  async ({ token, postId }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `https://fast-plat1.vercel.app/post/${postId}/like`,
-        {},
+      const response = await axios.put(
+        `https://fast-plat1.vercel.app/post/like/${postId}`,
         {
           headers: {
-            token: `${token}`,
+            token: token,
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const commentPost = createAsyncThunk(
+  "posts/commentPost",
+  async ({ postId, text, token }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `https://fast-plat1.vercel.app/post/reply/${postId}`,
+        text,
+        {
+          headers: {
+            token: token,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -71,21 +99,35 @@ export const likePost = createAsyncThunk(
     }
   }
 );
-export const commentPost = createAsyncThunk(
-  "posts/commentPost",
-  async ({ postId, commentData, token }, { rejectWithValue }) => {
+
+export const fetchRandomPosts = createAsyncThunk(
+  "posts/fetchRandomPosts",
+  async ({ token, lang }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `https://fast-plat1.vercel.app/post/${postId}/comment`,
-        commentData,
+      const response = await axios.get("https://fast-plat1.vercel.app/post");
+      return response.data.posts;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchFeedPosts = createAsyncThunk(
+  "posts/fetchFeedPosts",
+  async ({ token, lang }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `https://fast-plat1.vercel.app/post/feed`,
         {
           headers: {
-            token: `${token}`,
-            "Content-Type": "application/json",
+            token: token,
           },
         }
       );
-      return response.data;
+      return response.data.feedPosts;
     } catch (error) {
       if (!error.response) {
         throw error;
@@ -125,6 +167,18 @@ const postsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload ? action.payload : action.error.message;
       })
+      .addCase(likePost.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(likePost.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        state.like = action.payload;
+      })
+      .addCase(likePost.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload ? action.payload : action.error.message;
+      })
       .addCase(fetchPost.pending, (state) => {
         state.status = "loading";
       })
@@ -136,8 +190,39 @@ const postsSlice = createSlice({
       .addCase(fetchPost.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload ? action.payload : action.error.message;
+      })
+      .addCase(fetchRandomPosts.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchRandomPosts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        state.randomPosts = action.payload;
+      })
+      .addCase(fetchRandomPosts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload ? action.payload : action.error.message;
+      })
+      .addCase(fetchFeedPosts.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchFeedPosts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        state.feedPosts = action.payload;
+      })
+      .addCase(fetchFeedPosts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload ? action.payload : action.error.message;
       });
   },
 });
+
+export const getCreatedPosts = (state) => state.posts.posts;
+export const getFeedPosts = (state) => state.posts.feedPosts;
+export const getRandomPosts = (state) => state.posts.randomPosts;
+export const getPostError = (state) => state.posts.error;
+export const getPostStatus = (state) => state.posts.status;
+export const getlikkk = (state) => state.posts.like;
 
 export default postsSlice.reducer;

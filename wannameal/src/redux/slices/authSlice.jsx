@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 export const loginUser = createAsyncThunk("auth/login", async (user) => {
   try {
     const response = await axios.post(
-      "https://fast-plat1.vercel.app/auth/login?lang=eng",
+      "https://fast-plat1.vercel.app/auth/login?lang=en",
       user
     );
     return response.data;

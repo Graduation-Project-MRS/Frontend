@@ -8,8 +8,8 @@ import { Link } from "react-router-dom";
 function MealCard({ meal }) {
   return (
     <>
-      <Link to={`/recipeDetails/${meal?.index}`}>
-        <div className={`${styles.mealCard}`}>
+      <Link to={`/recipeDetails/${meal?._id}`} state={{ meal }}>
+        <div className={`${styles.mealCard} mx-auto`}>
           <div className={`${styles.imageContainer}`}>
             <img
               src={meal?.image?.url}

@@ -11,14 +11,15 @@ import {
   logout,
 } from "../../../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getProfile,
-  getProfileById,
-  updateProfile,
-} from "../../../redux/slices/communityUserSlice";
+
 import Loading from "../../../components/loading/loading";
 
-import { fetchUser, getLoggoedUser } from "../../../redux/slices/userSLice";
+import {
+  fetchUser,
+  getLoggoedUser,
+  updateUser,
+  deleteAccount,
+} from "../../../redux/slices/userSLice";
 import { getUpdatedUser } from "../../../redux/slices/userSLice";
 
 function EditProfile() {
@@ -28,10 +29,12 @@ function EditProfile() {
     firstName: user?.userName?.split(" ")[0],
     lastName: user?.userName?.split(" ")[1],
     email: user?.email,
+    phone: user?.phone || "",
     currentPassword: "",
     newPassword: "",
     confirmNewPassword: "",
     imageProfile: user?.profileImage?.url,
+    removeProfileImage: false,
   });
 
   const [passwordValidity, setPasswordValidity] = useState({
@@ -47,10 +50,13 @@ function EditProfile() {
   const decodedToken = useSelector(getDecodedToken);
 
   const userError = useSelector((state) => state.user.error);
+  console.log("🚀 ~ EditProfile ~ userError:", userError);
   const userStatus = useSelector((state) => state.user.status);
+  console.log("🚀 ~ EditProfile ~ userStatus:", userStatus);
   const dispatch = useDispatch();
 
   const updatedUser = useSelector(getUpdatedUser);
+  console.log("🚀 ~ EditProfile ~ updatedUser:", updatedUser);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -82,14 +88,17 @@ function EditProfile() {
   };
 
   const cancelChanges = (e) => {
+    e.preventDefault()
     setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
+      firstName: user?.userName?.split(" ")[0],
+      lastName: user?.userName?.split(" ")[1],
+      email: user?.email,
+      phone: user?.phone || "",
       currentPassword: "",
       newPassword: "",
       confirmNewPassword: "",
-      imageProfile: null,
+      imageProfile: user?.profileImage?.url,
+      removeProfileImage: false,
     });
   };
 
@@ -98,6 +107,7 @@ function EditProfile() {
     setFormData((prevData) => ({
       ...prevData,
       imageProfile: file,
+      removeProfileImage: false,
     }));
   };
 
@@ -105,6 +115,7 @@ function EditProfile() {
     setFormData((prevData) => ({
       ...prevData,
       imageProfile: null,
+      removeProfileImage: true,
     }));
   };
 
@@ -124,6 +135,7 @@ function EditProfile() {
         return;
       }
     }
+
     if (
       formData.firstName === "" ||
       formData.lastName === "" ||
@@ -147,19 +159,32 @@ function EditProfile() {
       "userName",
       formData.firstName + " " + formData.lastName
     );
-    formDataToSend.append("imageProfile", formData.imageProfile);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("password", formData.newPassword);
+    formDataToSend.append("confirmPassword", formData.confirmNewPassword);
+    if (
+      typeof formData.imageProfile !== "string" ||
+      formData.imageProfile !== null
+    ) {
+      formDataToSend.append("img", formData.imageProfile);
+    }
+    if (formData.removeProfileImage == true) {
+      formDataToSend.append("removeProfileImage", formData.removeProfileImage);
+    }
+    formDataToSend.append("phone", formData.phone);
 
     await dispatch(
-      updateProfile({
+      updateUser({
         formData: formDataToSend,
         userId: decodedToken.id,
         token: availableUser.token,
       })
     );
+
     if (userError) {
       Swal.fire({
         icon: "error",
-        title: `${userError}`,
+        title: `${userError?.msgError}`,
         toast: true,
         position: "top-end",
         showConfirmButton: false,
@@ -190,9 +215,16 @@ function EditProfile() {
       confirmButtonColor: "rgb(236, 52, 52)",
       cancelButtonColor: "#3ac568",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         let timerInterval;
+        await dispatch(
+          deleteAccount({
+            userId: decodedToken.id,
+            token: availableUser.token,
+          })
+        );
+
         Swal.fire({
           title: "Deleting Account!",
           html: "Your Account will be Deleted in <b></b> second.",
@@ -265,6 +297,19 @@ function EditProfile() {
                     onChange={handleInputChange}
                     placeholder="Email"
                     required
+                  />
+                </div>
+                <div className={`${styles.email}`}>
+                  <label htmlFor="phone">Phone Number</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="phone"
+                    minLength="11"
+                    maxLength="11"
                   />
                 </div>
                 <hr />
