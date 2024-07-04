@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 function MealCard({ meal }) {
   return (
     <>
-      <Link to={`/recipeDetails/${meal?.id}`}>
+      <Link to={`/recipeDetails/${meal?._id} `} state={{ meal }} >
         <div className={`${styles.mealCard}`}>
           <div className={`${styles.imageContainer}`}>
             <img

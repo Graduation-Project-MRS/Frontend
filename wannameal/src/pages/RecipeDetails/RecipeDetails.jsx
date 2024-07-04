@@ -6,8 +6,13 @@ import { IoTime } from "react-icons/io5";
 import { BsFire } from "react-icons/bs";
 import { GiCookingPot } from "react-icons/gi";
 import MealCard from '../../components/mealCard/mealCard';
+import { useLocation } from 'react-router-dom';
 const RecipeDetails = () => {
     let x = [1, 23, 45, 68, 564, 6, 456, 44]
+    const location = useLocation()
+    const { meal } = location.state || {}
+    console.log(location);
+    console.log(meal);
     return (
         <div className='p-md-5 mx-md-5 my-4'>
             <div className="row justify-content-between p-3">

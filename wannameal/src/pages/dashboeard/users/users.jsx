@@ -115,6 +115,7 @@ export default function Users() {
               </tbody>
             </table>
             <Pagination
+              who={'users'}
               currentPage={currentPage}
               totalPages={totalPages}
               setCurrentPage={setCurrentPage}

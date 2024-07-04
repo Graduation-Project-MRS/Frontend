@@ -1,26 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./ingredients.module.css";
 import Pagination from "../../../components/pagination/pagination";
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchIngredients } from "../../../redux/slices/ingredients"; // Adjust the path to your slice
-
+import axios from "axios";
+const INGR_PER_PAGE = 9;
 export default function Ingredients() {
-  const dispatch = useDispatch();
-  const ingredients = useSelector((state) => state.ingredients.items);
-  const status = useSelector((state) => state.ingredients.status);
-  const error = useSelector((state) => state.ingredients.error);
-  console.log(ingredients);
+
+  const [ingredients, setingredients] = useState([])
+  const [currentPage, setCurrentPage] = useState(1);
+  const getIngredients = () => {
+    axios.get(('https://fast-plat1.vercel.app/Ingredients/getAll')).then((res) => {
+      console.log(res.data.data);
+      setingredients(res.data.data)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
   useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
-
-  if (status === 'loading') {
-    return <p>Loading...</p>;
-  }
-
-  if (status === 'failed') {
-    return <p>Error: {error}</p>;
-  }
+    getIngredients()
+  }, [])
+  const startIndex = (currentPage - 1) * INGR_PER_PAGE;
+  const selectedIngre = ingredients.slice(
+    startIndex,
+    startIndex + INGR_PER_PAGE
+  );
+  const totalPages = Math.ceil(ingredients.length / INGR_PER_PAGE);
 
   return (
     <div className="px-5 my-4">
@@ -32,17 +35,24 @@ export default function Ingredients() {
           className="row m-3 pb-3 flex-wrap align-items-start justify-content-center"
           style={{ gap: "40px", borderBottom: "1px solid var(--text_black)" }}
         >
-          {ingredients?.map((ing, index) => (
+          {selectedIngre?.map((ing, index) => (
             <div
               key={index}
-              className={`d-flex flex-column justify-content-center gap-3 ${style.ing_div}`}
+              className={`col-6 col-lg-3 d-flex flex-column justify-content-center gap-3 ${style.ing_div}`}
             >
-              <h1>🥩</h1>
-              <p>{ing.name || 'Meat'}</p>
+              <h5>{ing.name || 'Meat'}</h5>
+              <p>quantity: {ing.quantity}</p>
+              <p>category: {ing.category.name}</p>
             </div>
           ))}
         </div>
-        <Pagination />
+        <Pagination
+          who={'ingredients'}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={setCurrentPage}
+          totalUsers={ingredients.length}
+        />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import React from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import style from "./pagination.module.css";
 
-export default function Pagination({ currentPage, totalPages, setCurrentPage, totalUsers }) {
+export default function Pagination({ who, currentPage, totalPages, setCurrentPage, totalUsers }) {
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -10,7 +10,7 @@ export default function Pagination({ currentPage, totalPages, setCurrentPage, to
   };
   return (
     <div className={`d-flex justify-content-between align-items-center ${style.pagination_div}`}>
-      <p className="fw-bold m-0">Total users :<span className="ps-2">{totalUsers}</span></p>
+      <p className="fw-bold m-0">Total {who} :<span className="ps-2">{totalUsers}</span></p>
       <div className="d">
         <nav aria-label="Page navigation example">
           <ul className="pagination d-flex gap-2">
