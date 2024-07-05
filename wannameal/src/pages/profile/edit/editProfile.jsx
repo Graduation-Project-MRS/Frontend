@@ -487,10 +487,15 @@ function EditProfile() {
 
               <div
                 className={styles.deleteAccount}
+<<<<<<< HEAD
                 onClick={handleDeleteAccount}
               >
                 {delteAcc}
               </div>
+=======
+              // onClick={handleDeleteAcount}
+              >{delteAcc}</div>
+>>>>>>> 5dc3a657bc688bd875b8314498e04df32d3e9ebe
             </div>
           </div>
         </div>

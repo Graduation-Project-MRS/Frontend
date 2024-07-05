@@ -1,26 +1,27 @@
 import React from "react";
 import style from "./page.module.css";
 import Food_Icon from "../../assets/fluent_food-24-filled.svg";
-import dish from "../../assets/dish.png";
 import { IoTime } from "react-icons/io5";
-import { BsFire } from "react-icons/bs";
-import { GiCookingPot } from "react-icons/gi";
+import { BsDiagram3, BsFire } from "react-icons/bs";
 import { useLocation } from "react-router-dom";
 
 import MealCard from "../../components/mealCard/mealCard";
 const RecipeDetails = () => {
-    
+
   const location = useLocation();
   const { meal } = location.state || {};
 
   console.log("🚀 ~ RecipeDetails ~ meal:", meal);
-  let x = [1, 23, 45, 68, 564, 6, 456, 44];
+  const stepsArray = meal?.steps ? meal.steps.split(',') : [];
+  const ingredientsArray = meal?.steps ? meal.ingredients.split(',') : [];
+  console.log(stepsArray);
+  let x = [1, 2, 35, 459, 88, 113, 87, 2]
   return (
     <div className="p-md-5 mx-md-5 my-4">
       <div className="row justify-content-between p-3">
         <div className="col-12 col-lg-5 d-flex flex-column gap-5 px-4 mb-5 mb-lg-0">
           <h3 className={style.head_title}>
-            The modus operandi of meat with potato and onion pieces
+            {meal.recipeName}
           </h3>
           <div
             className={`d-flex  gap-5 align-items-center mt-3 ${style.customize} flex-wrap`}
@@ -30,7 +31,7 @@ const RecipeDetails = () => {
               <div className="d-flex flex-column">
                 <p className="m-0 opacity-50">apply for</p>
                 <span className="fw-bold fs-5 text-center">
-                  <big>2</big> people
+                  <big>{meal.EnoughFor}</big> people
                 </span>
               </div>
             </div>
@@ -68,7 +69,7 @@ const RecipeDetails = () => {
               <IoTime className={style.icon_details} />
               <span className={style.icon_value}>
                 {" "}
-                <big className="fw-bold">60</big> minutes
+                <big className="fw-bold">{meal.times}</big> minutes
               </span>
             </div>
             <div
@@ -77,72 +78,54 @@ const RecipeDetails = () => {
               <BsFire className={style.icon_details} />
               <span className={style.icon_value}>
                 {" "}
-                <big className="fw-bold">60</big> minutes
+                <big className="fw-bold">{meal.times}</big> minutes
               </span>
             </div>
             <div className={`d-flex gap-2 align-items-center `}>
-              <GiCookingPot className={style.icon_details} />
+              <BsDiagram3 className={style.icon_details} />
               <span className={style.icon_value}>
                 {" "}
-                <big className="fw-bold">6</big> components
+                <big className="fw-bold">{meal.calories}</big> components
               </span>
             </div>
           </div>
         </div>
         <div className="col-12 col-lg-6">
-          <img style={{ width: "100%" }} src={dish} alt="dish" />
+          <img style={{ width: "100%" }} src={meal.image.url} alt="dish" />
         </div>
       </div>
       <h2 className={style.divider_title}>ingredients</h2>
       <div className="row p-3">
         <div className="col-12 col-md-8 d-flex flex-column gap-5">
-          <div
-            className={`d-flex justify-content-between ${style.ingredients}`}
-          >
-            <p>meat</p>
-            <p className="opacity-50">1/2 K</p>
-          </div>
-          <div
-            className={`d-flex justify-content-between ${style.ingredients}`}
-          >
-            <p>meat</p>
-            <p className="opacity-50">1/2 K</p>
-          </div>
-          <div
-            className={`d-flex justify-content-between ${style.ingredients}`}
-          >
-            <p>meat</p>
-            <p className="opacity-50">1/2 K</p>
-          </div>
+          {ingredientsArray?.map((x, ind) => {
+
+            return (
+              <div
+                key={ind}
+                className={`d-flex justify-content-between align-items-center ${style.directionDiv}`}
+              >
+                <span>{ind + 1}</span>
+                <p className="m-0">{x}</p>
+              </div>
+            )
+          })}
         </div>
       </div>
       <h2 className={style.divider_title}>Directions</h2>
       <div className="row p-3">
         <div className="col-12 col-md-8 d-flex flex-column gap-4">
-          <div
-            className={`d-flex justify-content-between align-items-center ${style.directionDiv}`}
-          >
-            <span>1</span>
-            <p className="m-0">قطع اللحم الي مكعبات متوسطه الحجم </p>
-          </div>
-          <div
-            className={`d-flex justify-content-between align-items-center ${style.directionDiv}`}
-          >
-            <span>2</span>
-            <p className="m-0">
-              ضع قطع اللحم في وعاء به ماء علي نار متوسطه وضع فيه البهارات (ملح -
-              توابل لحم - فلفل اسود -ورق لوري )
-            </p>
-          </div>
-          <div
-            className={`d-flex justify-content-between align-items-center ${style.directionDiv}`}
-          >
-            <span>3</span>
-            <p className="m-0">
-              عندما تنتهي البطاطس من الغليان اخرجها من الوعاء وقم بتقشيرها
-              وقطعها اللي مكعبات متوسطه وقم برش بعض الملح والفلفل الاسود عليها{" "}
-            </p>
-          </div>
+          {stepsArray?.map((x, ind) => {
+
+            return (
+              <div
+                key={ind}
+                className={`d-flex justify-content-between align-items-center ${style.directionDiv}`}
+              >
+                <span>{ind + 1}</span>
+                <p className="m-0">{x}</p>
+              </div>
+            )
+          })}
         </div>
       </div>
       <h2 className={style.divider_title}>Latest Recipes</h2>
