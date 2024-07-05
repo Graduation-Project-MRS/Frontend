@@ -30,6 +30,7 @@ import {
 } from "../../redux/slices/ingredients";
 import { getuser } from "../../redux/slices/authSlice";
 import { getLanguage } from "../../redux/slices/language";
+import axios from "axios";
 
 function FoodIngreientSlider() {
   // const ingredients = useSelector(getIngredients);
@@ -63,7 +64,7 @@ function FoodIngreientSlider() {
     );
   };
 
-    useEffect(() => {
+  useEffect(() => {
     const fetch = async () => {
       await dispatch(
         fetchIngredients({ token: availableUser.token, lang: language })
@@ -87,22 +88,45 @@ function FoodIngreientSlider() {
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        let ingredientNames = 'موز'; // Default value if no checked ingredients
-        console.log("🚀 ~ fetchMeals ~ ingredientNames:", ingredientNames)
+        let ingredientNames = "موز"; // Default value if no checked ingredients
+        console.log("🚀 ~ fetchMeals ~ ingredientNames:", ingredientNames);
         if (checkedIngredients.length > 0) {
           ingredientNames = checkedIngredients
-          .map(ingredient => ingredient.name)
-          .join(",")
+            .map((ingredient) => ingredient.name)
+            .join(",");
         }
-        
-        console.log("🚀 ~ fetchMeals ~ checkedIngredients:", checkedIngredients)
-        console.log("🚀🚀🚀🚀🚀 ~ fetchMeals ~ ingredientNames:", ingredientNames)
-        
-        const response = await dispatch(
-          recommendMeals({ ingredients: ingredientNames, lang: language,token:availableUser?.token })
+
+        console.log(
+          "🚀 ~ fetchMeals ~ checkedIngredients:",
+          checkedIngredients
+        );
+        console.log(
+          "🚀🚀🚀🚀🚀 ~ fetchMeals ~ ingredientNames:",
+          ingredientNames
         );
 
-        console.log("Recommendation response:", response); // Log the response or handle it as needed
+        // const response = await dispatch(
+        //   recommendMeals({ ingredients: ingredientNames, lang: language,token:availableUser?.token })
+        // );
+
+        axios
+          .get("https://tesst11.azurewebsites.net/meals/recommendMeal", {
+            params: {
+              lang: "en",
+              ingredients: ingredientNames,
+            },
+            headers: {
+              token: availableUser?.token,
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+        // console.log("Recommendation response:", response); // Log the response or handle it as needed
       } catch (error) {
         console.error("Error fetching meals:", error);
       }

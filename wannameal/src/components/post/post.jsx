@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { VscSend } from "react-icons/vsc";
 import {
   commentPost,
   getPostStatus,
   getPostError,
+  likePost,
+  getlikkk,
 } from "../../redux/slices/postsSLlce";
 import { getDecodedToken, getuser } from "../../redux/slices/authSlice";
 import PostContent from "../postContent/PostContent";
@@ -12,20 +14,28 @@ import Loading from "../loading/loading";
 import style from "./post.module.css";
 import defaultProfile from "../../assets/man-user.svg";
 import { getProfile } from "../../redux/slices/communityUserSlice";
-import axios from "axios";
 
 export default function Post({ post }) {
   const dispatch = useDispatch();
   const [commentText, setCommentText] = useState("");
-  const [postComments, setPostComments] = useState(post?.replies || []);
-
-  console.log("🚀 ~ Post ~ postComments:", postComments);
+  const [postComments, setPostComments] = useState([]);
+  const [likedPost, setLikedPost] = useState(false);
+  const [likes, setLikes] = useState(post?.likes || []);
 
   const commentStatus = useSelector(getPostStatus);
   const postError = useSelector(getPostError);
   const profile = useSelector(getProfile);
   const { token } = useSelector(getuser);
   const decodedToken = useSelector(getDecodedToken);
+  const likesta = useSelector(getlikkk);
+  console.log("🚀 ~ Post ~ likesta:", likesta);
+
+  useEffect(() => {
+    if (post?.replies) {
+      setPostComments(post.replies);
+    }
+    setLikedPost(post?.likes?.includes(decodedToken.id));
+  }, [post, decodedToken.id]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -43,14 +53,6 @@ export default function Post({ post }) {
         await dispatch(
           commentPost({ postId: post._id, text: commentText, token })
         );
-        // await axios
-        //   .put(`https://fast-plat1.vercel.app/post/reply/${post?._id}`, null, {
-        //     headers: {
-        //       token: token,
-        //     },
-        //   })
-        //   .then((res) => console.log(res))
-        //   .catch((err) => console.log(err));
 
         setCommentText("");
       } catch (error) {
@@ -59,12 +61,38 @@ export default function Post({ post }) {
     }
   };
 
+  const handleLikeClick = async () => {
+    try {
+      await dispatch(likePost({ postId: post._id, token })).unwrap(); // Unwrap the result to handle it as a plain promise
+
+      const newLikedPost = !likedPost;
+      setLikedPost(newLikedPost);
+
+      if (newLikedPost) {
+        setLikes([...likes, decodedToken.id]);
+      } else {
+        setLikes(likes.filter((like) => like !== decodedToken.id));
+      }
+
+      console.log("Post liked/unliked successfully");
+    } catch (error) {
+      console.error(`Failed to like ${post._id}`, error);
+    }
+  };
+
   return (
     <>
-      <PostContent post={post} />
+      <PostContent
+        post={post}
+        comments={postComments}
+        likes={likes}
+        likedPost={likedPost}
+        onLikeClick={handleLikeClick}
+        onCommentChange={setPostComments}
+      />
       <div
         className="modal fade rounded-2"
-        id="commentmodal"
+        id={`comment-${post._id}`}
         tabIndex={-1}
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -73,19 +101,19 @@ export default function Post({ post }) {
           <div className="modal-content position-relative">
             <button
               type="button"
-              className={`${style.btnClose}`}
-              style={{
-                position: "absolute",
-                top: "15px",
-                right: "15px",
-                color: "#699bf7",
-                zIndex: "100",
-              }}
+              className={` btn-close ${style.btnClose}`}
               data-bs-dismiss="modal"
               aria-label="Close"
             />
             <div className={`modal-body p-0 ${style.modalBody} rounded-2`}>
-              <PostContent post={post} />
+              <PostContent
+                post={post}
+                comments={postComments}
+                likes={likes}
+                likedPost={likedPost}
+                onLikeClick={handleLikeClick}
+                onCommentChange={setPostComments}
+              />
               <div className={`${style.comments}`}>
                 {commentStatus === "loading" ? (
                   <Loading width="50px" height="50px" />
@@ -105,7 +133,7 @@ export default function Post({ post }) {
                     </div>
                   ))
                 ) : (
-                  <p>No comments yet.</p>
+                  <p className={style.noComments}>No comments yet.</p>
                 )}
               </div>
               <div className={`${style.uploadComment} d-flex p-`}>
@@ -121,7 +149,7 @@ export default function Post({ post }) {
                     <input
                       type="text"
                       name="comment"
-                      id="comment"
+                      id={`comment-${post?._id}`}
                       className="w-100"
                       value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}
