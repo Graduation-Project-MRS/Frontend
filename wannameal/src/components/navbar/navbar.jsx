@@ -16,7 +16,8 @@ import { useTranslation } from "react-i18next";
 import { getLoggoedUser } from "../../redux/slices/userSLice";
 function Navbar() {
   const availableUser = useSelector(getuser);
-
+  const loggedUser = useSelector(getLoggoedUser);
+  console.log("🚀 ~ Navbar ~ loggedUser:", loggedUser);
   console.log("🚀 ~ Navbar ~ availableUser:", availableUser);
   const dispatch = useDispatch();
   const theme = useSelector(getTheme);
@@ -77,12 +78,10 @@ function Navbar() {
     }
   }, [path]);
 
-
-
   const toggletheme = () => {
     dispatch(toggleTheme());
   };
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation();
   const isAr = i18n.dir();
   console.log(isAr);
   const {
@@ -91,8 +90,10 @@ function Navbar() {
     Make,
     Profile,
     Contact,
-    logoutt
-  } = t('canvas');
+    logout,
+    dashboard,
+    makeMeal,t
+  } = t("canvas");
 
   return (
     <>
@@ -100,7 +101,7 @@ function Navbar() {
         <nav className={`${style.nav} navbar navbar-expand-lg sticky-lg-top `}>
           <div className="container">
             <button
-              class={`${isAr === 'ltr' ? style.leftBars : style.rightBars}`}
+              class={`${isAr === "ltr" ? style.leftBars : style.rightBars}`}
               type=""
               data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasRouting"
@@ -218,7 +219,9 @@ function Navbar() {
 
       {/*left aside  offcanvas */}
       <div
-        className={`offcanvas ${isAr === 'ltr' ? 'offcanvas-start' : 'offcanvas-end'} ${style.Aside}`}
+        className={`offcanvas ${
+          isAr === "ltr" ? "offcanvas-start" : "offcanvas-end"
+        } ${style.Aside}`}
         tabIndex={-1}
         id="offcanvasRouting"
         aria-labelledby="offcanvasExampleLabel"
@@ -260,6 +263,16 @@ function Navbar() {
               <li>
                 <Link to={"/contact"}>{Contact}</Link>
               </li>
+              {loggedUser && loggedUser?.role === "user" && (
+                <>
+                  <li>
+                    <Link to={"/dashboard"}>{dashboard}</Link>
+                  </li>
+                  <li>
+                    <Link to={"/AddProduct"}>{makeMeal}</Link>
+                  </li>
+                </>
+              )}
             </ul>
 
             <div className={style.logout} onClick={handleLogout}>

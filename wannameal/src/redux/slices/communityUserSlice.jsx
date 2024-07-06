@@ -59,10 +59,10 @@ export const updateProfile = createAsyncThunk(
 
 export const followUser = createAsyncThunk(
   "communityUser/followUser",
-  async ({ userId, token }, { rejectWithValue }) => {
+  async ({ userId, token, lang }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `https://fast-plat1.vercel.app/auth/follow/${userId}?lang=eng`,
+        `https://fast-plat1.vercel.app/auth/follow/${userId}?lang=${lang}`,
 
         {},
         {

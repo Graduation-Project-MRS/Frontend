@@ -159,6 +159,8 @@
     "Make": "Make Meal",
     "Profile": "My Profile",
     "Contact": "Contact Us",
-    "logoutt": "logout"
+    "logoutt": "logout",
+    "dashboard":"dashboard",
+"makeMeal":"Add Recipe"
   }
 }
