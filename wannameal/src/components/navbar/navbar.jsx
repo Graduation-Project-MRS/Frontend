@@ -5,7 +5,7 @@ import style from "./page.module.css";
 import { Link, useLocation } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { getuser } from "../../redux/slices/authSlice";
+import { getuser, logout } from "../../redux/slices/authSlice";
 import { IoNotificationsOutline } from "react-icons/io5";
 import LanguageSelector from "../../components/languageSelector/LanguageSelector";
 import { getTheme, toggleTheme } from "../../redux/slices/systemModeSlice";
@@ -91,7 +91,7 @@ function Navbar() {
     Make,
     Profile,
     Contact,
-    logout
+    logoutt
   } = t('canvas');
 
   return (
@@ -263,7 +263,7 @@ function Navbar() {
             </ul>
 
             <div className={style.logout} onClick={handleLogout}>
-              {logout}
+              {logoutt}
             </div>
           </div>
         </div>

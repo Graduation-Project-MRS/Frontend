@@ -92,7 +92,7 @@
   border: none;
   border-radius: 10px;
   padding: 0.9rem;
-  color: var(--text_black);
+  color: #000;
 }
 
 .add_input:focus {
