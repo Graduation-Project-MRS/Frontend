@@ -163,6 +163,21 @@
   transform: translateY(-50%);
   left: 20px;
 }
+.rightBars {
+  padding: 7px;
+  border-radius: 50%;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+  background-color: var(--light-green);
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 50px;
+}
 
 .Aside {
   display: flex;
@@ -186,6 +201,7 @@
   transition: 0.3s;
   color: var(--text_black);
   border-radius: 6px;
+  text-align: center;
 }
 .Aside ul li a {
   width: 100% !important;

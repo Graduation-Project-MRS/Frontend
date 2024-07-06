@@ -36,10 +36,11 @@ function Portfolio() {
   console.log("🚀 ~ profile ~ user:", user);
   console.log("🚀 ~ Portfolio ~ systemlanguage:", systemlanguage);
   const { t } = useTranslation()
-  const { name, Nickname, edit, share, followers, following, savedRE, MyRE } = t('profile', {
-    fullname: 'badr abdelhalim',
-    nickname: 'badrJr'
-  })
+  const { name, Nickname, edit, share, followers, following, savedRE, MyRE, WannaMeaL, premium, Country, language, Invite, contactus, log,
+    Cancel } = t('profile', {
+      fullname: 'badr abdelhalim',
+      nickname: 'badrJr'
+    })
   useEffect(() => {
     setLink(window.location.href);
     const handlePopState = () => {
@@ -151,11 +152,11 @@ function Portfolio() {
                     </div>
                     <div className={`${styles.followData}`}>
                       <span className={`${styles.followers}`}>
-  
+
                         {user?.followers?.length || 0} {followers}
                       </span>
                       <span className={`${styles.following}`}>
-  
+
                         {user?.following?.length || 0} {following}
                       </span>
                     </div>
@@ -221,28 +222,28 @@ function Portfolio() {
                           <div class="modal-body p-0 m-0">
                             <ul className={`${styles.settingUl} `}>
                               <li>
-                                WannaMeaL
+                                {WannaMeaL}
                                 <span className={` ${styles.premium} `}>
-                                  premium
+                                  {premium}
                                 </span>
                               </li>
                               <li
                                 data-bs-target="#country"
                                 data-bs-toggle="modal"
                               >
-                                Country
+                                {Country}
                               </li>
                               <li
                                 data-bs-target="#language"
                                 data-bs-toggle="modal"
                               >
-                                language
+                                {language}
                               </li>
                               <li
                                 data-bs-target="#invite"
                                 data-bs-toggle="modal"
                               >
-                                Invite your friends to WannaMeaL
+                                {Invite}
                               </li>
                               <li data-bs-dismiss="modal">
                                 <Link
@@ -254,14 +255,14 @@ function Portfolio() {
                                     }
                                   }
                                 >
-                                  contact us
+                                  {contactus}
                                 </Link>
                               </li>
                               <li
                                 data-bs-dismiss="modal"
                                 onClick={handleLogout}
                               >
-                                log out
+                                {log}
                               </li>
                             </ul>
                           </div>
@@ -270,7 +271,7 @@ function Portfolio() {
                               class="btn btn-danger w-100 h-0 m-0 rounded-0 "
                               data-bs-dismiss="modal"
                             >
-                              Cancel
+                              {Cancel}
                             </div>
                           </div>
                         </div>

@@ -32,16 +32,16 @@ export default function Ingredients() {
       </div>
       <div className=" rounded-4 p-3" style={{ background: "var(--body)" }}>
         <div
-          className="row m-3 pb-3 flex-wrap align-items-start justify-content-center"
+          className="row m-3 pb-3 flex-wrap align-items-start justify-content-center "
           style={{ gap: "40px", borderBottom: "1px solid var(--text_black)" }}
         >
           {selectedIngre?.map((ing, index) => (
             <div
               key={index}
-              className={`col-6 col-lg-3 d-flex flex-column justify-content-center gap-3 ${style.ing_div}`}
+              className={`col-6 col-lg-3 d-flex flex-column justify-content-center align-items-center gap-3 ${style.ing_div}`}
             >
+              <img src={ing.image.url} alt="img" width={100} height={100} style={{ borderRadius: "18px" }} />
               <h5>{ing.name || 'Meat'}</h5>
-              <p>quantity: {ing.quantity}</p>
               <p>category: {ing.category.name}</p>
             </div>
           ))}

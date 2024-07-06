@@ -19,7 +19,7 @@ export default function LandingPage() {
   return (
     <div className={styles.homeContainer}>
       <div className={`container-lg m-0 p-0 `}>
-        <div className="row ">
+        <div className="row">
           <motion.div
             initial={{ x: -200, opacity: 0.3 }}
             animate={{ x: 0, opacity: 1 }}

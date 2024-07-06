@@ -6,6 +6,8 @@ import { MdCheckCircleOutline } from "react-icons/md";
 import { CiCamera } from "react-icons/ci";
 import axios from "axios";
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getuser } from '../../redux/slices/authSlice';
 
 const AddProduct = () => { // Changed from addProduct to AddProduct
     const [ingredientsValue, setIngredientsValue] = useState([{ id: 1, value: "" }]);
@@ -14,6 +16,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
     const [image, setImage] = useState(null);
     const { t } = useTranslation()
     const { Rname, Special, share, breaks, lunch, dinner, enough, time, Ingredients, Directions, addingredient, addStep, saveRecipe, cancelRecipe } = t('add')
+    const user = useSelector(getuser)
     const [recipe, setRecipe] = useState({
         recipeName: "",
         information: "",
@@ -146,7 +149,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                     headers: {
                         "Content-Type": "multipart/form-data",
                         token:
-                            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZTBlZWI1NDQ0NjExZTI2NzczNmMxNSIsImVtYWlsIjoia2FzYWJ5MTQxNUBnbWFpbC5jb20iLCJpYXQiOjE3MDk2NTQ0NjV9.l9-2_aFHYFrvSn_C0KpnbYTTpImtGMHCOWV0QXjYKZo",
+                            user?.token,
                     },
                 }
             );
@@ -159,6 +162,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
             // Handle error
         }
     };
+    console.log(user)
     return (
         <div className="p-md-5 mx-md-5 my-4">
             <div className="row gap-3 ps-4">
@@ -277,7 +281,7 @@ const AddProduct = () => { // Changed from addProduct to AddProduct
                                 </div>
                                 <div className={style.text}>
                                     <CiCamera size={36} />
-                                        <span>{share}</span>
+                                    <span>{share}</span>
                                 </div>
                             </div>
                         )}

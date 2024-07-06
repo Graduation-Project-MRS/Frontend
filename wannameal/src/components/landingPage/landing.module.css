@@ -15,6 +15,7 @@
   justify-content: space-evenly;
   align-items: flex-start;
   padding-left: 7rem;
+  /* padding-right: 5rem; */
 }
 
 .info .mainTitle {
@@ -77,13 +78,15 @@
 }
 
 @media (max-width: 991px) {
-  .homeContainer .images {
+  .homeContainer .images,
+  .homeContainer .imagesAR {
     display: none;
   }
 }
-@media (max-width: 700px) {
+@media (max-width: 990px) {
   .homeContainer .info {
     padding-left: 2rem;
+    padding-right: 5rem;
   }
 }
 @media (min-width: 992px) {

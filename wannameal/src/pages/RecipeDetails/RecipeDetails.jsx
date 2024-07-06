@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 
 import MealCard from "../../components/mealCard/mealCard";
 import CommonMeals from "../../components/commonMeals/commonMeals";
+import { useTranslation } from "react-i18next";
 const RecipeDetails = () => {
 
   const location = useLocation();
@@ -17,6 +18,16 @@ const RecipeDetails = () => {
   const ingredientsArray = meal?.steps ? meal.ingredients.split(',') : [];
   console.log(stepsArray);
   let x = [1, 2, 35, 459, 88, 113, 87, 2]
+  const { t } = useTranslation()
+  const {
+    apply,
+    minutes,
+    components,
+    people,
+    Ingredients,
+    Directions,
+    Latest
+  } = t('View');
   return (
     <div className="p-md-5 mx-md-5 my-4">
       <div className="row justify-content-between p-3">
@@ -30,13 +41,13 @@ const RecipeDetails = () => {
             <div className="d-flex gap-2 ">
               <img className={style.Food_Icon} src={Food_Icon} alt="icon" />
               <div className="d-flex flex-column">
-                <p className="m-0 opacity-50">apply for</p>
+                <p className="m-0 opacity-50">{apply}</p>
                 <span className="fw-bold fs-5 text-center">
-                  <big>{meal.EnoughFor}</big> people
+                  <big>{meal.EnoughFor}</big> {people}
                 </span>
               </div>
             </div>
-            <button
+            {/* <button
               className="border-0 rounded-3 px-2 "
               style={{
                 background: "var(--green)",
@@ -45,7 +56,7 @@ const RecipeDetails = () => {
               }}
             >
               customize
-            </button>
+            </button> */}
           </div>
           <svg
             className="ms-lg-4"
@@ -70,7 +81,7 @@ const RecipeDetails = () => {
               <IoTime className={style.icon_details} />
               <span className={style.icon_value}>
                 {" "}
-                <big className="fw-bold">{meal.times}</big> minutes
+                <big className="fw-bold">{meal.times}</big> {minutes}
               </span>
             </div>
             <div
@@ -79,14 +90,14 @@ const RecipeDetails = () => {
               <BsFire className={style.icon_details} />
               <span className={style.icon_value}>
                 {" "}
-                <big className="fw-bold">{meal.times}</big> minutes
+                <big className="fw-bold">{meal.times}</big> {minutes}
               </span>
             </div>
             <div className={`d-flex gap-2 align-items-center `}>
               <BsDiagram3 className={style.icon_details} />
               <span className={style.icon_value}>
                 {" "}
-                <big className="fw-bold">{meal.calories}</big> components
+                <big className="fw-bold">{meal.calories}</big> {components}
               </span>
             </div>
           </div>
@@ -95,7 +106,7 @@ const RecipeDetails = () => {
           <img style={{ width: "100%" }} src={meal.image.url} alt="dish" />
         </div>
       </div>
-      <h2 className={style.divider_title}>ingredients</h2>
+      <h2 className={style.divider_title}>{Ingredients}</h2>
       <div className="row p-3">
         <div className="col-12 col-md-8 d-flex flex-column gap-5">
           {ingredientsArray?.map((x, ind) => {
@@ -112,7 +123,7 @@ const RecipeDetails = () => {
           })}
         </div>
       </div>
-      <h2 className={style.divider_title}>Directions</h2>
+      <h2 className={style.divider_title}>{Directions}</h2>
       <div className="row p-3">
         <div className="col-12 col-md-8 d-flex flex-column gap-4">
           {stepsArray?.map((x, ind) => {
@@ -129,7 +140,7 @@ const RecipeDetails = () => {
           })}
         </div>
       </div>
-      <h2 className={style.divider_title}>Latest Recipes</h2>
+      <h2 className={style.divider_title}>{Latest}</h2>
       <div className="row">
         <CommonMeals />
       </div>

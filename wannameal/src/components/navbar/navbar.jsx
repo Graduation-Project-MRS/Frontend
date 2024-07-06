@@ -1,6 +1,6 @@
 // import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import style from "./page.module.css";
 import { Link, useLocation } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
@@ -12,10 +12,12 @@ import { getTheme, toggleTheme } from "../../redux/slices/systemModeSlice";
 import { IoMoonOutline } from "react-icons/io5";
 import { IoSunnyOutline } from "react-icons/io5";
 import { HiBars3 } from "react-icons/hi2";
-
+import { useTranslation } from "react-i18next";
+import { getLoggoedUser } from "../../redux/slices/userSLice";
 function Navbar() {
   const availableUser = useSelector(getuser);
-
+  const loggedUser = useSelector(getLoggoedUser);
+  console.log("🚀 ~ Navbar ~ loggedUser:", loggedUser);
   console.log("🚀 ~ Navbar ~ availableUser:", availableUser);
   const dispatch = useDispatch();
   const theme = useSelector(getTheme);
@@ -68,8 +70,7 @@ function Navbar() {
       path === "/accounting" ||
       path === "/verification" ||
       path === "/forgotPassword" ||
-      path === "/reset" ||
-      path.startsWith("/dashboard")
+      path === "/reset"
     ) {
       return true;
     } else {
@@ -77,37 +78,30 @@ function Navbar() {
     }
   }, [path]);
 
-  const [clicked, setClicked] = useState(false);
-
-  const navItems = [
-    {
-      title: "Home",
-      href: "/",
-    },
-    {
-      title: "Community",
-      href: "/",
-    },
-    {
-      title: "Demo",
-      href: "/",
-    },
-    {
-      title: "Contact",
-      href: "/",
-    },
-  ];
-
   const toggletheme = () => {
     dispatch(toggleTheme());
   };
+  const { t, i18n } = useTranslation();
+  const isAr = i18n.dir();
+  console.log(isAr);
+  const {
+    Home,
+    Community,
+    Make,
+    Profile,
+    Contact,
+    logoutt,
+    dashboard,
+    makeMeal,
+  } = t("canvas");
+
   return (
     <>
       {!hide && (
         <nav className={`${style.nav} navbar navbar-expand-lg sticky-lg-top `}>
           <div className="container">
             <button
-              class={style.leftBars}
+              class={`${isAr === "ltr" ? style.leftBars : style.rightBars}`}
               type=""
               data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasRouting"
@@ -225,7 +219,8 @@ function Navbar() {
 
       {/*left aside  offcanvas */}
       <div
-        className={`offcanvas offcanvas-start ${style.Aside}`}
+        className={`offcanvas ${isAr === "ltr" ? "offcanvas-start" : "offcanvas-end"
+          } ${style.Aside}`}
         tabIndex={-1}
         id="offcanvasRouting"
         aria-labelledby="offcanvasExampleLabel"
@@ -253,24 +248,34 @@ function Navbar() {
           <div>
             <ul>
               <li>
-                <Link to={"/"}>Home</Link>
+                <Link to={"/"}>{Home}</Link>
               </li>
               <li>
-                <Link to={"/community"}>Community</Link>
+                <Link to={"/community"}>{Community}</Link>
               </li>
               <li>
-                <Link to={"/makeMeal"}>Make Meal</Link>
+                <Link to={"/makeMeal"}>{Make}</Link>
               </li>
               <li>
-                <Link to={"/profile"}>My Profile</Link>
+                <Link to={"/profile"}>{Profile}</Link>
               </li>
               <li>
-                <Link to={"/contact"}>Contact Us</Link>
+                <Link to={"/contact"}>{Contact}</Link>
               </li>
+              {loggedUser && loggedUser?.role === "user" && (
+                <>
+                  <li>
+                    <Link to={"/dashboard"}>{dashboard}</Link>
+                  </li>
+                  <li>
+                    <Link to={"/AddProduct"}>{makeMeal}</Link>
+                  </li>
+                </>
+              )}
             </ul>
 
             <div className={style.logout} onClick={handleLogout}>
-              logout
+              {logoutt}
             </div>
           </div>
         </div>
