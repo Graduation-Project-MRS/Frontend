@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchMeals } from "../../../redux/slices/dashmeals";
 import axios from "axios";
 import DashCard from "../../../components/mealCard/dashCard";
-
+const Meals_PER_PAGE = 6;
 export default function Recipes() {
   // const dispatch = useDispatch();
   // const meals = useSelector((state) => state.meals.meals);
@@ -21,11 +21,18 @@ export default function Recipes() {
   // }
   // console.log('Meals from Redux:', meals);
   const [meals, setmeals] = useState([])
+  const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
     axios.get('https://fast-plat1.vercel.app/meals').then((res) => {
       setmeals(res.data.result)
     })
   }, [meals])
+  const startIndex = (currentPage - 1) * Meals_PER_PAGE;
+  const selectedMeals = meals.slice(
+    startIndex,
+    startIndex + Meals_PER_PAGE
+  );
+  const totalPages = Math.ceil(meals.length / Meals_PER_PAGE);
 
   return (
     <div className="px-5 my-4">
@@ -41,7 +48,7 @@ export default function Recipes() {
         className="row pb-3 d-flex flex-wrap"
         style={{ borderBottom: "1px solid var(--text_black)" }}
       >
-        {meals?.map((meal) => (
+        {selectedMeals?.map((meal) => (
           <div
             key={meal._id}
             className="col-12 col-md-6 col-xl-4 col-xxl-3 mb-4 d-flex flex-wrap justify-content-center align-items-center"
@@ -51,7 +58,13 @@ export default function Recipes() {
         ))}
       </div>
       {/* )} */}
-      <Pagination />
+      <Pagination
+        who={'recipes'}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        setCurrentPage={setCurrentPage}
+        totalUsers={meals.length}
+      />
     </div>
   );
 };

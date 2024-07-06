@@ -8,10 +8,10 @@
 }
 .green {
   background-color: var(--green);
-  color: white;
+  color: var(--text_white);
 }
 .head_table {
-  color: #000;
+  color: var(--text_black);
   /* text-align: center; */
   font-family: Poppins;
   padding: 0 8px;
@@ -42,7 +42,7 @@
   height: 72px;
 }
 .body_table {
-  color: #000;
+  color: var(--text_black);
   /* text-align: center; */
   padding: 0 8px;
   font-family: Poppins;
