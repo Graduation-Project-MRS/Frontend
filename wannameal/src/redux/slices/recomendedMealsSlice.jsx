@@ -123,7 +123,7 @@ export const fetchCommonMeals = createAsyncThunk(
   async ({ token, lang }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://fast-plat1.vercel.app/meals/common-meals?lang=${lang}`,
+        `https://tesst11.azurewebsites.net/meals/common-meals?lang=${lang}`,
         {
           headers: {
             token: `${token}`,

@@ -36,6 +36,7 @@ import { useTranslation } from "react-i18next";
 function FoodIngreientSlider() {
   // const ingredients = useSelector(getIngredients);
   const ingredients = useSelector(getIngredients);
+  console.log("🚀 ~ FoodIngreientSlider ~ ingredients:", ingredients);
   const [checkedIngredients, setCheckedIngredients] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredIngredients, setFilteredIngredients] = useState(ingredients);
@@ -121,10 +122,7 @@ function FoodIngreientSlider() {
     fetchMeals();
   }, [checkedIngredients, dispatch, language]);
   const { t } = useTranslation();
-  const {
-    Choose,
-    searchh,
-  } = t('make');
+  const { Choose, searchh } = t("make");
   return (
     <>
       <div className="container my-4">
@@ -144,7 +142,7 @@ function FoodIngreientSlider() {
               placeholder={`${searchh}`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-            // autocomplete="off"
+              // autocomplete="off"
             />
           </form>
         </div>
