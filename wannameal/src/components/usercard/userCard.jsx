@@ -10,17 +10,20 @@ import {
   getSuggestedUsers,
   fetchSuggestedUsers,
 } from "../../redux/slices/communityUserSlice";
+import { getLanguage } from "../../redux/slices/language";
 
 export default function UserCard({ method, user }) {
   const [activeBtn, setActiveBtn] = useState(false);
-  const { token } = useSelector(getuser);
   const userId = user?._id;
   // console.log("🚀 ~ UserCard ~ user:", user);
   const status = useSelector((state) => state.communityUser.status);
   const error = useSelector((state) => state.communityUser.error);
+  console.log("🚀 ~ UserCard ~ error:", error);
   const availableUser = useSelector(getuser);
   const decodedToken = useSelector(getDecodedToken);
+  const language = useSelector(getLanguage);
   const follow = useSelector((state) => state.communityUser.follow);
+  console.log("🚀 ~ UserCard ~ follow:", follow);
   const pr = useSelector((state) => state.communityUser.profile);
   // console.log("🚀 ~ UserCard ~ follow:", follow);
 
@@ -54,7 +57,9 @@ export default function UserCard({ method, user }) {
   const handleClick = async () => {
     if (method === "follow") {
       try {
-        await dispatch(followUser({ userId, token }));
+        await dispatch(
+          followUser({ userId, token: availableUser.token, lang: language })
+        );
         if (error == null) {
           setActiveBtn(!activeBtn);
         } else {
