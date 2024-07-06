@@ -4,6 +4,7 @@ import { MdOutlineMailOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import style from "./page.module.css";
+import { useTranslation } from "react-i18next";
 
 export default function Forgot() {
   const [email, setemail] = useState("");
@@ -15,7 +16,7 @@ export default function Forgot() {
   const confirmEmali = (e) => {
     e.preventDefault();
     axios
-      .patch("https://fast-plat1.vercel.app/auth/forgetCode", { email })
+      .patch("https://fast-plat1.vercel.app/auth/forgetCode?lang=en", { email })
       .then((respo) => {
         console.log(respo.data);
         if (respo.data.success) {
@@ -44,13 +45,18 @@ export default function Forgot() {
         console.log(err.response.data);
       });
   };
+  const { t } = useTranslation();
+  const {
+    Forgot,
+    Forgotp,
+    Send,
+  } = t('auth');
   return (
     <div className={style.contain}>
       <div className="d-flex align-items-center gap-2 flex-column justify-content-center w-75 text-center">
-        <h1>Forgot Password</h1>
+        <h1>{Forgot}</h1>
         <p className="text-50">
-          Enter the email address with your account and we’ll send an email with
-          confirmation to reset your password
+         {Forgotp}
         </p>
       </div>
       <form onSubmit={confirmEmali} className={style.form}>
@@ -65,7 +71,7 @@ export default function Forgot() {
             placeholder="Enter your Email"
           />
         </div>
-        <button className={style.button_submit}>send code</button>
+        <button className={style.button_submit}>{Send}</button>
       </form>
     </div>
   );

@@ -12,10 +12,10 @@ export default function Dashboard() {
     <div className="d-flex">
       <Sidebar />
       <div
-        className="d-flex flex-column w-100"
+        className="d-flex flex-column w-100 overflow-hidden"
         style={{ background: "var(--body)" }}
       >
-        <DashNav />
+        {/* <DashNav /> */}
         <Routes>
           <Route path="/ingredients" element={<Ingredients />} />
           <Route path="/recipes" element={<Recipes />} />

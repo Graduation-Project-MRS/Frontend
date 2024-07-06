@@ -5,6 +5,7 @@ import { MdPassword } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import style from './page.module.css';
+import { useTranslation } from 'react-i18next';
 
 export default function Reset() {
     const [user, setUser] = useState({
@@ -41,7 +42,7 @@ export default function Reset() {
     };
     const submit = (e) => {
         e.preventDefault();
-        axios.patch('https://fast-plat1.vercel.app/auth/resetPassword', user, config)
+        axios.patch('https://fast-plat1.vercel.app/auth/resetPassword?lang=en', user, config)
             .then((respo) => {
                 console.log(respo.data);
                 if (respo.data.success) {
@@ -67,10 +68,20 @@ export default function Reset() {
                 console.log(err.response.data);
             })
     }
+    const { t } = useTranslation();
+    const {
+        CreatePas,
+        shuold,
+        Reset,
+        Password,
+        characters,
+        number,
+        letters,
+    } = t('auth');
     return (
         <form onSubmit={submit} method="get" className={`${style.form} `}>
-            <p className={style.head}>Create New password</p>
-            <h5 className='text-center text-black-50'>The password shuold be different from the previous password</h5>
+            <p className={style.head}>{CreatePas}</p>
+            <h5 className='text-center text-black-50'>{shuold}</h5>
             <div className="d-flex flex-column gap-4 my-3 w-100">
                 <div className={style.inputForm}>
                     <MdPassword size={25} />
@@ -80,7 +91,7 @@ export default function Reset() {
                         value={user.password}
                         onChange={handleChange}
                         className={style.input}
-                        placeholder="Enter your Password"
+                        placeholder={`${Password}`}
                     />
                 </div>
                 <div className={style.inputForm}>
@@ -91,25 +102,25 @@ export default function Reset() {
                         value={user.confirmPassword}
                         onChange={handleChange}
                         className={style.input}
-                        placeholder="confirm your Password"
+                        placeholder={`${Password}`}
                     />
                 </div>
             </div>
             <div className="d-flex flex-column w-100 justify-content-between">
                 <div className={`d-flex gap-2 align-items-center ${miniNumber ? style.green : style.red}`}>
                     <IoCheckmarkCircle size={20} />
-                    <p className="m-0">At least 8 characters</p>
+                    <p className="m-0">{characters}</p>
                 </div>
                 <div className={`d-flex gap-2 align-items-center ${hasNumber ? style.green : style.red}`}>
                     <IoCheckmarkCircle size={20} />
-                    <p className="m-0">At least 1 number</p>
+                    <p className="m-0">{number}</p>
                 </div>
                 <div className={`d-flex gap-2 align-items-center ${lowerUpper ? style.green : style.red}`}>
                     <IoCheckmarkCircle size={20} />
-                    <p className="m-0">Bath upper and lower case letters</p>
+                    <p className="m-0">{letters}</p>
                 </div>
             </div>
-            <button className={style.button_submit}>Reset Password</button>
+            <button className={style.button_submit}>{Reset}</button>
         </form>
     )
 }

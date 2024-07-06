@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../redux/slices/authSlice';
 import { registerUser } from '../../../redux/slices/registerSlice';
 import Swal from 'sweetalert2';
+import { useTranslation } from 'react-i18next';
 export default function Account() {
     const [logappear, setlogappear] = useState(true)
     const navigate = useNavigate()
@@ -149,11 +150,34 @@ export default function Account() {
                 }
             });
     };
+    const { t } = useTranslation();
+    const {
+        Login,
+        email,
+        Password,
+        Remember,
+        Forgot,
+        Google,
+        have,
+        haves,
+        Sign,
+        With,
+        Create,
+        What,
+        Manage,
+        Share,
+        Organize,
+        Know,
+        Name,
+        characters,
+        number,
+        letters,
+    } = t('auth');
     return (
         <div>
             {/* start login component  */}
             <form method="get" className={`${style.form} ${logappear ? style.login_animation : ''}`} onSubmit={submitLogin}>
-                <p className={style.head}>Login</p>
+                <p className={style.head}>{Login}</p>
                 <div className="d-flex flex-column gap-4 my-3">
                     <div className={style.inputForm}>
                         <MdOutlineMailOutline size={20} />
@@ -163,7 +187,7 @@ export default function Account() {
                             value={user.email}
                             onChange={handleLoginChange}
                             className={style.input}
-                            placeholder="Enter your Email" />
+                            placeholder={`${email}`} />
                     </div>
                     <div className={style.inputForm}>
                         <MdPassword size={20} />
@@ -173,26 +197,28 @@ export default function Account() {
                             value={user.password}
                             onChange={handleLoginChange}
                             className={style.input}
-                            placeholder="Enter your Password"
+                            placeholder={`${Password}`}
                         />
                     </div>
                 </div>
                 <div className='d-flex justify-content-between'>
                     <div className="d-flex align-items-center gap-1">
                         <input type="checkbox" className={style.check} />
-                        <label className={style.typo}>Remember me </label>
+                        <label className={style.typo}>{Remember} </label>
                     </div>
-                    <Link className={style.typo} to={'/auth/forgotPassword'}><span >Forgot password?</span></Link>
+                    <Link className={style.typo} to={'/auth/forgotPassword'}><span >{Forgot}</span></Link>
                 </div>
-                <button className={style.button_submit}>Log In</button>
-                <p className={style.p}>Or With</p>
+                <button className={style.button_submit}>{Login}</button>
+                <p className={style.p}>{With}</p>
                 <div className={style.flex_row}>
-                    <button className={style.btn}>
-                        <FcGoogle size={35} />
-                        Google
-                    </button>
+                    <Link to={'https://fast-plat1.vercel.app/auth/google'} className={style.btn}>
+                        <div className={style.btn}>
+                            <FcGoogle size={35} />
+                            {Google}
+                        </div>
+                    </Link>
                     <p className={style.p}>
-                        Don't have an account? <span onClick={() => setlogappear(!logappear)} className={style.span}>Sign Up</span>
+                        {have} <span onClick={() => setlogappear(!logappear)} className={style.span}>{Sign}</span>
                     </p>
                 </div>
             </form>
@@ -208,7 +234,7 @@ export default function Account() {
                                 className={style.input}
                                 id="userName"
                                 name="userName"
-                                placeholder="Name"
+                                placeholder={`${Name}`}
                                 value={userData.userName}
                                 onChange={handleRegisterChange}
                             />
@@ -221,8 +247,7 @@ export default function Account() {
                                 value={userData.email}
                                 onChange={handleRegisterChange}
                                 className={style.input}
-                                placeholder="Enter your Email"
-                            />
+                                placeholder={`${email}`} />
                         </div>
                         <div className={style.inputForm}>
                             <MdPassword size={20} />
@@ -232,8 +257,7 @@ export default function Account() {
                                 value={userData.password}
                                 onChange={handleRegisterChange}
                                 className={style.input}
-                                placeholder="Enter your Password"
-                            />
+                                placeholder={`${Password}`} />
                         </div>
                         <div className={style.inputForm}>
                             <MdPassword size={20} />
@@ -243,57 +267,55 @@ export default function Account() {
                                 value={userData.confirmPassword}
                                 onChange={handleRegisterChange}
                                 className={style.input}
-                                placeholder="confirm your Password"
-                            />
+                                placeholder={`${Password}`} />
                         </div>
                     </div>
                     <div className="d-flex flex-column justify-content-between">
                         <div className={`d-flex gap-2 align-items-center ${miniNumber ? style.green : style.red}`}>
                             <IoCheckmarkCircle size={20} />
-                            <p className="m-0">At least 8 characters</p>
+                            <p className="m-0">{characters}</p>
                         </div>
                         <div className={`d-flex gap-2 align-items-center ${hasNumber ? style.green : style.red}`}>
                             <IoCheckmarkCircle size={20} />
-                            <p className="m-0">At least 1 number</p>
+                            <p className="m-0">{number}</p>
                         </div>
                         <div className={`d-flex gap-2 align-items-center ${lowerUpper ? style.green : style.red}`}>
                             <IoCheckmarkCircle size={20} />
-                            <p className="m-0">Bath upper and lower case letters</p>
+                            <p className="m-0">{letters}</p>
                         </div>
                     </div>
-                    <button type="submit" className={style.button_submit}>sign In</button>
-                    <p className={style.p}>Or With</p>
+                    <button type="submit" className={style.button_submit}>{Sign}</button>
+                    <p className={style.p}>{With}</p>
                     <div className={style.flex_row}>
-                        <Link href={'https://fast-plat1.vercel.app/auth/login/success'} className={style.btn}>
+                        <Link to={'https://fast-plat1.vercel.app/auth/google'} className={style.btn}>
                             <FcGoogle size={35} />
-                            Google
+                            {Google}
                         </Link>
                         <p className={style.p}>
-                            have an account? <span onClick={() => setlogappear(!logappear)} className={style.span}>log in</span>
+                            {haves}<span onClick={() => setlogappear(!logappear)} className={style.span}>{Login}</span>
                         </p>
                     </div>
                 </form>
                 <div className={`${style.register_content} ${!logappear ? style.full_opacity : ''}`}>
-                    <h1>Create Account</h1>
-                    <h3 className="mb-5">What you will get? </h3>
+                    <h1>{Create}</h1>
+                    <h3 className="mb-5">{What}</h3>
                     <div className="d-flex flex-column gap-5">
                         <div className="d-flex gap-2">
                             <MdStar color='#FFC107' size={25} />
-                            <p className="m-0">Manage your recipes the easy way</p>
+                            <p className="m-0">{Manage}</p>
                         </div>
                         <div className="d-flex gap-2">
                             <MdStar color='#FFC107' size={25} />
-                            <p className="m-0">Share recipes with your friends and discover new ones.</p>
+                            <p className="m-0">{Share}</p>
                         </div>
                         <div className="d-flex gap-2">
                             <MdStar color='#FFC107' size={25} />
-                            <p className="m-0">Organize recipes by tag, share it with your friends</p>
+                            <p className="m-0">{Organize}</p>
                         </div>
                         <div className="d-flex gap-2 ">
                             <MdStar color='#FFC107' size={25} />
                             <p className="m-0">
-                                Know the parts of the meal and what it consists of and the
-                                components that each molecule contains.
+                                {Know}
                             </p>
                         </div>
                     </div>

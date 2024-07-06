@@ -31,6 +31,7 @@ import {
 import { getuser } from "../../redux/slices/authSlice";
 import { getLanguage } from "../../redux/slices/language";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 function FoodIngreientSlider() {
   // const ingredients = useSelector(getIngredients);
@@ -139,6 +140,11 @@ function FoodIngreientSlider() {
 
     fetchMeals();
   }, [checkedIngredients, dispatch, language]);
+  const { t } = useTranslation();
+  const {
+    Choose,
+    searchh,
+  } = t('make');
   return (
     <>
       <div className="container my-4">
@@ -148,17 +154,17 @@ function FoodIngreientSlider() {
               className={`col-4 ${styles.label}`}
               htmlFor="ingredientSearch"
             >
-              Choose your ingredients
+              {Choose}
             </label>
             <input
               className={`col-8 ${styles.searchinput}`}
               type="search"
               id="ingredientSearch"
               name="ingredientSearch"
-              placeholder="search for your ingredients"
+              placeholder={`${searchh}`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              // autocomplete="off"
+            // autocomplete="off"
             />
           </form>
         </div>
@@ -230,6 +236,7 @@ function FoodIngreientSlider() {
                   slidesPerView: 8.5,
                 },
               }}
+              style={{ direction: "ltr" }}
             >
               {filteredIngredients.map((ingredient, index) => (
                 <SwiperSlide key={index}>

@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import style from "./page.module.css";
+import { useTranslation } from 'react-i18next';
 
 export default function Verification() {
     const [code, setCode] = useState(['', '', '', '', '']);
@@ -31,7 +32,7 @@ export default function Verification() {
     const forgetCode = code.join('')
     const submitCode = (e) => {
         e.preventDefault();
-        axios.patch('https://fast-plat1.vercel.app/auth/VerifyCode', { forgetCode }, config)
+        axios.patch('https://fast-plat1.vercel.app/auth/VerifyCode?lang=en', { forgetCode }, config)
             .then((respo) => {
                 console.log(respo.data);
                 if (respo.data.success) {
@@ -57,12 +58,19 @@ export default function Verification() {
                 console.log(err.response.data);
             })
     }
+    const { t } = useTranslation();
+    const {
+        check,
+        Verification,
+        Send,
+        Sended,
+    } = t('auth');
     return (
         <div >
             <form onSubmit={submitCode} className={style.contain}>
                 <div className="d-flex align-items-center gap-2 flex-column justify-content-center w-75 text-center">
-                    <h2>Please check your Email</h2>
-                    <p className='text-black-50'>We have sent code to Badr23@gmail.com</p>
+                    <h2>{check}</h2>
+                    <p className='text-black-50'>{Sended}</p>
                 </div>
                 <div className={style['code-input']}>
                     {code.map((digit, index) => (
@@ -77,8 +85,8 @@ export default function Verification() {
                         />
                     ))}
                 </div>
-                <p className='text-black-50 fs-3'>send code again <span className='text-black-50 fs-5'>00:45</span></p>
-                <button type='submit' className={style.button_submit}>Verification</button>
+                <p className='text-black-50 fs-3'>{Send} again <span className='text-black-50 fs-5'>00:45</span></p>
+                <button type='submit' className={style.button_submit}>{Verification}</button>
             </form>
         </div>
     )
