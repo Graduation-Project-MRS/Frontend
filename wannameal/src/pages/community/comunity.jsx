@@ -17,6 +17,8 @@ import {
   fetchRandomPosts,
   getCreatedPosts,
   getFeedPosts,
+  getPostError,
+  getPostStatus,
   getRandomPosts,
 } from "../../redux/slices/postsSLlce";
 import {
@@ -37,15 +39,36 @@ export default function Community() {
   const [videos, setVideos] = useState([]);
   const [previewPhotos, setPreviewPhotos] = useState([]);
   const [previewVideos, setPreviewVideos] = useState([]);
-  const { t } = useTranslation()
-  const { Fname, email, edit, comment, sharee, like, mine, recommend, Norecommend, more, follow, msg, share, followers, following, photo, video, who } = t('community', {
-    fullname: 'mahmoud khairy402',
-    email: 'mahmoudkhairy402@gmail.com'
+  const { t } = useTranslation();
+  const {
+    Fname,
+    email,
+    edit,
+    comment,
+    sharee,
+    like,
+    mine,
+    recommend,
+    Norecommend,
+    more,
+    follow,
+    msg,
+    share,
+    followers,
+    following,
+    photo,
+    video,
+    who,
+  } = t("community", {
+    fullname: "mahmoud khairy402",
+    email: "mahmoudkhairy402@gmail.com",
   });
   const [followingUsersPage, setFollowingUsersPage] = useState(1);
   console.log("🚀 ~ Community ~ followingUsersPage:", followingUsersPage);
   const [suggestedUsersPage, setSuggestedUsersPage] = useState(1);
   console.log("🚀 ~ Community ~ suggestedUsersPage:", suggestedUsersPage);
+  const [postsLimit, setPostsLimit] = useState(5);
+  console.log("🚀🚀🚀🚀🚀🚀 ~ Community ~ postsLimit:", postsLimit);
 
   // Use selectors to get state values
   const { suggestedUsers } = useSelector(getSuggestedUsers);
@@ -61,8 +84,9 @@ export default function Community() {
   const randomposts = useSelector(getRandomPosts);
   console.log("🚀 ~ Community ~ randomposts:", randomposts);
   console.log("🚀 ~ Community ~ posts:", createdPosts);
-  const postError = useSelector((state) => state.posts.error);
-  const postStatus = useSelector((state) => state.posts.status);
+  const postError = useSelector(getPostError);
+  const postStatus = useSelector(getPostStatus);
+  console.log("🚀 ~ Community ~ postStatus:", postStatus);
   const profileError = useSelector((state) => state.communityUser.error);
   const profileStatus = useSelector((state) => state.communityUser.status);
   const decodedToken = useSelector(getDecodedToken);
@@ -226,6 +250,29 @@ export default function Community() {
     }
   }, [availableUser.token, decodedToken.id, followingUsersPage]);
 
+  const handleScroll = () => {
+    const bottom =
+      Math.ceil(window.innerHeight + window.scrollY) >=
+      document.documentElement.scrollHeight;
+
+    if (bottom) {
+      // Load more random posts
+      // Adjust the number of posts to load here
+      // dispatch(
+      //   fetchRandomPosts({
+      //     token: availableUser.token,
+      //     lang: language,
+      //     limit: randomposts.length + 5, // Increase the limit by 5 when scrolling to bottom
+      //   })
+      // );
+      setPostsLimit((prev) => prev + 5);
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className={style.communityContainer}>
       <div className="container-lg">
@@ -283,7 +330,7 @@ export default function Community() {
                         key={user.id}
                         method={follow}
                         user={user}
-                      // suggestedUsers={suggestedUsers}
+                        // suggestedUsers={suggestedUsers}
                       /> // Ensure unique key for each UserCard
                     ))
                   ) : (
@@ -383,7 +430,7 @@ export default function Community() {
               feedPostes.map((post) => <Post key={post._id} post={post} />)
             ) : randomposts && randomposts.length > 0 ? (
               randomposts
-                .slice(0, 3)
+                .slice(0, postsLimit)
                 .map((post) => <Post key={post._id} post={post} />)
             ) : (
               <Loading width="100px" height="100px" />

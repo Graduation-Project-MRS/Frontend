@@ -24,8 +24,28 @@ import { getUpdatedUser } from "../../../redux/slices/userSLice";
 import { useTranslation } from "react-i18next";
 
 function EditProfile() {
-  const { t } = useTranslation()
-  const { setting, Profile, info, fname, lname, Email, image, change, delte, changePass, info2, CurrentPass, NewPass, ConfirmPass, savedCH, cancel, deltePers, info3, delteAcc } = t('editprofile')
+  const { t } = useTranslation();
+  const {
+    setting,
+    Profile,
+    info,
+    fname,
+    lname,
+    Email,
+    image,
+    change,
+    delte,
+    changePass,
+    info2,
+    CurrentPass,
+    NewPass,
+    ConfirmPass,
+    savedCH,
+    cancel,
+    deltePers,
+    info3,
+    delteAcc,
+  } = t("editprofile");
   const navigate = useNavigate();
   const user = useSelector(getLoggoedUser); // Ensure profile is fetched properly
   const [formData, setFormData] = useState({
@@ -91,7 +111,7 @@ function EditProfile() {
   };
 
   const cancelChanges = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     setFormData({
       firstName: user?.userName?.split(" ")[0],
       lastName: user?.userName?.split(" ")[1],
@@ -335,7 +355,9 @@ function EditProfile() {
                   </div>
                   <div className={styles.btns}>
                     <label htmlFor="change" className={styles.change}>
-                      <PiUploadSimple size={22} className="mx-2" />{change}</label>
+                      <PiUploadSimple size={22} className="mx-2" />
+                      {change}
+                    </label>
                     <input
                       id="change"
                       type="file"
@@ -454,7 +476,9 @@ function EditProfile() {
                   <button
                     onClick={cancelChanges}
                     className={`${styles.delete} col-12 col-md-5`}
-                  >{cancel}</button>
+                  >
+                    {cancel}
+                  </button>
                 </div>
               </form>
               <hr />
@@ -463,8 +487,10 @@ function EditProfile() {
 
               <div
                 className={styles.deleteAccount}
-              // onClick={handleDeleteAcount}
-              >{delteAcc}</div>
+                onClick={handleDeleteAccount}
+              >
+                {delteAcc}
+              </div>
             </div>
           </div>
         </div>

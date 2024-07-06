@@ -244,5 +244,22 @@
 }
 
 .btnClose {
-  color: var(--light-blue) !important;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 15px;
+  height: 15px;
+  color: #699bf7 !important;
+  z-index: 100;
+  outline: none !important;
+  box-shadow: none !important;
+  /* color: var(--light-blue) !important; */
+}
+
+.noComments {
+  text-transform: capitalize;
+  color: var(--grayWritingColor);
+  font-size: 18px;
+  width: 100%;
+  text-align: center;
 }

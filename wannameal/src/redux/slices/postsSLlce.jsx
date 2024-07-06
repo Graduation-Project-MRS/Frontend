@@ -4,7 +4,7 @@ import axios from "axios";
 // Define the initial state of the slice
 const initialState = {
   posts: [],
-  comments: [],
+  comments: null,
   singlePost: null,
   feedPosts: [], // New property for feed posts
   randomPosts: [], // New property for random posts
@@ -39,10 +39,15 @@ export const createPost = createAsyncThunk(
 
 export const fetchPost = createAsyncThunk(
   "posts/fetchPost",
-  async (postId, { rejectWithValue }) => {
+  async ({ token, postId }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://fast-plat1.vercel.app/post/${postId}`
+        `https://fast-plat1.vercel.app/post/${postId}`,
+        {
+          headers: {
+            token: token,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -60,13 +65,14 @@ export const likePost = createAsyncThunk(
     try {
       const response = await axios.put(
         `https://fast-plat1.vercel.app/post/like/${postId}`,
+        {},
         {
           headers: {
             token: token,
           },
         }
       );
-      return response;
+      return response.data; // Ensure to return response data
     } catch (error) {
       if (!error.response) {
         throw error;
@@ -82,7 +88,7 @@ export const commentPost = createAsyncThunk(
     try {
       const response = await axios.put(
         `https://fast-plat1.vercel.app/post/reply/${postId}`,
-        text,
+        { text },
         {
           headers: {
             token: token,
@@ -167,18 +173,12 @@ const postsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload ? action.payload : action.error.message;
       })
-      .addCase(likePost.pending, (state) => {
-        state.status = "loading";
-      })
       .addCase(likePost.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
         state.like = action.payload;
       })
-      .addCase(likePost.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload ? action.payload : action.error.message;
-      })
+
       .addCase(fetchPost.pending, (state) => {
         state.status = "loading";
       })
@@ -224,5 +224,6 @@ export const getRandomPosts = (state) => state.posts.randomPosts;
 export const getPostError = (state) => state.posts.error;
 export const getPostStatus = (state) => state.posts.status;
 export const getlikkk = (state) => state.posts.like;
+export const getCommentState = (state) => state.posts.comments;
 
 export default postsSlice.reducer;

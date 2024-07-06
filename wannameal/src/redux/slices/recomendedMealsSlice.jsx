@@ -20,10 +20,10 @@ export const recommendMeals = createAsyncThunk(
         ingredients: ingredients,
       });
 
-      const response = await fetch(
-        `https://tesst11.azurewebsites.net/meals/recommendMeal?lang=${lang}&ingredients=${ingredients}`,
+      const response = await axios.get(
+        `https://tesst11.azurewebsites.net/meals/recommendMeal?lang=${lang}`,
+        { ingredients },
         {
-          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
