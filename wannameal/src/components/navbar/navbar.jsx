@@ -1,7 +1,4 @@
 // import { jwtDecode } from "jwt-decode";
-import { curve, menuSlide, slide } from "./Animate";
-import { AnimatePresence, motion } from "framer-motion";
-import userImage from "../../assets/man-user.svg";
 import Swal from "sweetalert2";
 import React, { useMemo, useState } from "react";
 import style from "./page.module.css";
