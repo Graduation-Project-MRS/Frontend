@@ -7,6 +7,7 @@ const initialState = {
   savedMeals: [],
   myRecipes: [],
   commonMeals: [],
+  savedMeal: null,
   status: "idle",
   error: null,
 };
@@ -45,7 +46,7 @@ export const recommendMeals = createAsyncThunk(
 //         {
 //           method: 'GET',
 //           headers: {
-//           // token: token,
+//            token: token,
 //             'Content-Type': 'application/json'
 //           }
 //         }
@@ -76,7 +77,28 @@ export const fetchSavedMeals = createAsyncThunk(
       const response = await axios.get(
         `https://fast-plat1.vercel.app/meals?isSaved=true&id=${userId}`
       );
-      return response.result;
+      return response.data.result;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const saveMeal = createAsyncThunk(
+  "meals/saveMeal",
+  async ({ mealData, token, mealId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `https://fast-plat1.vercel.app/meals/isSaved?id=${mealId}`,
+        mealData,
+        {
+          headers: {
+            token: token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -96,10 +118,10 @@ export const fetchMyRecipes = createAsyncThunk(
 );
 export const fetchCommonMeals = createAsyncThunk(
   "meals/fetchCommonMeals",
-  async ({ token }, { rejectWithValue }) => {
+  async ({ token, lang }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://fast-plat1.vercel.app/meals/common-meals`,
+        `https://fast-plat1.vercel.app/meals/common-meals?lang=${lang}`,
         {
           headers: {
             token: `${token}`,
@@ -177,6 +199,14 @@ const mealsSlice = createSlice({
       .addCase(fetchCommonMeals.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+      .addCase(saveMeal.fulfilled, (state, action) => {
+        state.savedMeal = action.payload;
+        state.status = "succeededddd";
+      })
+      .addCase(saveMeal.rejected, (state, action) => {
+        state.savedMeal = action.payload;
+        // state.status = "rejected";
       });
   },
 });
@@ -186,6 +216,7 @@ export const getSingleMeal = (state) => state.meals.singleMeal;
 export const getSavedMeals = (state) => state.meals.savedMeals;
 export const getMyRecipes = (state) => state.meals.myRecipes;
 export const getCommonMeals = (state) => state.meals.commonMeals;
+export const getsSavedMeal = (state) => state.meals.savedMeal;
 export const getMealsStatus = (state) => state.meals.status;
 export const getMealsError = (state) => state.meals.error;
 

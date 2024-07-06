@@ -11,6 +11,7 @@ import {
 } from "../../redux/slices/recomendedMealsSlice";
 import { MdSmsFailed } from "react-icons/md";
 import { getuser } from "../../redux/slices/authSlice";
+import { getLanguage } from "../../redux/slices/language";
 
 export default function CommonMeals() {
   const commonMeals = useSelector(getCommonMeals);
@@ -18,17 +19,20 @@ export default function CommonMeals() {
   const mealsError = useSelector(getMealsError);
   const mealsStatus = useSelector(getMealsStatus);
   const availableUser = useSelector(getuser);
+  const language = useSelector(getLanguage);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (availableUser?.token) {
       const fetchMeals = async () => {
-        await dispatch(fetchCommonMeals({ token: availableUser.token }));
+        await dispatch(
+          fetchCommonMeals({ token: availableUser.token, lang: language })
+        );
       };
       fetchMeals();
     }
-  }, [dispatch, availableUser?.token]);
+  }, [dispatch, language]);
 
   if (mealsStatus === "loading")
     return (

@@ -45,6 +45,7 @@ function FoodIngreientSlider() {
   const ingredientError = useSelector(getIngredientsError);
   const language = useSelector(getLanguage);
   console.log("🚀 ~ FoodIngreientSlider ~ language:", language);
+  console.log("🚀 ~ FoodIngreientSlider ~ language:", language);
 
   const handleCheckboxChange = (ingredient) => {
     setCheckedIngredients((prevIngredients) => {
@@ -105,26 +106,30 @@ function FoodIngreientSlider() {
           ingredientNames
         );
 
-        // const response = await dispatch(
-        //   recommendMeals({ ingredients: ingredientNames, lang: language,token:availableUser?.token })
-        // );
+        await dispatch(
+          recommendMeals({
+            ingredients: ingredientNames,
+            lang: language,
+            token: availableUser?.token,
+          })
+        );
 
-        axios
-          .get("https://tesst11.azurewebsites.net/meals/recommendMeal", {
-            params: {
-              lang: "en",
-              ingredients: ingredientNames,
-            },
-            headers: {
-              token: availableUser?.token,
-            },
-          })
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        // axios
+        //   .get("https://tesst11.azurewebsites.net/meals/recommendMeal", {
+        //     params: {
+        //       lang: language,
+        //       ingredients: ingredientNames,
+        //     },
+        //     headers: {
+        //       token: availableUser?.token,
+        //     },
+        //   })
+        //   .then((response) => {
+        //     console.log(response.data);
+        //   })
+        //   .catch((error) => {
+        //     console.error(error);
+        //   });
 
         // console.log("Recommendation response:", response); // Log the response or handle it as needed
       } catch (error) {
