@@ -222,8 +222,8 @@ export default function Community() {
     try {
       dispatch(
         getProfileById({
-          userId: decodedToken.id,
-          token: availableUser.token,
+          userId: decodedToken?.id,
+          token: availableUser?.token,
           lang: language,
         })
       );
