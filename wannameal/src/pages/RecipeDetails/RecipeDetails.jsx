@@ -6,6 +6,7 @@ import { BsDiagram3, BsFire } from "react-icons/bs";
 import { useLocation } from "react-router-dom";
 
 import MealCard from "../../components/mealCard/mealCard";
+import CommonMeals from "../../components/commonMeals/commonMeals";
 const RecipeDetails = () => {
 
   const location = useLocation();
@@ -130,13 +131,7 @@ const RecipeDetails = () => {
       </div>
       <h2 className={style.divider_title}>Latest Recipes</h2>
       <div className="row">
-        {x.map((x) => {
-          return (
-            <div className="col d-flex justify-content-center">
-              <MealCard />
-            </div>
-          );
-        })}
+        <CommonMeals />
       </div>
     </div>
   );

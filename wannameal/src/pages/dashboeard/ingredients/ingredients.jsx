@@ -26,11 +26,11 @@ export default function Ingredients() {
   const totalPages = Math.ceil(ingredients.length / INGR_PER_PAGE);
 
   return (
-    <div className="px-5 my-4">
+    <div className="px-5 my-4" >
       <div className={`${style.confirm_recipe}`}>
         <button className={style.confirm_btn}>Add Ingredient</button>
       </div>
-      <div className="bg-body rounded-4 p-3">
+      <div className=" rounded-4 p-3" style={{ background: "var(--body)" }}>
         <div
           className="row m-3 pb-3 flex-wrap align-items-start justify-content-center"
           style={{ gap: "40px", borderBottom: "1px solid var(--text_black)" }}

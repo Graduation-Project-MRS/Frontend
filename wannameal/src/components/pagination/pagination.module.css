@@ -4,9 +4,9 @@
 
 .number_btn button {
   padding: 5px 14px;
-  color: var(--text_black);
+  color: var(--text_white);
   border-radius: 7px;
-  background: #ffffff;
+  background: var(--text_black);
   transition: 1s;
   border: 1px solid #eff3fd;
 }
