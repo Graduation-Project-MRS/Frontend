@@ -6,10 +6,15 @@ import DashNav from "../../components/dashNav/dashNav";
 import Sidebar from "../../components/sidebar/sidebar";
 import { Route, Routes } from "react-router-dom";
 import React from "react";
+import { Helmet } from "react-helmet";
 
 export default function Dashboard() {
   return (
     <div className="d-flex">
+      <Helmet>
+        <title>Dashboard</title>
+        <meta name="description" content="" />
+      </Helmet>
       <Sidebar />
       <div
         className="d-flex flex-column w-100 overflow-hidden"

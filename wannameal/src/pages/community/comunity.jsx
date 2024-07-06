@@ -11,6 +11,8 @@ import Post from "../../components/post/post";
 import { VscSend } from "react-icons/vsc";
 import { useSelector, useDispatch } from "react-redux";
 import { getuser, getDecodedToken } from "../../redux/slices/authSlice";
+import { Helmet } from "react-helmet";
+
 import {
   createPost,
   fetchFeedPosts,
@@ -275,6 +277,13 @@ export default function Community() {
 
   return (
     <div className={style.communityContainer}>
+      <Helmet>
+        <title>WannaMeal community</title>
+        <meta
+          name="description"
+          content="Community for reacting with other users and sharing posts "
+        />
+      </Helmet>
       <div className="container-lg">
         <div className={style.Comunity}>
           <div className={style.leftAside}>
@@ -327,7 +336,7 @@ export default function Community() {
                   {suggestedUsers && suggestedUsers?.length > 0 ? (
                     suggestedUsers.map((user) => (
                       <UserCard
-                        key={user.id}
+                        key={user._id}
                         method={follow}
                         user={user}
                         // suggestedUsers={suggestedUsers}

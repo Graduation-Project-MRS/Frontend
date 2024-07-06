@@ -5,13 +5,19 @@ import { useSelector } from "react-redux";
 import FoodIngreientSlider from "../../components/FoodIngreientSlider/FoodIngreientSlider";
 import MealsSlider from "../../components/mealsSlider/mealsSlider";
 import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet";
+
 export default function MakeMeal() {
+  <Helmet>
+    <title>Make Your Meal</title>
+    <meta
+      name="description"
+      content="Making meal with your exist ingredients"
+    />
+  </Helmet>;
   const theme = useSelector(getTheme);
   const { t } = useTranslation();
-  const {
-    make,
-    meal,
-  } = t('make');
+  const { make, meal } = t("make");
   return (
     <div
       className={

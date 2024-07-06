@@ -7,6 +7,8 @@ import { VscSend } from "react-icons/vsc";
 import InputEmoji from "react-input-emoji";
 import { useSelector, useDispatch } from "react-redux";
 import { getTheme } from "../../redux/slices/systemModeSlice";
+import { Helmet } from "react-helmet";
+
 export default function Chatting() {
   let chats = [1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8];
   const [activeChat, setActiveChat] = useState(true);
@@ -44,6 +46,13 @@ export default function Chatting() {
   }, []);
   return (
     <div className={`  ${style.chattingContainer}`}>
+      <Helmet>
+        <title>WannaMeal messenger</title>
+        <meta
+          name="description"
+          content="chatting and contact with other users"
+        />
+      </Helmet>
       <div className="container-lg pt-2">
         <div className={`row p-0 w-100 d-flex gap-2 ${style.Chatting}`}>
           <div className={`${style.aside} col-2 col-lg-4`}>
