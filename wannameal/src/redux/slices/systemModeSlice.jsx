@@ -5,16 +5,14 @@ const loadTheme = () => {
     const savedTheme = localStorage.getItem("theme");
     return savedTheme ? JSON.parse(savedTheme) : "dark";
   } catch (err) {
-    return "dark";
+    return "light";
   }
 };
 
 const saveTheme = (theme) => {
   try {
     localStorage.setItem("theme", JSON.stringify(theme));
-  } catch (err) {
-    // Ignore write errors
-  }
+  } catch (err) {}
 };
 
 const initialState = {
