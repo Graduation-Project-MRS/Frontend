@@ -14,7 +14,7 @@ const initialState = {
 
 export const recommendMeals = createAsyncThunk(
   "meals/recommendMeals",
-  async ({ ingredients, lang }, { rejectWithValue }) => {
+  async ({ ingredients, lang, token }, { rejectWithValue }) => {
     try {
       console.log("Sending request to API with params:", {
         lang: lang,
@@ -26,6 +26,7 @@ export const recommendMeals = createAsyncThunk(
         {
           headers: {
             "Content-Type": "application/json",
+            token: token,
           },
         }
       );
