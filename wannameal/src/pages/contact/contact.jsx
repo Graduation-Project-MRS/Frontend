@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./contactUS.module.css";
 import { MdOutlineLocationOn } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
@@ -8,9 +8,65 @@ import { FaXTwitter } from "react-icons/fa6";
 import { TiSocialLinkedin } from "react-icons/ti";
 import "animate.css";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
+import Swal from "sweetalert2";
+
 function ContactUs() {
-  const { t } = useTranslation()
-  const { head, fname, Email, msg, send, location, phone, mail } = t('contact')
+  const { t } = useTranslation();
+  const { head, fname, Email, msg, send, location, phone, mail } = t("contact");
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  console.log("🚀 ~ ContactUs ~ formData:", formData);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "https://fast-plat1.vercel.app/contactus",
+        formData
+      );
+      console.log("🚀 ~ handleSubmit ~ response:", response);
+      Swal.fire({
+        icon: "success",
+        title: response?.data?.message,
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("Failed to send contact: ", error);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to send",
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    }
+  };
+
   return (
     <div className={` ${styles.contactContainer} `}>
       <div
@@ -21,7 +77,7 @@ function ContactUs() {
           className={`${styles.box} row justify-content-between align-items-center px-5`}
         >
           <div className={`${styles.form} col-7`}>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className={`py-5 px-4 ${styles.inputs}`}>
                 <div>
                   <input
@@ -30,6 +86,9 @@ function ContactUs() {
                     className={`form-control ${styles.input}`}
                     id="exampleFormControlInput1"
                     placeholder={fname}
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
                   />
                 </div>
                 <div>
@@ -39,6 +98,9 @@ function ContactUs() {
                     className={`form-control  ${styles.input}`}
                     id="exampleFormControlInput1"
                     placeholder={Email}
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
                   />
                 </div>
                 <div>
@@ -48,33 +110,14 @@ function ContactUs() {
                     placeholder={msg}
                     id="exampleFormControlTextarea1"
                     rows={3}
-                    defaultValue={""}
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
                   />
                 </div>
-
-                <div className={`${styles.submit}  w-100  py-3`}>{send}</div>
-                {/* {message && <div className={`${style.message}`}>{message}</div>} */}
-                {/* {!isLoading ? (
-                  <div
-                    style={{ background: "#912b22" }}
-                    className="btn w-25 text-white align-self-end py-3"
-                    onClick={submitSend}
-                  >
-                    send message
-                  </div>
-                ) : (
-                  <div
-                    style={{ background: "#912b22" }}
-                    className=" w-25 justify-content-center rounded-3 align-self-end py-2"
-                  >
-                    <div
-                      class="spinner-border text-white mx-auto d-block"
-                      role="status"
-                    >
-                      <span class="sr-only">Loading...</span>
-                    </div>
-                  </div>
-                )} */}
+                <button type="submit" className={`${styles.submit} w-100 py-3`}>
+                  {send}
+                </button>
               </div>
             </form>
           </div>

@@ -229,7 +229,7 @@ function EditProfile() {
     }
   };
 
-  let handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -241,33 +241,58 @@ function EditProfile() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         let timerInterval;
-        await dispatch(
-          deleteAccount({
-            userId: decodedToken.id,
-            token: availableUser.token,
-          })
-        );
 
-        Swal.fire({
-          title: "Deleting Account!",
-          html: "Your Account will be Deleted in <b></b> second.",
-          timer: 5000,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading();
-            const timer = Swal.getPopup().querySelector("b");
-            timerInterval = setInterval(() => {
-              timer.textContent = `${parseInt(Swal.getTimerLeft() / 1000)}`;
-            }, 1000);
-          },
-          willClose: () => {
-            clearInterval(timerInterval);
-          },
-        }).then((result) => {
-          if (result.dismiss === Swal.DismissReason.timer) {
-            dispatch(logout());
+        try {
+          await dispatch(
+            deleteAccount({
+              userId: decodedToken.id,
+              token: availableUser.token,
+            })
+          );
+
+          if (userError) {
+            Swal.fire({
+              icon: "error",
+              title: `${userError?.msgError}`,
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
+          } else {
+            Swal.fire({
+              title: "Deleting Account!",
+              html: "Your Account will be Deleted in <b></b> second.",
+              timer: 5000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                  timer.textContent = `${parseInt(Swal.getTimerLeft() / 1000)}`;
+                }, 1000);
+              },
+              willClose: () => {
+                clearInterval(timerInterval);
+              },
+            }).then((result) => {
+              if (result.dismiss === Swal.DismissReason.timer) {
+                dispatch(logout());
+              }
+            });
           }
-        });
+        } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: `${userError?.msgError || "Failed to delete account"}`,
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+          });
+        }
       }
     });
   };
