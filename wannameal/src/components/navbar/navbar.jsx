@@ -90,9 +90,9 @@ function Navbar() {
     Make,
     Profile,
     Contact,
-    logout,
+    logoutt,
     dashboard,
-    makeMeal,t
+    makeMeal,
   } = t("canvas");
 
   return (
@@ -219,9 +219,8 @@ function Navbar() {
 
       {/*left aside  offcanvas */}
       <div
-        className={`offcanvas ${
-          isAr === "ltr" ? "offcanvas-start" : "offcanvas-end"
-        } ${style.Aside}`}
+        className={`offcanvas ${isAr === "ltr" ? "offcanvas-start" : "offcanvas-end"
+          } ${style.Aside}`}
         tabIndex={-1}
         id="offcanvasRouting"
         aria-labelledby="offcanvasExampleLabel"
