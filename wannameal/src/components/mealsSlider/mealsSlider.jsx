@@ -24,6 +24,7 @@ import {
   getRecommendMeals,
 } from "../../redux/slices/recomendedMealsSlice";
 import Loading from "../loading/loading";
+import CommonMeals from "../commonMeals/commonMeals";
 
 function MealsSlider() {
   const recomendedMeals = useSelector(getRecommendMeals);
@@ -33,6 +34,9 @@ function MealsSlider() {
   const error = useSelector(getMealsError);
   console.log("🚀 ~ MealsSlider ~ error:", error);
 
+  if (recomendedMeals && recomendedMeals.length == 0) {
+    return <CommonMeals />;
+  }
   if (mealsStatus == "loading")
     return (
       <div className="w-100 d-flex justify-content-center align-items-center">
@@ -74,12 +78,13 @@ function MealsSlider() {
             spaceBetween: 40,
           },
         }}
+        style={{ direction: "ltr" }}
       >
-        {/* {recomendedMeals?.map((meal, index) => (
+        {recomendedMeals?.map((meal, index) => (
           <SwiperSlide key={index}>
             <MealCard meal={meal} />
           </SwiperSlide>
-        ))} */}
+        ))}
       </Swiper>
     </div>
   );

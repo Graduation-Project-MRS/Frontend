@@ -51,27 +51,33 @@ export default function SavedMeals() {
     );
 
   return (
-    <>
-      <div
-        className={` my-3 d-flex flex-wrap w-100 justify-content-center justify-content-md-between g-2 align-items-center ${style.recipsContainer} `}
-      >
-        {savedMeals && savedMeals.length > 0 ? (
-          savedMeals.map((meal) => {
-            return <MealCard meal={meal} className=" col-12 col-lg-3" />;
-          })
-        ) : (
-          <div className={style.noMealscontainer}>
-            <div className={style.imageContainer}>
-              <img src={noMeals} alt="" srcset="" />
+    <div className="d-flex flex-column align-items-center justify-content-center">
+      <div className="container-lg">
+        <div
+          className={`row p-0 my-3 d-flex align-items-center  ${style.recipsContainer}`}
+        >
+          {savedMeals && savedMeals.length > 0 ? (
+            savedMeals.map((meal) => (
+              <div key={meal._id} className="col-sm-12 col-md-5 col-lg p-0">
+                <MealCard meal={meal} />
+              </div>
+            ))
+          ) : (
+            <div className={style.noMealscontainer}>
+              <div className={style.imageContainer}>
+                <img src={noMeals} alt="" srcset="" />
+              </div>
+              <h3 className={style.mainTitle}>
+                There are no recipes saved yet.
+              </h3>
+              <p className={style.secondaryTitle}>
+                Save the recipes you like to try later and you will find them
+                saved here.{" "}
+              </p>
             </div>
-            <h3 className={style.mainTitle}>There are no recipes saved yet.</h3>
-            <p className={style.secondaryTitle}>
-              Save the recipes you like to try later and you will find them
-              saved here.{" "}
-            </p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </>
+    </div>
   );
 }

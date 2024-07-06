@@ -45,8 +45,6 @@ function FoodIngreientSlider() {
   const ingredientsStatus = useSelector(getIngredientsStatus);
   const ingredientError = useSelector(getIngredientsError);
   const language = useSelector(getLanguage);
-  console.log("🚀 ~ FoodIngreientSlider ~ language:", language);
-  console.log("🚀 ~ FoodIngreientSlider ~ language:", language);
 
   const handleCheckboxChange = (ingredient) => {
     setCheckedIngredients((prevIngredients) => {
@@ -90,7 +88,7 @@ function FoodIngreientSlider() {
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        let ingredientNames = "موز"; // Default value if no checked ingredients
+        let ingredientNames = ""; // Default value if no checked ingredients
         console.log("🚀 ~ fetchMeals ~ ingredientNames:", ingredientNames);
         if (checkedIngredients.length > 0) {
           ingredientNames = checkedIngredients
@@ -102,37 +100,19 @@ function FoodIngreientSlider() {
           "🚀 ~ fetchMeals ~ checkedIngredients:",
           checkedIngredients
         );
-        console.log(
-          "🚀🚀🚀🚀🚀 ~ fetchMeals ~ ingredientNames:",
-          ingredientNames
-        );
+        console.log(ingredientNames);
+        console.log(typeof ingredientNames);
 
-        await dispatch(
-          recommendMeals({
-            ingredients: ingredientNames,
-            lang: language,
-            token: availableUser?.token,
-          })
-        );
-
-        // axios
-        //   .get("https://tesst11.azurewebsites.net/meals/recommendMeal", {
-        //     params: {
-        //       lang: language,
-        //       ingredients: ingredientNames,
-        //     },
-        //     headers: {
-        //       token: availableUser?.token,
-        //     },
-        //   })
-        //   .then((response) => {
-        //     console.log(response.data);
-        //   })
-        //   .catch((error) => {
-        //     console.error(error);
-        //   });
-
-        // console.log("Recommendation response:", response); // Log the response or handle it as needed
+        if (ingredientNames !== "") {
+          const response = await dispatch(
+            recommendMeals({
+              ingredients: ingredientNames,
+              lang: language,
+              token: availableUser?.token,
+            })
+          );
+          console.log("Recommendation response:", response); // Log the response or handle it as needed
+        }
       } catch (error) {
         console.error("Error fetching meals:", error);
       }

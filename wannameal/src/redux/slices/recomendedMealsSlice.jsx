@@ -14,7 +14,7 @@ const initialState = {
 
 export const recommendMeals = createAsyncThunk(
   "meals/recommendMeals",
-  async ({ ingredients, lang }, { rejectWithValue }) => {
+  async ({ ingredients, lang, token }, { rejectWithValue }) => {
     try {
       console.log("Sending request to API with params:", {
         lang: lang,
@@ -22,15 +22,15 @@ export const recommendMeals = createAsyncThunk(
       });
 
       const response = await axios.get(
-        `https://tesst11.azurewebsites.net/meals/recommendMeal?lang=${lang}`,
-        { ingredients },
+        `https://tesst11.azurewebsites.net/meals/recommendMeal?lang=${lang}&ingredients=${ingredients}`,
         {
           headers: {
             "Content-Type": "application/json",
+            token: token,
           },
         }
       );
-      return response;
+      return response.data.Recommendation;
     } catch (error) {
       return rejectWithValue(error.message);
     }
