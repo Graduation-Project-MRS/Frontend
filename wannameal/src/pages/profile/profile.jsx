@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDecodedToken, getuser, logout } from "../../redux/slices/authSlice";
 import SavedMeals from "../../components/savedMeals/SavedMeals";
 import MyRecips from "../../components/MyRecips/MyRecips";
+import { Helmet } from "react-helmet";
 
 import { getTheme } from "../../redux/slices/systemModeSlice";
 import Loading from "../../components/loading/loading";
@@ -35,12 +36,28 @@ function Portfolio() {
 
   console.log("🚀 ~ profile ~ user:", user);
   console.log("🚀 ~ Portfolio ~ systemlanguage:", systemlanguage);
-  const { t } = useTranslation()
-  const { name, Nickname, edit, share, followers, following, savedRE, MyRE, WannaMeaL, premium, Country, language, Invite, contactus, log,
-    Cancel } = t('profile', {
-      fullname: 'badr abdelhalim',
-      nickname: 'badrJr'
-    })
+  const { t } = useTranslation();
+  const {
+    name,
+    Nickname,
+    edit,
+    share,
+    followers,
+    following,
+    savedRE,
+    MyRE,
+    WannaMeaL,
+    premium,
+    Country,
+    language,
+    Invite,
+    contactus,
+    log,
+    Cancel,
+  } = t("profile", {
+    fullname: "badr abdelhalim",
+    nickname: "badrJr",
+  });
   useEffect(() => {
     setLink(window.location.href);
     const handlePopState = () => {
@@ -122,6 +139,10 @@ function Portfolio() {
   return (
     <>
       <div className={`py-5 ${styles.portfolioContainer} `}>
+        <Helmet>
+          <title>Profile</title>
+          <meta name="description" content="user profile with his data" />
+        </Helmet>
         <div className="container-lg">
           <div className="row">
             <div className={`col-12 col-lg-9 ${styles.userData}`}>
@@ -152,11 +173,9 @@ function Portfolio() {
                     </div>
                     <div className={`${styles.followData}`}>
                       <span className={`${styles.followers}`}>
-
                         {user?.followers?.length || 0} {followers}
                       </span>
                       <span className={`${styles.following}`}>
-
                         {user?.following?.length || 0} {following}
                       </span>
                     </div>
@@ -182,9 +201,9 @@ function Portfolio() {
                       className={`${styles.settingIcon}`}
                       data-bs-target="#exampleModalToggle"
                       data-bs-toggle="modal"
-                    // onClick={() => {
-                    //   console.log("🚀 ~ Portfolio ~ showOverlay:", showOverlay);
-                    // }}
+                      // onClick={() => {
+                      //   console.log("🚀 ~ Portfolio ~ showOverlay:", showOverlay);
+                      // }}
                     >
                       <IoSettingsOutline size={29} />
                     </div>

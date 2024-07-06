@@ -219,8 +219,9 @@ function Navbar() {
 
       {/*left aside  offcanvas */}
       <div
-        className={`offcanvas ${isAr === "ltr" ? "offcanvas-start" : "offcanvas-end"
-          } ${style.Aside}`}
+        className={`offcanvas ${
+          isAr === "ltr" ? "offcanvas-start" : "offcanvas-end"
+        } ${style.Aside}`}
         tabIndex={-1}
         id="offcanvasRouting"
         aria-labelledby="offcanvasExampleLabel"
@@ -262,7 +263,7 @@ function Navbar() {
               <li>
                 <Link to={"/contact"}>{Contact}</Link>
               </li>
-              {loggedUser && loggedUser?.role === "user" && (
+              {loggedUser && loggedUser?.role === "admin" && (
                 <>
                   <li>
                     <Link to={"/dashboard"}>{dashboard}</Link>

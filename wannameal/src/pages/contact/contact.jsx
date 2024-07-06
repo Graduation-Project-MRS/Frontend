@@ -10,6 +10,7 @@ import "animate.css";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet";
 
 function ContactUs() {
   const { t } = useTranslation();
@@ -69,6 +70,10 @@ function ContactUs() {
 
   return (
     <div className={` ${styles.contactContainer} `}>
+      <Helmet>
+        <title>Contact Us</title>
+        <meta name="description" content="Get in touch with us" />
+      </Helmet>
       <div
         className={`${styles.contact} animate__animated animate__backInRight container-lg`}
       >

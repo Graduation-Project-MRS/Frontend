@@ -83,6 +83,19 @@ export const fetchSavedMeals = createAsyncThunk(
     }
   }
 );
+export const fetchMyRecipes = createAsyncThunk(
+  "meals/fetchMyRecipes",
+  async ({ userId, lang }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `https://fast-plat1.vercel.app/meals?user=${userId}`
+      );
+      return response.data.result;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const saveMeal = createAsyncThunk(
   "meals/saveMeal",
@@ -105,23 +118,12 @@ export const saveMeal = createAsyncThunk(
   }
 );
 
-export const fetchMyRecipes = createAsyncThunk(
-  "meals/fetchMyRecipes",
-  async ({ userId }, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`https://fast-plat1.vercel.app/meals`);
-      return response.result;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
 export const fetchCommonMeals = createAsyncThunk(
   "meals/fetchCommonMeals",
   async ({ token, lang }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://fast-plat1.vercel.app/meals/common-meals?lang=${lang}`,
+        `https://tesst11.azurewebsites.net/meals/common-meals?lang=${lang}`,
         {
           headers: {
             token: `${token}`,
