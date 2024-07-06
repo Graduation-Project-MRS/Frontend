@@ -60,7 +60,8 @@
     "addingredient": "أضف مكون",
     "addStep": "أضف خطوة",
     "saveRecipe": "احفظ الوصفة",
-    "cancelRecipe": "ألغِ الوصفة"
+    "cancelRecipe": "ألغِ الوصفة",
+    "caloriess": "السعرات"
   },
   "contact": {
     "head": "تواصل معنا",
@@ -160,7 +161,7 @@
     "Profile": "الملف الشخصى",
     "Contact": "تواصل معنا",
     "logoutt": "تسجيل الخروج",
-        "dashboard":"لوحة التحكم",
-"makeMeal":" اضافة وجبه"
+    "dashboard": "لوحة التحكم",
+    "makeMeal": " اضافة وجبه"
   }
 }

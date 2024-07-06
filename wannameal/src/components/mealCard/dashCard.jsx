@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 function DashCard({ meal }) {
     return (
         <>
-            <Link to={`/recipeDetails/${meal?.id}`}>
+            <Link to={`/recipeDetails/${meal?._id}`}>
                 <div className={`${styles.mealCard}`}>
                     <div className={`${styles.imageContainer}`}>
                         <img

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./page.module.css";
 import { BiSolidTrash } from "react-icons/bi";
 import { IoMdAddCircleOutline } from "react-icons/io";
@@ -20,6 +20,7 @@ const AddProduct = () => {
   ]);
   const [isActive, setisActive] = useState("");
   const [image, setImage] = useState(null);
+  const [randomNumber, setRandomNumber] = useState(null);
   const { t } = useTranslation();
   const {
     Rname,
@@ -36,7 +37,13 @@ const AddProduct = () => {
     addStep,
     saveRecipe,
     cancelRecipe,
+    caloriess,
   } = t("add");
+  useEffect(() => {
+    const randomNum = Math.floor(Math.random() * 100) + 1; // Generate random number between 1 and 100
+    setRandomNumber(randomNum);
+  }, [])
+
   const user = useSelector(getuser);
   const [recipe, setRecipe] = useState({
     recipeName: "",
@@ -44,7 +51,8 @@ const AddProduct = () => {
     typeMeals: "",
     times: "",
     EnoughFor: "",
-    calories: 500,
+    calories: null,
+    _id: 24,
     image: null,
     ingredients: [],
     steps: [],
@@ -104,6 +112,7 @@ const AddProduct = () => {
       ...prevRecipe,
       steps: updatedDirections,
     }));
+    console.log(recipe);
   };
 
   const handleRemoveIngredient = (index) => {
@@ -157,10 +166,10 @@ const AddProduct = () => {
     formData.append("times", recipe.times);
     formData.append("EnoughFor", recipe.EnoughFor);
     formData.append("calories", recipe.calories);
+    formData.append("_id", recipe._id);
     formData.append("image", recipe.image);
-    formData.append("ingredients", JSON.stringify(ingredients));
-    formData.append("steps", JSON.stringify(directions));
-
+    formData.append("ingredients", JSON.stringify(ingredients.join(',')));
+    formData.append("steps", JSON.stringify(directions.join(',')));
     try {
       const response = await axios.post(
         "https://fast-plat1.vercel.app/meals/addAnewRecipe",
@@ -181,7 +190,6 @@ const AddProduct = () => {
       // Handle error
     }
   };
-  console.log(user);
   return (
     <div className="p-md-5 mx-md-5 my-4">
       <Helmet>
@@ -217,9 +225,8 @@ const AddProduct = () => {
                   target: { name: "typeMeals", value: "Breakfast" },
                 });
               }}
-              className={`${style.recipe_type} ${
-                isActive === "Breakfast" ? style.recipe_active : ""
-              }`}
+              className={`${style.recipe_type} ${isActive === "Breakfast" ? style.recipe_active : ""
+                }`}
               name="Breakfast"
             >
               {breaks}
@@ -231,9 +238,8 @@ const AddProduct = () => {
                   target: { name: "typeMeals", value: "Lunch" },
                 });
               }}
-              className={`${style.recipe_type} ${
-                isActive === "Lunch" ? style.recipe_active : ""
-              }`}
+              className={`${style.recipe_type} ${isActive === "Lunch" ? style.recipe_active : ""
+                }`}
               name="Lunch"
             >
               {lunch}
@@ -245,9 +251,8 @@ const AddProduct = () => {
                   target: { name: "typeMeals", value: "Dinner" },
                 });
               }}
-              className={`${style.recipe_type} ${
-                isActive === "Dinner" ? style.recipe_active : ""
-              }`}
+              className={`${style.recipe_type} ${isActive === "Dinner" ? style.recipe_active : ""
+                }`}
               name="Dinner"
             >
               {dinner}
@@ -273,6 +278,17 @@ const AddProduct = () => {
               name="times"
               type="text"
               placeholder="How much time?"
+            />
+          </div>
+          <div className="d-flex gap-4 flex-wrap align-items-center justify-content-between  ">
+            <p className={style.text_label}>{caloriess}</p>
+            <input
+              className={style.add_input}
+              onChange={handleInputChange}
+              value={recipe.calories}
+              name="calories"
+              type="number"
+              placeholder="Recipe calories"
             />
           </div>
         </div>

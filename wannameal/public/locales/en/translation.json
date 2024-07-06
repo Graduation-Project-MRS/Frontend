@@ -60,7 +60,8 @@
     "addingredient": "add ingredient",
     "addStep": "add Step",
     "saveRecipe": "save Recipe",
-    "cancelRecipe": "cancel Recipe"
+    "cancelRecipe": "cancel Recipe",
+    "caloriess": "calories"
   },
   "contact": {
     "head": "get in touch",
@@ -160,7 +161,7 @@
     "Profile": "My Profile",
     "Contact": "Contact Us",
     "logoutt": "logout",
-    "dashboard":"dashboard",
-"makeMeal":"Add Recipe"
+    "dashboard": "dashboard",
+    "makeMeal": "Add Recipe"
   }
 }
